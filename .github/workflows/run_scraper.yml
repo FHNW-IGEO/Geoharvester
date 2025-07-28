@@ -76,14 +76,14 @@ jobs:
           name: data_to_keep_csv
           path: ./scraper/data/data_to_keep.csv
 
-      - name: Push log files to repo
-        uses: github-actions-x/commit@v2.9
-        with:
-          push-branch: "main"
-          commit-message: "Push logs"
-          force-add: "true"
-          files: ./scraper/tools/
-          name: autoupdate
+#      - name: Push log files to repo
+#        uses: github-actions-x/commit@v2.9
+#        with:
+#          push-branch: "main"
+#         commit-message: "Push logs"
+#        force-add: "true"
+#          files: ./scraper/tools/
+#         name: autoupdate
 
   translate_de:
     needs: scrape # Wait on the build job to complete
