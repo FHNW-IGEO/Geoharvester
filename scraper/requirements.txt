@@ -11,6 +11,7 @@ rake_nltk==1.0.6
 pyLDAvis==3.4.0
 langdetect==1.0.9
 bert-extractive-summarizer==0.10.1
+huggingface-hub==0.12.1
 
 # Data handling
 pandas==1.5.2
