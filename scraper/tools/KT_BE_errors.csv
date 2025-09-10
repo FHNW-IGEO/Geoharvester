@@ -1,2 +1,0 @@
-Timestamp,Operator,URL,Issue
-2025-05-25T04:22:32.940978+02:00,KT_BE,https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_environment01_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS,"GET requested yielded HTTP response status code 404"
