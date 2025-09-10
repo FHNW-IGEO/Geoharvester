@@ -9,6 +9,8 @@ langdetect
 re2
 rake_nltk>=1.0.6
 spacy>=3.3.1
+pydantic<2  # Fix needed for spacy 3 not supporting pydantic v2
+
 spacy-legacy>=3.0.12
 nltk>=3.7
 translators>=5.5.6
