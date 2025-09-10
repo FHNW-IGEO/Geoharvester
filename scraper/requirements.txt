@@ -1,9 +1,10 @@
-# Core ML / NLP
+# Core ML/NLP
 torch==2.2.2
 sentence-transformers==2.2.2
-transformers==4.39.3
+transformers==4.26.1
+huggingface-hub==0.12.1
 spacy==3.6.1
-pydantic<2  # spaCy 3.x only supports Pydantic v1
+pydantic<2
 scikit-learn==1.2.0
 gensim==4.3.0
 nltk==3.7
@@ -11,7 +12,6 @@ rake_nltk==1.0.6
 pyLDAvis==3.4.0
 langdetect==1.0.9
 bert-extractive-summarizer==0.10.1
-huggingface-hub==0.12.1
 
 # Data handling
 pandas==1.5.2
@@ -20,19 +20,22 @@ polars==0.17.11
 pyarrow==12.0.0
 python-dateutil==2.8.2
 pytz==2022.4
-typing-extensions==4.10.0
+typing_extensions==4.10.0
 pyproj==3.4.1
-openai==0.27.0
 
 # Visualization
 matplotlib==3.7.1
 
-# Web / API
+# Requests & I/O
 requests==2.28.1
 urllib3==1.26.12
 charset-normalizer==2.1.1
 idna==3.4
 certifi==2022.9.24
+PyYAML==6.0
+
+# Google APIs
+cachetools==5.3.0
 google-api-core==2.11.0
 google-api-python-client==2.80.0
 google-auth==2.16.2
@@ -45,14 +48,8 @@ uritemplate==4.1.1
 pyasn1==0.5.0
 pyasn1-modules==0.3.0
 
-# Utilities
-PyYAML==6.0
-python-dotenv==1.0.0
+# Other dependencies
+OWSLib==0.27.2
+openai==0.27.0
 deep-translator==1.11.4
-translators==5.5.6
-filelock==3.19.1
-cachetools==5.3.0
-
-# Optional ML / text tools
-FuzzyTM==2.0.9
-scipy==1.9.3
+python-dotenv==1.0.0
