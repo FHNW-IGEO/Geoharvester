@@ -34,6 +34,7 @@ openai==0.27.0
 pandas==1.5.2
 pyLDAvis==3.4.0
 spacy==3.3.1 #and spacy-legacy 3.0.12 + pretrained models
+pydantic<2  # Fix needed for spacy 3 not supporting pydantic v2
 translators==5.5.6
 gensim==4.3.0
 
