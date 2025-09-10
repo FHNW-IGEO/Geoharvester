@@ -39,7 +39,7 @@ jobs:
 
       - name: Show installed versions
         run: |
-          pip show pydantic spacy sentence-transformers
+          pip show pydantic transformers sentence-transformers spacy torch
 
       - name: Download spacy models
         run: |
