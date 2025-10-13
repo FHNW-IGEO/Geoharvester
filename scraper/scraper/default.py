@@ -168,14 +168,15 @@ def scrape(source,service,i,layertree, group,layer_data,prefix):
 
     
     #contact
-    if hasattr(service, 'provider'):
-        if hasattr(service.provider, 'contact') and service.provider.contact and hasattr(service.provider.contact, 'email'):
-            layer_data["contact"] = service.provider.contact.email
-        elif hasattr(service.provider, 'name'):
-            layer_data["contact"] = service.provider.name
+    contact = getattr(service, "provider", None)
+    contact_info = getattr(contact, "contact", None)
+
+    if contact_info:
+        email = getattr(contact_info, "email", None)
+        name = getattr(contact_info, "name", None)
+        layer_data["contact"] = email or name or ""
     else:
         layer_data["contact"] = ""
-
     
     #servicelink
     service_link=source['URL']
