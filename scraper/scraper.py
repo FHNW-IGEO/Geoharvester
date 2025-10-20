@@ -742,7 +742,7 @@ if __name__ == "__main__":
 
     data_to_keep = check_new_data(os.path.join(config.TEMP_PROCESSED_DATA_PKL),
                    config.GEOSERVICES_CH_CSV,
-                   match_columns=['name','title','provider','keywords','abstract','endpoint'],
+                   match_columns=['name','title','provider','keywords','abstract','endpoint', 'contact'],
                    output_path=os.path.split(config.GEOSERVICES_CH_CSV)[0])
     
     print("\nKeeping "+str(len(data_to_keep))+" datasets from old database")
