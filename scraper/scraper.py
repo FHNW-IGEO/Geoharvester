@@ -739,24 +739,26 @@ if __name__ == "__main__":
     print(f"Scraping took: {int((scraping_endT-scraping_startT) / 60)} mins")
 
     write_dataset_info(config.GEOSERVICES_CH_CSV,config.GEOSERVICES_CH_CSV)
+    # Copy to artifact folder
+    shutil.copyfile(config.GEOSERVICES_CH_CSV, os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'geoservices_CH.csv'))
 
-    data_to_keep = check_new_data(os.path.join(config.TEMP_PROCESSED_DATA_PKL),
-                   config.GEOSERVICES_CH_CSV,
-                   match_columns=['name','title','provider','keywords','abstract','endpoint', 'contact'],
-                   output_path=os.path.split(config.GEOSERVICES_CH_CSV)[0])
+    # data_to_keep = check_new_data(os.path.join(config.TEMP_PROCESSED_DATA_PKL),
+    #                config.GEOSERVICES_CH_CSV,
+    #                match_columns=['name','title','provider','keywords','abstract','endpoint', 'contact'],
+    #                output_path=os.path.split(config.GEOSERVICES_CH_CSV)[0])
     
-    print("\nKeeping "+str(len(data_to_keep))+" datasets from old database")
-    logger.info(f"Keeping {len(data_to_keep)} datasets from old database")
+    # print("\nKeeping "+str(len(data_to_keep))+" datasets from old database")
+    # logger.info(f"Keeping {len(data_to_keep)} datasets from old database")
 
-    preprd_data = preprocessing_NLP(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],
-                                                 'to_preprocess.pkl'))
-    pathpart = os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl')
+    # preprd_data = preprocessing_NLP(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],
+    #                                              'to_preprocess.pkl'))
+    # pathpart = os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl')
 
-    preprd_data.to_pickle(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl'))
-    preprd_data.to_csv(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.csv'))
-    # Save to data for last pipeline stage
-    data_to_keep.to_pickle(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'data_to_keep.pkl'))
-    data_to_keep.to_csv(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'data_to_keep.csv'))
+    # preprd_data.to_pickle(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl'))
+    # preprd_data.to_csv(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.csv'))
+    # # Save to data for last pipeline stage
+    # data_to_keep.to_pickle(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'data_to_keep.pkl'))
+    # data_to_keep.to_csv(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'data_to_keep.csv'))
 
-    process_endT = time()
-    print(f"Job took: {int((process_endT-process_startT) / 60)} mins")
+    # process_endT = time()
+    # print(f"Job took: {int((process_endT-process_startT) / 60)} mins")
