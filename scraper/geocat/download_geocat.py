@@ -227,7 +227,7 @@ def fetch_and_save_metadata(identifier, save_folder):
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-def download_xml_metadata_from_csv(save_dir="01_ETL\\02_geocat.ch", csv_file="geocat_dataset_id_title.csv", max_files=None, max_workers=10):
+def download_xml_metadata_from_csv(save_dir="01_ETL\\02_geocat.ch", csv_file="geocat_dataset_id_title.csv", max_files=None, max_workers=20):
     """
     Downloads XML metadata files listed in a CSV using parallel threads.
 

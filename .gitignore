@@ -24,6 +24,13 @@ client/public/cantonIcons/Logo_geodienste.ch.zip
 ##------SCRAPER ------
 
 
+
+##------geocat ------
+scraper/data/geocat_data
+scraper/data/geocat_xml
+
+
+
 # misc
 env
 .DS_Store

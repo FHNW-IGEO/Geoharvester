@@ -18,3 +18,23 @@ preview_PREFIX = \
 # Google Indexing API
 # JSON_KEY_FILE = "geoharvester-indexing-credentials.json"
 # SCOPES = ["https://www.googleapis.com/auth/indexing"]
+
+#geocat
+# Base directory of this configuration file (i.e., the 'scraper' folder)
+_BASE_DIR = os.path.dirname(__file__)
+
+# Output CSV filename for the identifier-title list
+WORKFLOW_DATA =  os.path.join(_BASE_DIR, "data")
+WORKFLOW_GEOCAT_DATASET_LIST =  os.path.join(_BASE_DIR, "data", "geocat_dataset_id_title.csv")
+WORKFLOW_GEOCAT_DATA =  os.path.join(_BASE_DIR, "data", "geocat_data")
+
+# Where to store Geocat outputs (CSV + XMLs). Resolved relative to this file.
+WORKFLOW_GEOCAT_XML = os.path.join(_BASE_DIR, "data", "geocat_xml")
+
+# Paths to the main Geocat CSV files
+WORKFLOW_GEOCAT_FILES = [
+    os.path.join(WORKFLOW_GEOCAT_DATA, "geocat_dataset_metadata.csv"),
+    os.path.join(WORKFLOW_GEOCAT_DATA, "geocat_distribution_metadata.csv"),
+    os.path.join(WORKFLOW_GEOCAT_DATA, "geocat_contact_point_metadata.csv"),
+]
+
