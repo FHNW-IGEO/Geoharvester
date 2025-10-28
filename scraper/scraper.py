@@ -751,7 +751,6 @@ if __name__ == "__main__":
                 server_operator, server_url))
         n += 1
         scrape_source_endT = time()
-        print(f"Dataset {source['URL']} processed in {int(scrape_source_endT-scrape_source_startT)} seconds")
         logger.info(f"Dataset {source['URL']} processed in {int(scrape_source_endT-scrape_source_startT)} seconds")
 
     scraping_endT = time()

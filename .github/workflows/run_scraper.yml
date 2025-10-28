@@ -60,11 +60,6 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: geoservices_CH
-          path: ./scraper/artifacts/geoservices_CH.csv # From artifacts for scraper
-          
-      - uses: actions/upload-artifact@v4
-        with:
           name: preprd_data
           path: ./scraper/artifacts/preprd_data.pkl # From artifacts for 2nd stage
 
