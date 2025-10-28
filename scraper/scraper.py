@@ -535,7 +535,8 @@ def write_dataset_info(csv_filename, output_file):
             geo_data_done.append(checklayer)
     return
 
-def check_new_data(actual_db_path, new_data_path, match_columns, output_path):
+def check_new_data(actual_db_path, new_data_path, match_columns,
+                   output_path, keep_old=False):
     """
     It compares the old and new databases to extract and preprocess
     only the new datasets.
@@ -554,14 +555,21 @@ def check_new_data(actual_db_path, new_data_path, match_columns, output_path):
     data_to_keep_path : str
         Path to data already preprocessed from the old database with no
         modifications.
+    keep_old : bool
+        if the data presents only in the old database should be kept
     """
     old_db = pd.read_pickle(actual_db_path)
+    old_db = old_db.fillna("nan")
+    old_db = old_db.replace(to_replace='', value='nan', regex=True)
     new_db = pd.read_csv(new_data_path, low_memory=False)
+    new_db = new_db.drop_duplicates(keep='first') # check duplicates
     new_db = new_db.fillna("nan")
-    new_db = new_db.replace(to_replace="'", value="-", regex=True)
-    new_db = new_db.replace(to_replace='\"', value="-", regex=True)
-    new_db = new_db.replace(to_replace="  ", value = " ", regex=True)
-    new_db = new_db.replace(to_replace="    ", value = " ", regex=True)
+    new_db = new_db.replace(to_replace="'", value="nan", regex=True)
+    new_db = new_db.replace(to_replace='\"', value="nan", regex=True)
+    new_db = new_db.replace(to_replace="", value = "nan", regex=True)
+    new_db = new_db.replace(to_replace=" ", value = "nan", regex=True)
+    new_db = new_db.replace(to_replace="  ", value = "nan", regex=True)
+    new_db = new_db.replace(to_replace="    ", value = "nan", regex=True)
     
     to_preprocessing = new_db.merge(old_db, on=match_columns, how='left',
                                     indicator='_lmerge', suffixes=(None, "_drop"))
@@ -569,10 +577,20 @@ def check_new_data(actual_db_path, new_data_path, match_columns, output_path):
     to_keep = old_db.merge(new_db, on=match_columns, how='inner', indicator='_innermerge',
                            suffixes=(None,"_drop"))
     to_keep = to_keep[old_db.columns.to_list()]
+    to_keep = to_keep.drop_duplicates(keep='first')
+
+    old_db_lmerge = old_db.merge(new_db, on=match_columns, how='left',indicator='_lmerge',
+                                 sufixes=(None,"_drop"))
+    old_db_lmerge = old_db_lmerge.loc[old_db_lmerge['_lmerge']=='left_only']
+
     to_preprocessing = to_preprocessing[new_db.columns.to_list()]
+    to_preprocessing = to_preprocessing.drop_duplicates(keep='first')
 
     to_preprocessing.to_pickle(os.path.join(output_path, 'to_preprocess.pkl'))
-    return to_keep
+    if not keep_old:
+        return to_keep
+    else:
+        return to_keep, old_db_lmerge
 
 def preprocessing_NLP(raw_data_path, output_folder=None, column='abstract'):
     """
@@ -743,23 +761,23 @@ if __name__ == "__main__":
     # Copy to artifact folder
     shutil.copyfile(config.GEOSERVICES_CH_CSV, os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'geoservices_CH.csv'))
 
-    # data_to_keep = check_new_data(os.path.join(config.TEMP_PROCESSED_DATA_PKL),
-    #                config.GEOSERVICES_CH_CSV,
-    #                match_columns=['name','title','provider','keywords','abstract','endpoint', 'contact'],
-    #                output_path=os.path.split(config.GEOSERVICES_CH_CSV)[0])
+    data_to_keep = check_new_data(os.path.join(config.TEMP_PROCESSED_DATA_PKL),
+                   config.GEOSERVICES_CH_CSV,
+                   match_columns=['name','title','provider','keywords','abstract','endpoint', 'contact'],
+                   output_path=os.path.split(config.GEOSERVICES_CH_CSV)[0])
     
-    # print("\nKeeping "+str(len(data_to_keep))+" datasets from old database")
-    # logger.info(f"Keeping {len(data_to_keep)} datasets from old database")
+    print("\nKeeping "+str(len(data_to_keep))+" datasets from old database")
+    logger.info(f"Keeping {len(data_to_keep)} datasets from old database")
 
-    # preprd_data = preprocessing_NLP(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],
-    #                                              'to_preprocess.pkl'))
-    # pathpart = os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl')
+    preprd_data = preprocessing_NLP(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],
+                                                 'to_preprocess.pkl'))
+    pathpart = os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl')
 
-    # preprd_data.to_pickle(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl'))
-    # preprd_data.to_csv(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.csv'))
-    # # Save to data for last pipeline stage
-    # data_to_keep.to_pickle(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'data_to_keep.pkl'))
-    # data_to_keep.to_csv(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'data_to_keep.csv'))
+    preprd_data.to_pickle(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl'))
+    preprd_data.to_csv(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.csv'))
+    # Save to data for last pipeline stage
+    data_to_keep.to_pickle(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'data_to_keep.pkl'))
+    data_to_keep.to_csv(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'data_to_keep.csv'))
 
-    # process_endT = time()
-    # print(f"Job took: {int((process_endT-process_startT) / 60)} mins")
+    process_endT = time()
+    print(f"Job took: {int((process_endT-process_startT) / 60)} mins")
