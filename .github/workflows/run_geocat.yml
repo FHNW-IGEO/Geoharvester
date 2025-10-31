@@ -30,30 +30,25 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install --upgrade --force-reinstall -r requirements_geocat.txt
+          pip install --upgrade --force-reinstall -r requirements.txt
 
       - name: Run geocat scraper
         run: python scraper_geocat.py
         env:
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
 
-      - name: Upload data_to_keep (PKL)
+      - name: Upload geocat_metadata (PKL)
         uses: actions/upload-artifact@v4
         with:
           name: data_to_keep
           path: ./scraper/data/geocat_data/geocat_metadata.pkl
 
-      - name: Upload data_to_keep (CSV)
-        uses: actions/upload-artifact@v4
-        with:
-          name: data_to_keep_csv
-          path: ./scraper/data/geocat_dataset_id_title.csv
-
+      
       - name: Push log files to repo
         uses: github-actions-x/commit@v2.9
         with:
           push-branch: "geocat_integration"
-          commit-message: "Push geocat_data"
+          commit-message: "geocat_data"
           force-add: "true"
           files: ./scraper/data/geocat_data/
           name: autoupdate
