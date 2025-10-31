@@ -44,11 +44,12 @@ if __name__ == "__main__":
         # 2.0 Parse metadatacatalog geocat.ch and save dataset list to CSV
         # -------------------------------
 
+        #! HARDCOED START POSITION INSIEDE FUNCTION FOR TESTING PURPOSES!
         download_geocat_metadata(
             save_dir=config.WORKFLOW_GEOCAT_DATA,
             csv_file= config.WORKFLOW_GEOCAT_DATASET_LIST,
             log_file="logfile_geocat.log",
-            start_pos=15000,
+            start_pos=16750,
             batch_size=250
         )
 
