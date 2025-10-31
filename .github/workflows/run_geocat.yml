@@ -1,0 +1,71 @@
+name: Run geocat scraper and preprocessing
+
+on:
+  schedule:
+    - cron: "0 0 * * 0" # Runs weekly (every Sunday at midnight)
+  workflow_dispatch:     # Allows manual execution from GitHub Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  scrape_geocat:   # ← job names cannot contain spaces
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./scraper
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4  # use stable version tag instead of "@main"
+
+      - name: Increase git buffer size
+        run: git config --global http.postBuffer 1048576000
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade --force-reinstall -r requirements.txt
+
+      - name: Run geocat scraper
+        run: python scraper_geocat.py
+        env:
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+
+      - name: Upload preprd_data (PKL)
+        uses: actions/upload-artifact@v4
+        with:
+          name: preprd_data
+          path: ./scraper/artifacts/preprd_data.pkl
+
+      - name: Upload preprd_data (CSV)
+        uses: actions/upload-artifact@v4
+        with:
+          name: preprd_data_csv
+          path: ./scraper/artifacts/preprd_data.csv
+
+      - name: Upload data_to_keep (PKL)
+        uses: actions/upload-artifact@v4
+        with:
+          name: data_to_keep
+          path: ./scraper/data/data_to_keep.pkl
+
+      - name: Upload data_to_keep (CSV)
+        uses: actions/upload-artifact@v4
+        with:
+          name: data_to_keep_csv
+          path: ./scraper/data/data_to_keep.csv
+
+      - name: Push log files to repo
+        uses: github-actions-x/commit@v2.9
+        with:
+          push-branch: "geocat_integration"
+          commit-message: "Push logs"
+          force-add: "true"
+          files: ./scraper/tools/
+          name: autoupdate
