@@ -37,29 +37,17 @@ jobs:
         env:
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
 
-      - name: Upload preprd_data (PKL)
-        uses: actions/upload-artifact@v4
-        with:
-          name: preprd_data
-          path: ./scraper/artifacts/preprd_data.pkl
-
-      - name: Upload preprd_data (CSV)
-        uses: actions/upload-artifact@v4
-        with:
-          name: preprd_data_csv
-          path: ./scraper/artifacts/preprd_data.csv
-
       - name: Upload data_to_keep (PKL)
         uses: actions/upload-artifact@v4
         with:
           name: data_to_keep
-          path: ./scraper/data/data_to_keep.pkl
+          path: ./scraper/data/geocat_data/geocat_metadata.pkl
 
       - name: Upload data_to_keep (CSV)
         uses: actions/upload-artifact@v4
         with:
           name: data_to_keep_csv
-          path: ./scraper/data/data_to_keep.csv
+          path: ./scraper/data/geocat_dataset_id_title.csv
 
       - name: Push log files to repo
         uses: github-actions-x/commit@v2.9
