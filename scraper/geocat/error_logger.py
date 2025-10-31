@@ -2,7 +2,8 @@ import os
 import logging
 
 # Set up logging configuration
-LOG_FILE = "ETL_logfile.log"
+
+LOG_FILE = "scraper/data/geocat_data/geocat_logfile.log"
 
 # Clear the log file before each run
 # if os.path.exists(LOG_FILE):

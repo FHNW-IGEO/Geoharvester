@@ -59,7 +59,7 @@ if __name__ == "__main__":
         download_xml_metadata_from_csv(
             save_dir=config.WORKFLOW_GEOCAT_XML,
             csv_file=config.WORKFLOW_GEOCAT_DATASET_LIST,
-            max_files=None  # oder None für alle
+            max_files=100  # oder None für alle
         )
 
         # -------------------------------
