@@ -44,31 +44,31 @@ if __name__ == "__main__":
         # 2.0 Parse metadatacatalog geocat.ch and save dataset list to CSV
         # -------------------------------
 
-        # download_geocat_metadata(
-        #     save_dir=config.WORKFLOW_GEOCAT_DATA,
-        #     csv_file= config.WORKFLOW_GEOCAT_DATASET_LIST,
-        #     log_file="logfile_geocat.log",
-        #     start_pos=15000,
-        #     batch_size=250
-        # )
+        download_geocat_metadata(
+            save_dir=config.WORKFLOW_GEOCAT_DATA,
+            csv_file= config.WORKFLOW_GEOCAT_DATASET_LIST,
+            log_file="logfile_geocat.log",
+            start_pos=15000,
+            batch_size=250
+        )
 
         # -------------------------------
         # 2.1 Download XML-files from geocat.ch based on CSV list
         # -------------------------------
 
-        # download_xml_metadata_from_csv(
-        #     save_dir=config.WORKFLOW_GEOCAT_XML,
-        #     csv_file=config.WORKFLOW_GEOCAT_DATASET_LIST,
-        #     max_files=100  # oder None für alle
-        # )
+        download_xml_metadata_from_csv(
+            save_dir=config.WORKFLOW_GEOCAT_XML,
+            csv_file=config.WORKFLOW_GEOCAT_DATASET_LIST,
+            max_files=None  # oder None für alle
+        )
 
         # -------------------------------
         # 2.2 Clean XML-files
         # -------------------------------
 
-        # xml_cleaner.process_folders([
-        #     config.WORKFLOW_GEOCAT_XML
-        # ])
+        xml_cleaner.process_folders([
+            config.WORKFLOW_GEOCAT_XML
+        ])
 
         # -------------------------------
         # 2.3 Extract metadata and save to new folder
@@ -103,14 +103,6 @@ if __name__ == "__main__":
         # 5. Language Detection
         # -------------------------------
 
-        # language_correction(
-        #     db_name = db_name,
-        #     table_name = "merged_dataset_metadata",
-        #     language_prefixes = ["DE", "EN", "FR", "IT"],   
-        #     base_columns = ["dataset_title", "dataset_keyword", "dataset_description"],
-        #     table_set_type = "dataset",
-        #     min_length_lang_detect = 20
-        # )
 
         language_correction(
             base_dir = config.WORKFLOW_GEOCAT_DATA,

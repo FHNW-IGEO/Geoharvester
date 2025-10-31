@@ -51,8 +51,17 @@ uritemplate==4.1.1
 pyasn1==0.5.0
 pyasn1-modules==0.3.0
 
+# geocat
+tqdm>=4.65.0
+langid>=1.1.6
+lxml>=4.9.0
+asttokens>=2.2.1
+concurrent-log-handler>=0.9.24
+
 # Other utilities
 typing-extensions==4.10.0
 translators==5.5.6
 deep-translator==1.11.4
 openai==0.27.0
+
+
