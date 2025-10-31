@@ -1,0 +1,25 @@
+# Core dependencies
+pandas>=2.0.0
+numpy>=1.24.0
+
+# XML and web requests
+requests>=2.31.0
+lxml>=4.9.0
+
+# Logging and progress
+tqdm>=4.65.0
+
+# Language detection
+langid>=1.1.6
+
+# Concurrency and scheduling
+concurrent-log-handler>=0.9.24
+
+# Optional: For parsing and date utilities
+python-dateutil>=2.8.2
+
+# Used in various modules
+asttokens>=2.2.1
+
+# (Optional) If you use Jupyter notebooks (test.ipynb)
+notebook>=7.0.0

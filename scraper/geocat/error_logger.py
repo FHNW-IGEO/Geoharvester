@@ -3,7 +3,7 @@ import logging
 
 # Set up logging configuration
 
-LOG_FILE = "scraper/tools/geocat_logfile.log"
+LOG_FILE = "geocat_logfile.log"
 
 # Clear the log file before each run
 # if os.path.exists(LOG_FILE):
