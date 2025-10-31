@@ -48,7 +48,7 @@ jobs:
         uses: github-actions-x/commit@v2.9
         with:
           push-branch: "geocat_integration"
-          commit-message: "Push logs"
+          commit-message: "geocat_data"
           force-add: "true"
-          files: ./scraper/tools/
+          files: ./scraper/data/geocat_data/
           name: autoupdate
