@@ -1,0 +1,70 @@
+name: Run geocat scraper and preprocessing V3
+
+on:
+  schedule:
+    - cron: "0 0 * * 0" # Runs weekly (every Sunday at midnight)
+  workflow_dispatch:     # Allows manual execution from GitHub Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  scrape_geocat:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./scraper
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0                 # required for git pull to work
+          ref: geocat_integration        # checkout the same branch you will push to
+
+      - name: Set up Git identity
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+      - name: Increase git buffer size
+        run: git config --global http.postBuffer 1048576000
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade --force-reinstall -r requirements_geocat.txt
+
+      - name: Run geocat scraper
+        run: python scraper_geocat.py
+        env:
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+
+      - name: Pull latest remote changes
+        run: |
+          git add -A
+          git stash
+          git fetch origin geocat_integration
+          git pull --rebase origin geocat_integration
+          git stash pop || true
+
+
+      - name: Upload geocat_metadata (PKL)
+        uses: actions/upload-artifact@v4
+        with:
+          name: data_to_keep
+          path: ./scraper/data/geocat_data/geocat_metadata.pkl
+
+      - name: Commit and push updated geocat data
+        uses: github-actions-x/commit@v2.9
+        with:
+          push-branch: "geocat_integration"
+          commit-message: "geocat_data"
+          force-add: "true"
+          files: ./scraper/data/geocat_data/
+          name: autoupdate
