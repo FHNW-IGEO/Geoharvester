@@ -143,9 +143,9 @@ def download_geocat_metadata(save_dir=r"01_ETL\02_geocat.ch", csv_file="geocat_d
             start += batch_size
             time.sleep(WAIT_TIME)
 
-        # total_reverse_fetch = total_records - first_half_limit
+        total_reverse_fetch = total_records - first_half_limit
         #! HARDCOED START POSITION INSIEDE FUNCTION FOR TESTING PURPOSES!
-        total_reverse_fetch = total_records - 17000
+        # total_reverse_fetch = total_records - 17000
         #! HARDCOED START POSITION INSIEDE FUNCTION FOR TESTING PURPOSES!
 
         ascending = False
