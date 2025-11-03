@@ -1,47 +1,171 @@
 dataset_identifier,contact_type,contact_email,contact_name,origin,xml_filename
-ur-2183,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-2183.xml
-ur-2183,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-2183.xml
-ur-2182,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-2182.xml
-ur-2182,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-2182.xml
-ur-2164,,,Lisag AG,geocat.ch,ur-2164.xml
-ur-2164,,,Lisag AG,geocat.ch,ur-2164.xml
-ur-2181,,,Amt für Landwirtschaft Kt. Uri,geocat.ch,ur-2181.xml
-ur-2181,,,Amt für Landwirtschaft Kt. Uri,geocat.ch,ur-2181.xml
-ur-2175,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-2175.xml
-ur-2175,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-2175.xml
-ur-2170,,,Amt für Landwirtschaft Kt. Uri,geocat.ch,ur-2170.xml
-ur-2170,,,Amt für Landwirtschaft Kt. Uri,geocat.ch,ur-2170.xml
-ur-2176,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-2176.xml
-ur-2176,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-2176.xml
-ur-2165,,,Amt für Strassen- und Schiffsverkehr Kt. Uri,geocat.ch,ur-2165.xml
-ur-2165,,,Amt für Strassen- und Schiffsverkehr Kt. Uri,geocat.ch,ur-2165.xml
-ur-2163,,,Amt für Forst und Jagd Kt. Uri,geocat.ch,ur-2163.xml
-ur-2163,,,Amt für Forst und Jagd Kt. Uri,geocat.ch,ur-2163.xml
-ur-2155,,,Lisag AG,geocat.ch,ur-2155.xml
-ur-2155,,,Lisag AG,geocat.ch,ur-2155.xml
-ur-2171,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-2171.xml
-ur-2171,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-2171.xml
-ur-2159,,,Lisag AG,geocat.ch,ur-2159.xml
-ur-2159,,,Lisag AG,geocat.ch,ur-2159.xml
-ur-2184,,,Amt für Raumentwicklung Kt. Uri,geocat.ch,ur-2184.xml
-ur-2184,,,Amt für Raumentwicklung Kt. Uri,geocat.ch,ur-2184.xml
-ur-2177,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-2177.xml
-ur-2177,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-2177.xml
-ur-2173,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-2173.xml
-ur-2173,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-2173.xml
-ur-2172,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-2172.xml
-ur-2172,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-2172.xml
-ur-2156,,,Lisag AG,geocat.ch,ur-2156.xml
-ur-2156,,,Lisag AG,geocat.ch,ur-2156.xml
-ur-2179,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-2179.xml
-ur-2179,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-2179.xml
-ur-2158,,,Lisag AG,geocat.ch,ur-2158.xml
-ur-2158,,,Lisag AG,geocat.ch,ur-2158.xml
-ur-2161,,,Lisag AG,geocat.ch,ur-2161.xml
-ur-2161,,,Lisag AG,geocat.ch,ur-2161.xml
-ur-2180,,,Lisag AG,geocat.ch,ur-2180.xml
-ur-2180,,,Lisag AG,geocat.ch,ur-2180.xml
-ur-2174,,,Amt für Raumentwicklung Kt. Uri,geocat.ch,ur-2174.xml
-ur-2174,,,Amt für Raumentwicklung Kt. Uri,geocat.ch,ur-2174.xml
-ur-2185,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-2185.xml
-ur-2185,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-2185.xml
+ur-1879,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1879.xml
+ur-1879,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1879.xml
+ur-1864,,,Direktionssekretariat BD Kt. Uri,geocat.ch,ur-1864.xml
+ur-1864,,,Direktionssekretariat BD Kt. Uri,geocat.ch,ur-1864.xml
+ur-1840,,,Gemeinden des Kt. Uri,geocat.ch,ur-1840.xml
+ur-1840,,,Gemeinden des Kt. Uri,geocat.ch,ur-1840.xml
+ur-1785,,,ZAKU,geocat.ch,ur-1785.xml
+ur-1785,,,ZAKU,geocat.ch,ur-1785.xml
+ur-1816,,,Justizdirektion Kt. Uri,geocat.ch,ur-1816.xml
+ur-1816,,,Justizdirektion Kt. Uri,geocat.ch,ur-1816.xml
+ur-1862,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1862.xml
+ur-1862,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1862.xml
+ur-1903,,,Amt für Bevölkerungsschutz und Militär Kt. Uri,geocat.ch,ur-1903.xml
+ur-1903,,,Amt für Bevölkerungsschutz und Militär Kt. Uri,geocat.ch,ur-1903.xml
+ur-1801,,,Amt für Energie Kt. Uri,geocat.ch,ur-1801.xml
+ur-1801,,,Amt für Energie Kt. Uri,geocat.ch,ur-1801.xml
+ur-1878,,,Gemeinden des Kt. Uri,geocat.ch,ur-1878.xml
+ur-1878,,,Gemeinden des Kt. Uri,geocat.ch,ur-1878.xml
+ur-1884,,,Justizdirektion Kt. Uri,geocat.ch,ur-1884.xml
+ur-1884,,,Justizdirektion Kt. Uri,geocat.ch,ur-1884.xml
+ur-1872,,,Amt für Betrieb Nationalstrassen,geocat.ch,ur-1872.xml
+ur-1872,,,Amt für Betrieb Nationalstrassen,geocat.ch,ur-1872.xml
+ur-1899,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1899.xml
+ur-1899,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1899.xml
+ur-1876,,,Amt für Forst und Jagd Kt. Uri,geocat.ch,ur-1876.xml
+ur-1876,,,Amt für Forst und Jagd Kt. Uri,geocat.ch,ur-1876.xml
+ur-1847,,,Amt für Landwirtschaft Kt. Uri,geocat.ch,ur-1847.xml
+ur-1847,,,Amt für Landwirtschaft Kt. Uri,geocat.ch,ur-1847.xml
+ur-1806,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1806.xml
+ur-1806,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1806.xml
+ur-1861,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1861.xml
+ur-1861,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1861.xml
+ur-1877,,,Amt für Volksschulen Kt. Uri,geocat.ch,ur-1877.xml
+ur-1877,,,Amt für Volksschulen Kt. Uri,geocat.ch,ur-1877.xml
+ur-2008,,,Amt für Raumentwicklung Kt. Uri,geocat.ch,ur-2008.xml
+ur-2008,,,Amt für Raumentwicklung Kt. Uri,geocat.ch,ur-2008.xml
+ur-1805,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1805.xml
+ur-1805,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1805.xml
+ur-1817,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1817.xml
+ur-1817,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1817.xml
+ur-1867,,,ZAKU,geocat.ch,ur-1867.xml
+ur-1867,,,ZAKU,geocat.ch,ur-1867.xml
+ur-1881,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1881.xml
+ur-1881,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1881.xml
+ur-1851,,,Amt für Landwirtschaft Kt. Uri,geocat.ch,ur-1851.xml
+ur-1851,,,Amt für Landwirtschaft Kt. Uri,geocat.ch,ur-1851.xml
+ur-1853,,,Gemeinden des Kt. Uri,geocat.ch,ur-1853.xml
+ur-1853,,,Gemeinden des Kt. Uri,geocat.ch,ur-1853.xml
+ur-1904,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1904.xml
+ur-1904,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1904.xml
+ur-1896,,,Abwasser Uri,geocat.ch,ur-1896.xml
+ur-1896,,,Abwasser Uri,geocat.ch,ur-1896.xml
+ur-1987,,,Bundesamt für Verkehr,geocat.ch,ur-1987.xml
+ur-1987,,,Bundesamt für Verkehr,geocat.ch,ur-1987.xml
+ur-1887,,,Amt für Raumentwicklung Kt. Uri,geocat.ch,ur-1887.xml
+ur-1887,,,Amt für Raumentwicklung Kt. Uri,geocat.ch,ur-1887.xml
+ur-1895,,,Abwasser Uri,geocat.ch,ur-1895.xml
+ur-1895,,,Abwasser Uri,geocat.ch,ur-1895.xml
+ur-1901,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1901.xml
+ur-1901,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1901.xml
+ur-1774,,,Gemeinden des Kt. Uri,geocat.ch,ur-1774.xml
+ur-1774,,,Gemeinden des Kt. Uri,geocat.ch,ur-1774.xml
+ur-1984,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1984.xml
+ur-1984,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1984.xml
+ur-1849,,,Amt für Landwirtschaft Kt. Uri,geocat.ch,ur-1849.xml
+ur-1849,,,Amt für Landwirtschaft Kt. Uri,geocat.ch,ur-1849.xml
+ur-1850,,,Amt für Landwirtschaft Kt. Uri,geocat.ch,ur-1850.xml
+ur-1850,,,Amt für Landwirtschaft Kt. Uri,geocat.ch,ur-1850.xml
+ur-1784,,,ZAKU,geocat.ch,ur-1784.xml
+ur-1784,,,ZAKU,geocat.ch,ur-1784.xml
+ur-1890,,,Amt für Energie Kt. Uri,geocat.ch,ur-1890.xml
+ur-1890,,,Amt für Energie Kt. Uri,geocat.ch,ur-1890.xml
+ur-1802,,,Amt für Betrieb Nationalstrassen,geocat.ch,ur-1802.xml
+ur-1802,,,Amt für Betrieb Nationalstrassen,geocat.ch,ur-1802.xml
+ur-1819,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1819.xml
+ur-1819,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1819.xml
+ur-2005,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-2005.xml
+ur-2005,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-2005.xml
+ur-1856,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1856.xml
+ur-1856,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1856.xml
+ur-1882,,,Elektrizitätswerke,geocat.ch,ur-1882.xml
+ur-1882,,,Elektrizitätswerke,geocat.ch,ur-1882.xml
+ur-1886,,,Amt für Volksschulen Kt. Uri,geocat.ch,ur-1886.xml
+ur-1886,,,Amt für Volksschulen Kt. Uri,geocat.ch,ur-1886.xml
+ur-1986,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1986.xml
+ur-1986,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1986.xml
+ur-1905,,,Amt für Landwirtschaft Kt. Uri,geocat.ch,ur-1905.xml
+ur-1905,,,Amt für Landwirtschaft Kt. Uri,geocat.ch,ur-1905.xml
+ur-1990,,,Bundesamt für Verkehr,geocat.ch,ur-1990.xml
+ur-1990,,,Bundesamt für Verkehr,geocat.ch,ur-1990.xml
+ur-1858,,,Amt für Landwirtschaft Kt. Uri,geocat.ch,ur-1858.xml
+ur-1858,,,Amt für Landwirtschaft Kt. Uri,geocat.ch,ur-1858.xml
+ur-1889,,,Amt für Volksschulen Kt. Uri,geocat.ch,ur-1889.xml
+ur-1889,,,Amt für Volksschulen Kt. Uri,geocat.ch,ur-1889.xml
+ur-1789,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1789.xml
+ur-1789,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1789.xml
+ur-1843,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1843.xml
+ur-1843,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1843.xml
+ur-1892,,,Amt für Energie Kt. Uri,geocat.ch,ur-1892.xml
+ur-1892,,,Amt für Energie Kt. Uri,geocat.ch,ur-1892.xml
+ur-1888,,,Amt für Raumentwicklung Kt. Uri,geocat.ch,ur-1888.xml
+ur-1888,,,Amt für Raumentwicklung Kt. Uri,geocat.ch,ur-1888.xml
+ur-1907,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1907.xml
+ur-1907,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1907.xml
+ur-1846,,,Amt für Energie Kt. Uri,geocat.ch,ur-1846.xml
+ur-1846,,,Amt für Energie Kt. Uri,geocat.ch,ur-1846.xml
+ur-1860,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1860.xml
+ur-1860,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1860.xml
+ur-1880,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1880.xml
+ur-1880,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1880.xml
+ur-1869,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1869.xml
+ur-1869,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1869.xml
+ur-1818,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1818.xml
+ur-1818,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1818.xml
+ur-1820,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1820.xml
+ur-1820,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1820.xml
+ur-1823,,,Korporation Uri,geocat.ch,ur-1823.xml
+ur-1823,,,Korporation Uri,geocat.ch,ur-1823.xml
+ur-1863,,,Amt für Raumentwicklung Kt. Uri,geocat.ch,ur-1863.xml
+ur-1863,,,Amt für Raumentwicklung Kt. Uri,geocat.ch,ur-1863.xml
+ur-1988,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1988.xml
+ur-1988,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1988.xml
+ur-1885,,,Amt für Volksschulen Kt. Uri,geocat.ch,ur-1885.xml
+ur-1885,,,Amt für Volksschulen Kt. Uri,geocat.ch,ur-1885.xml
+ur-1804,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1804.xml
+ur-1804,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1804.xml
+ur-1842,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1842.xml
+ur-1842,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1842.xml
+ur-1845,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1845.xml
+ur-1845,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1845.xml
+ur-1859,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1859.xml
+ur-1859,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1859.xml
+ur-2007,,,Amt für Raumentwicklung Kt. Uri,geocat.ch,ur-2007.xml
+ur-2007,,,Amt für Raumentwicklung Kt. Uri,geocat.ch,ur-2007.xml
+ur-1909,,,Amt für Betrieb Nationalstrassen,geocat.ch,ur-1909.xml
+ur-1909,,,Amt für Betrieb Nationalstrassen,geocat.ch,ur-1909.xml
+ur-1981,,,Amt für Forst und Jagd Kt. Uri,geocat.ch,ur-1981.xml
+ur-1981,,,Amt für Forst und Jagd Kt. Uri,geocat.ch,ur-1981.xml
+ur-2006,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-2006.xml
+ur-2006,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-2006.xml
+ur-1800,,,Amt für Betrieb Nationalstrassen,geocat.ch,ur-1800.xml
+ur-1800,,,Amt für Betrieb Nationalstrassen,geocat.ch,ur-1800.xml
+ur-1852,,,Amt für Raumentwicklung Kt. Uri,geocat.ch,ur-1852.xml
+ur-1852,,,Amt für Raumentwicklung Kt. Uri,geocat.ch,ur-1852.xml
+ur-1857,,,Gemeinden des Kt. Uri,geocat.ch,ur-1857.xml
+ur-1857,,,Gemeinden des Kt. Uri,geocat.ch,ur-1857.xml
+ur-1866,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1866.xml
+ur-1866,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1866.xml
+ur-1875,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1875.xml
+ur-1875,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1875.xml
+ur-1787,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1787.xml
+ur-1787,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1787.xml
+ur-1949,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1949.xml
+ur-1949,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1949.xml
+ur-1980,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1980.xml
+ur-1980,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1980.xml
+ur-1844,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1844.xml
+ur-1844,,,Amt für Umwelt Kt. Uri,geocat.ch,ur-1844.xml
+ur-1952,,,Amt für Forst und Jagd Kt. Uri,geocat.ch,ur-1952.xml
+ur-1952,,,Amt für Forst und Jagd Kt. Uri,geocat.ch,ur-1952.xml
+ur-1822,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1822.xml
+ur-1822,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1822.xml
+ur-2004,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-2004.xml
+ur-2004,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-2004.xml
+ur-1989,,,Bundesamt für Verkehr,geocat.ch,ur-1989.xml
+ur-1989,,,Bundesamt für Verkehr,geocat.ch,ur-1989.xml
+ur-1906,,,Justizdirektion Kt. Uri,geocat.ch,ur-1906.xml
+ur-1906,,,Justizdirektion Kt. Uri,geocat.ch,ur-1906.xml
+ur-1883,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1883.xml
+ur-1883,,,Amt für Tiefbau Kt. Uri,geocat.ch,ur-1883.xml
