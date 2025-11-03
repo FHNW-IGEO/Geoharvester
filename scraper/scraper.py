@@ -580,7 +580,7 @@ def check_new_data(actual_db_path, new_data_path, match_columns,
     to_keep = to_keep.drop_duplicates(keep='first')
 
     old_db_lmerge = old_db.merge(new_db, on=match_columns, how='left',indicator='_lmerge',
-                                 sufixes=(None,"_drop"))
+                                 suffixes=(None,"_drop"))
     old_db_lmerge = old_db_lmerge.loc[old_db_lmerge['_lmerge']=='left_only']
 
     to_preprocessing = to_preprocessing[new_db.columns.to_list()]
