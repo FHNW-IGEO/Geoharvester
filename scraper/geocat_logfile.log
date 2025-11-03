@@ -1,0 +1,29 @@
+2025-11-03 09:02:58,221 - INFO - initializing identifier
+2025-11-03 09:02:59,551 - INFO - 
+
+    ==============================================================================================
+         ____  ____  ____  ______________________    ______________    ____  ________________
+        / __ \/ __ \/ __ \/ ____/ ____/ ___/ ___/   / ___/_  __/   |  / __ \/_  __/ ____/ __ \ 
+       / /_/ / /_/ / / / / /   / __/  \__ \__ \    \__ \ / / / /| | / /_/ / / / / __/ / / / /
+      / ____/ _, _/ /_/ / /___/ /___ ___/ /__/ /   ___/ // / / ___ |/ _, _/ / / / /___/ /_/ / _ _
+     /_/   /_/ |_|\____/\____/_____//____/____/   /____//_/ /_/  |_/_/ |_| /_/ /_____/_____(_|_|_)
+
+    PROCESS STARTED...
+    ==============================================================================================
+2025-11-03 09:03:03,013 - INFO - Starting cleaning of XML ['/home/runner/work/Geoharvester/Geoharvester/scraper/data/geocat_xml']
+2025-11-03 09:03:03,080 - INFO - Finished cleaning of XML ['/home/runner/work/Geoharvester/Geoharvester/scraper/data/geocat_xml'] successfully
+2025-11-03 09:03:03,080 - INFO - Start extraction form geocat.ch XML files
+2025-11-03 09:03:03,104 - INFO - GeoCat metadata extraction completed successfully.
+2025-11-03 09:03:03,116 - INFO - Geocat metadata transformation completed successfully.
+2025-11-03 09:03:03,125 - INFO - Geocat metadata transformation completed successfully.
+2025-11-03 09:03:03,129 - INFO - Geocat metadata transformation completed successfully.
+2025-11-03 09:03:03,129 - INFO - Start applying schemas
+2025-11-03 09:03:03,137 - INFO - Schema applied to geocat_dataset_metadata.csv
+2025-11-03 09:03:03,145 - INFO - Schema applied to geocat_distribution_metadata.csv
+2025-11-03 09:03:03,147 - INFO - Schema applied to geocat_contact_point_metadata.csv
+2025-11-03 09:03:03,147 - INFO - Created new pickle DB at /home/runner/work/Geoharvester/Geoharvester/scraper/data/geocat_data/geocat_metadata.pkl
+2025-11-03 09:03:03,147 - INFO - Reset pickle DB 'geocat_metadata'
+2025-11-03 09:03:03,152 - INFO - Saved pickle DB to /home/runner/work/Geoharvester/Geoharvester/scraper/data/geocat_data/geocat_metadata.pkl
+2025-11-03 09:03:03,152 - INFO - Metadata successfully loaded into pickle DB 'geocat_metadata'
+2025-11-03 09:03:03,385 - INFO - Saved updated pickle DB to /home/runner/work/Geoharvester/Geoharvester/scraper/data/geocat_data/geocat_metadata.pkl
+2025-11-03 09:03:03,446 - INFO - Saved updated pickle DB to /home/runner/work/Geoharvester/Geoharvester/scraper/data/geocat_data/geocat_metadata.pkl
