@@ -38,3 +38,5 @@ WORKFLOW_GEOCAT_FILES = [
     os.path.join(WORKFLOW_GEOCAT_DATA, "geocat_contact_point_metadata.csv"),
 ]
 
+WORKFLOW_GEOCAT_DATABASE_NAME = "geocat_metadata"  # Name of the pickle database file
+

@@ -48,7 +48,7 @@ if __name__ == "__main__":
             save_dir=config.WORKFLOW_GEOCAT_DATA,
             csv_file= config.WORKFLOW_GEOCAT_DATASET_LIST,
             log_file="logfile_geocat.log",
-            start_pos=16750,
+            start_pos=1,
             batch_size=250
         )
 
@@ -91,7 +91,7 @@ if __name__ == "__main__":
 
 
         # 3.0 Load metadata into database
-        db_name = "geocat_metadata"
+        db_name = config.WORKFLOW_GEOCAT_DATABASE_NAME
         base_dir = config.WORKFLOW_GEOCAT_DATA
         files = config.WORKFLOW_GEOCAT_FILES
         # Always recreate pickle DB
