@@ -1,4 +1,4 @@
-name: Run geocat scraper and preprocessing V2
+name: Run geocat scraper and preprocessing V3
 
 on:
   schedule:
@@ -47,8 +47,12 @@ jobs:
 
       - name: Pull latest remote changes
         run: |
+          git add -A
+          git stash
           git fetch origin geocat_integration
           git pull --rebase origin geocat_integration
+          git stash pop || true
+
 
       - name: Upload geocat_metadata (PKL)
         uses: actions/upload-artifact@v4
