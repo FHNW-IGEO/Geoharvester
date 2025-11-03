@@ -17,7 +17,10 @@ jobs:
 
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4  # use stable version tag instead of "@main"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  
+          ref: geocat_integration 
 
       - name: Increase git buffer size
         run: git config --global http.postBuffer 1048576000
@@ -37,6 +40,11 @@ jobs:
         env:
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
 
+      - name: Pull latest changes
+        run: |
+          git config pull.rebase true
+          git pull origin geocat_integration
+
       - name: Upload geocat_metadata (PKL)
         uses: actions/upload-artifact@v4
         with:
@@ -47,6 +55,7 @@ jobs:
       - name: Push log files to repo
         uses: github-actions-x/commit@v2.9
         with:
+      
           push-branch: "geocat_integration"
           commit-message: "geocat_data"
           force-add: "true"
