@@ -1,4 +1,4 @@
-name: Run geocat scraper and preprocessing
+name: Run geocat scraper and preprocessing V2
 
 on:
   schedule:
