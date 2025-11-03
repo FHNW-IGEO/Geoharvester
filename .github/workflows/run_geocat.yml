@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  scrape_geocat:   # ← job names cannot contain spaces
+  scrape_geocat:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -19,8 +19,13 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  
-          ref: geocat_integration 
+          fetch-depth: 0                 # required for git pull to work
+          ref: geocat_integration        # checkout the same branch you will push to
+
+      - name: Set up Git identity
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
 
       - name: Increase git buffer size
         run: git config --global http.postBuffer 1048576000
@@ -40,10 +45,10 @@ jobs:
         env:
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
 
-      - name: Pull latest changes
+      - name: Pull latest remote changes
         run: |
-          git config pull.rebase true
-          git pull origin geocat_integration
+          git fetch origin geocat_integration
+          git pull --rebase origin geocat_integration
 
       - name: Upload geocat_metadata (PKL)
         uses: actions/upload-artifact@v4
@@ -51,11 +56,9 @@ jobs:
           name: data_to_keep
           path: ./scraper/data/geocat_data/geocat_metadata.pkl
 
-      
-      - name: Push log files to repo
+      - name: Commit and push updated geocat data
         uses: github-actions-x/commit@v2.9
         with:
-      
           push-branch: "geocat_integration"
           commit-message: "geocat_data"
           force-add: "true"
