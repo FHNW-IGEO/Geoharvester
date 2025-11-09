@@ -5,6 +5,7 @@ dataset_identifier,contact_type,contact_email,contact_name,origin,xml_filename
 00d2e1d2-39ad-45e0-a36b-3183846bbe80,,staatskanzlei@sh.ch,Staatskanzlei,geocat.ch,00d2e1d2-39ad-45e0-a36b-3183846bbe80.xml
 00b803b3-f6f1-42cd-8a26-98886bbc4f1c,,geoinformation@bern.ch,Geoinformation Stadt Bern,geocat.ch,00b803b3-f6f1-42cd-8a26-98886bbc4f1c.xml
 00b803b3-f6f1-42cd-8a26-98886bbc4f1c,,stadtarchiv@bern.ch,Stadtarchiv Bern,geocat.ch,00b803b3-f6f1-42cd-8a26-98886bbc4f1c.xml
+00759d9e-5993-49a5-a73f-36e3a41fd78d,,SDT-DRE@admin.vs.ch,Canton du Valais - Service du développement territorial (SDT) - Gestion du territoire,geocat.ch,00759d9e-5993-49a5-a73f-36e3a41fd78d.xml
 00e1a99b-8092-4fd0-9bd6-8eb0e6fb5b60,,gemeinde@steinerberg.ch,Gemeinde Steinerberg,geocat.ch,00e1a99b-8092-4fd0-9bd6-8eb0e6fb5b60.xml
 00e67723-c106-4d2d-b811-cb05d0effaee,,info.jfv@tg.ch,"Kanton Thurgau, Jagd- und Fischereiverwaltung",geocat.ch,00e67723-c106-4d2d-b811-cb05d0effaee.xml
 01081171-65F6-4B4A-8DF8-DACC03BB769A,,volkswirtschaftsamt@ow.ch,"Kanton Obwalden, Volkswirtschaftsamt (VWA)",geocat.ch,01081171-65F6-4B4A-8DF8-DACC03BB769A.xml
@@ -17,8 +18,6 @@ dataset_identifier,contact_type,contact_email,contact_name,origin,xml_filename
 00e6430e-8e79-448e-9370-4a748c2cf9d2,,info@jermann-ag.ch,Jermann Ingenieure und Geometer AG,geocat.ch,00e6430e-8e79-448e-9370-4a748c2cf9d2.xml
 00a60ee9-cdf3-4338-8478-348e8927e69d,,zb@zb.uzh.ch,Universität Zürich- Zentralbibliothek Zürich,geocat.ch,00a60ee9-cdf3-4338-8478-348e8927e69d.xml
 0025C3A7-2E41-4E38-8D7A-6C970DACFFEE,,bauamt@sarnen.ow.ch,"Gemeinde Sarnen, Bauamt / Raumentwicklung",geocat.ch,0025C3A7-2E41-4E38-8D7A-6C970DACFFEE.xml
-00fb2625-a427-49e6-a3f2-8caef0bae866,,agi@bd.so.ch,Amt für Geoinformation,geocat.ch,00fb2625-a427-49e6-a3f2-8caef0bae866.xml
-00fb2625-a427-49e6-a3f2-8caef0bae866,,agi@bd.so.ch,Amt für Geoinformation,geocat.ch,00fb2625-a427-49e6-a3f2-8caef0bae866.xml
 01811bd5-7f55-4c89-92f2-78fcd379affa,,info@isska.ch,Schweizerisches Institut für Speläologie und Karstforschung,geocat.ch,01811bd5-7f55-4c89-92f2-78fcd379affa.xml
 019e7c89-5f98-463b-b5a8-792e8f5a2117,,geoinformation@bern.ch,Geoinformation Stadt Bern,geocat.ch,019e7c89-5f98-463b-b5a8-792e8f5a2117.xml
 019e7c89-5f98-463b-b5a8-792e8f5a2117,,stadtarchiv@bern.ch,Stadtarchiv Bern,geocat.ch,019e7c89-5f98-463b-b5a8-792e8f5a2117.xml
@@ -33,8 +32,8 @@ dataset_identifier,contact_type,contact_email,contact_name,origin,xml_filename
 0078f9be-d7ef-4877-a9fa-089b77de4e59,,atlasinfo@ethz.ch,Atlas of Switzerland,geocat.ch,0078f9be-d7ef-4877-a9fa-089b77de4e59.xml
 0078f9be-d7ef-4877-a9fa-089b77de4e59,,atlasinfo@ethz.ch,Atlas of Switzerland,geocat.ch,0078f9be-d7ef-4877-a9fa-089b77de4e59.xml
 0078f9be-d7ef-4877-a9fa-089b77de4e59,,info@svv.ch,Swiss Insurance Association,geocat.ch,0078f9be-d7ef-4877-a9fa-089b77de4e59.xml
-001d9c13-6501-4de5-b0f8-5e97afd8e258,,mi@sparrow.city,Sparrow Analytics SA,geocat.ch,001d9c13-6501-4de5-b0f8-5e97afd8e258.xml
 01572f54-17f3-4620-8b50-60170f67517f,,awn@sz.ch,SZ Amt für Wald und Natur,geocat.ch,01572f54-17f3-4620-8b50-60170f67517f.xml
+00215252-85d5-49e7-8893-490ed4aa6fc8,,asitvd@mc-sa.ch,Mosini et Caviezel Ingénieurs Géomètres Officiels,geocat.ch,00215252-85d5-49e7-8893-490ed4aa6fc8.xml
 009cd049-f54b-40cf-8c7a-e9b678e15ce8,,are@sz.ch,SZ Amt für Raumentwicklung,geocat.ch,009cd049-f54b-40cf-8c7a-e9b678e15ce8.xml
 007fbcfd-f168-48b7-bfbd-8c23b7b5bb70,,dario.carrea@ville-fr.ch,Secteur des ponts et chaussées de la Ville de Fribourg,geocat.ch,007fbcfd-f168-48b7-bfbd-8c23b7b5bb70.xml
 00ea3649-045a-4961-81ef-8d162b4ad623,,geoinformation@bern.ch,Geoinformation Stadt Bern,geocat.ch,00ea3649-045a-4961-81ef-8d162b4ad623.xml
@@ -55,6 +54,7 @@ dataset_identifier,contact_type,contact_email,contact_name,origin,xml_filename
 00b28d92-5108-4fec-943d-6246a03f00c3,,info@swisstopo.ch,Bundesamt für Landestopografie swisstopo,geocat.ch,00b28d92-5108-4fec-943d-6246a03f00c3.xml
 01b61887-ffac-48fb-ba98-04195e945e9a,,energieumweltamt@horgen.ch,Abteilung Energie und Umwelt der Gemeinde Horgen,geocat.ch,01b61887-ffac-48fb-ba98-04195e945e9a.xml
 01afcb7a-920a-4971-a2aa-04feb8b03790,,geomatik@horgen.ch,Abteilung Geomatik und Vermessung der Gemeinde Horgen,geocat.ch,01afcb7a-920a-4971-a2aa-04feb8b03790.xml
+0134b2ac-cdfc-4992-8a89-dbbd6f0b787f,,audrey.brunetti@ville-fr.ch,Secteur du cadastre de la Ville de Fribourg,geocat.ch,0134b2ac-cdfc-4992-8a89-dbbd6f0b787f.xml
 00a40413-aae8-403b-a9aa-8eeef111a90f-8371,,gis@stadtluzern.ch,Geoinformationszentrum (GIS) Stadt Luzern,geocat.ch,00a40413-aae8-403b-a9aa-8eeef111a90f-8371.xml
 00a40413-aae8-403b-a9aa-8eeef111a90f-8371,,gis@stadtluzern.ch,Geoinformationszentrum (GIS) Stadt Luzern,geocat.ch,00a40413-aae8-403b-a9aa-8eeef111a90f-8371.xml
 01c995c4-d1b4-4f52-bc3e-1fc979a1a1d5,,geodaten@lu.ch,"Kanton Luzern, Abteilung Geoinformation",geocat.ch,01c995c4-d1b4-4f52-bc3e-1fc979a1a1d5.xml
@@ -70,8 +70,7 @@ dataset_identifier,contact_type,contact_email,contact_name,origin,xml_filename
 00f023b5-3ecc-4a40-b3a4-8e77943e284e,,sfn@fr.ch,Service des forêts et de la nature,geocat.ch,00f023b5-3ecc-4a40-b3a4-8e77943e284e.xml
 0022888a-a4f2-4d5c-881c-00b6591bf178-6571,,alg@ag.ch,Abteilung Landschaft und Gewässer,geocat.ch,0022888a-a4f2-4d5c-881c-00b6591bf178-6571.xml
 017afd2a-0117-4cf6-bd37-a269e9ebbe59,,umwelt.afu@tg.ch,"Kanton Thurgau, Amt für Umwelt",geocat.ch,017afd2a-0117-4cf6-bd37-a269e9ebbe59.xml
-01592910-3b98-41f1-8735-ef6ab07dd7f9,,geoinformation@bern.ch,Geoinformation Stadt Bern,geocat.ch,01592910-3b98-41f1-8735-ef6ab07dd7f9.xml
-01592910-3b98-41f1-8735-ef6ab07dd7f9,,bauinspektorat@bern.ch,Bauinspektorat Stadt Bern,geocat.ch,01592910-3b98-41f1-8735-ef6ab07dd7f9.xml
+004ff1f9-f245-4517-ad82-e4a71cf23371,,sitvs@admin.vs.ch,Canton du Valais - Service de la géoinformation (SGI) - CC GEO,geocat.ch,004ff1f9-f245-4517-ad82-e4a71cf23371.xml
 0087d049-54e4-4783-83d9-ed393d0731d2,,noise@bafu.admin.ch,Office fédéral de l'environnement,geocat.ch,0087d049-54e4-4783-83d9-ed393d0731d2.xml
 010961b4-a8cd-4875-beb7-d3a43f8221bb,,francesca.cheda@fr.ch,Service des forêts et de la nature,geocat.ch,010961b4-a8cd-4875-beb7-d3a43f8221bb.xml
 00e83ac5-6aee-4974-9a2e-2742a28ab25c-8371,,geodaten@sg.ch,Amt für Raumentwicklung und Geoinformation,geocat.ch,00e83ac5-6aee-4974-9a2e-2742a28ab25c-8371.xml
@@ -79,27 +78,31 @@ dataset_identifier,contact_type,contact_email,contact_name,origin,xml_filename
 019bc856-8d5d-47fa-94da-4896fb12366d,,gis@bazl.admin.ch,Bundesamt für Zivilluftfahrt,geocat.ch,019bc856-8d5d-47fa-94da-4896fb12366d.xml
 01b87e0c-d617-4f72-88e1-891b64da7325,,sigip@pully.ch,Pully,geocat.ch,01b87e0c-d617-4f72-88e1-891b64da7325.xml
 009a6d70-06bd-45bf-a420-4ac2065129e0,,catherine.folly@fr.ch,,geocat.ch,009a6d70-06bd-45bf-a420-4ac2065129e0.xml
+005c2ee1-0294-4702-b7f6-40fd7bd05618,,contact@georhena.eu,GeoRhena,geocat.ch,005c2ee1-0294-4702-b7f6-40fd7bd05618.xml
+005c2ee1-0294-4702-b7f6-40fd7bd05618,,contact@atmo-grandest.eu,ATMO Grand Est,geocat.ch,005c2ee1-0294-4702-b7f6-40fd7bd05618.xml
+005c2ee1-0294-4702-b7f6-40fd7bd05618,,emissionserklaerung@lubw.bwl.de,Landesanstalt für Umwelt Baden-Württemberg (LUBW),geocat.ch,005c2ee1-0294-4702-b7f6-40fd7bd05618.xml
+005c2ee1-0294-4702-b7f6-40fd7bd05618,,lufthygieneamt@bl.ch,Lufthygieneamt beider Basel,geocat.ch,005c2ee1-0294-4702-b7f6-40fd7bd05618.xml
+005c2ee1-0294-4702-b7f6-40fd7bd05618,,poststelle@lfu.rlp.de,Landesamt für Umwelt Rheinland-Pfalz,geocat.ch,005c2ee1-0294-4702-b7f6-40fd7bd05618.xml
+005c2ee1-0294-4702-b7f6-40fd7bd05618,,secr.env@jura.ch,Office de l'environnement - République et Canton du Jura,geocat.ch,005c2ee1-0294-4702-b7f6-40fd7bd05618.xml
+005c2ee1-0294-4702-b7f6-40fd7bd05618,,bvu@ag.ch,"Departement Bau, Verkehr und Umwelt - Kanton Aargau",geocat.ch,005c2ee1-0294-4702-b7f6-40fd7bd05618.xml
 0054E877-00C5-470A-B431-AA093E0CD028,,stans@gis-daten.ch,GIS Daten AG Stans,geocat.ch,0054E877-00C5-470A-B431-AA093E0CD028.xml
 00347ff2-fc9d-4171-bc6d-5fe49658e80b,,transmitter@bakom.admin.ch,Bundesamt für Kommunikation,geocat.ch,00347ff2-fc9d-4171-bc6d-5fe49658e80b.xml
 00347ff2-fc9d-4171-bc6d-5fe49658e80b,,info@bakom.admin.ch,Bundesamt für Kommunikation,geocat.ch,00347ff2-fc9d-4171-bc6d-5fe49658e80b.xml
 010b6d98-4a5a-4117-9cf7-889bfb5dd6cc-6571,,umwelt@ag.ch,Abteilung für Umwelt,geocat.ch,010b6d98-4a5a-4117-9cf7-889bfb5dd6cc-6571.xml
 012c160a-1404-42dd-8379-001a0bb2375b,,kundendienst@meteoschweiz.ch,Bundesamt für Meteorologie und Klimatologie,geocat.ch,012c160a-1404-42dd-8379-001a0bb2375b.xml
 011f2b38-a7e3-49c9-a40f-99d5f0548928,,bnl@bafu.admin.ch,Bundesamt für Umwelt / Abteilung Biodiversität und Landschaft,geocat.ch,011f2b38-a7e3-49c9-a40f-99d5f0548928.xml
+0005cc49-b66a-49b4-a30b-0aba36b28d01,,kiss@tomo.ig.erdw.ethz.ch,Schweizerische Geophysikalische Kommission,geocat.ch,0005cc49-b66a-49b4-a30b-0aba36b28d01.xml
+0005cc49-b66a-49b4-a30b-0aba36b28d01,,milan.beres@swisstopo.ch,Bundesamt für Landestopografie swisstopo,geocat.ch,0005cc49-b66a-49b4-a30b-0aba36b28d01.xml
+0005cc49-b66a-49b4-a30b-0aba36b28d01,,info@swisstopo.ch,Bundesamt für Landestopografie swisstopo,geocat.ch,0005cc49-b66a-49b4-a30b-0aba36b28d01.xml
 01087FEE-8EA0-49CE-85D8-8C747A16A52B,,raumentwicklung@nw.ch,"Kanton Nidwalden, Amt für Raumentwicklung (ARE)",geocat.ch,01087FEE-8EA0-49CE-85D8-8C747A16A52B.xml
-01b281dc-77ba-4511-86a8-7835ccadca22,,atlasinfo@ethz.ch,Atlas of Switzerland,geocat.ch,01b281dc-77ba-4511-86a8-7835ccadca22.xml
-01b281dc-77ba-4511-86a8-7835ccadca22,,marco.zanoli@ken.ch,,geocat.ch,01b281dc-77ba-4511-86a8-7835ccadca22.xml
-01b281dc-77ba-4511-86a8-7835ccadca22,,atlasinfo@ethz.ch,Atlas of Switzerland,geocat.ch,01b281dc-77ba-4511-86a8-7835ccadca22.xml
-01b281dc-77ba-4511-86a8-7835ccadca22,,geodata@swisstopo.ch,Swiss Federal Office of Topography,geocat.ch,01b281dc-77ba-4511-86a8-7835ccadca22.xml
-01b281dc-77ba-4511-86a8-7835ccadca22,,not@set.yet,Historisches Lexikon der Schweiz,geocat.ch,01b281dc-77ba-4511-86a8-7835ccadca22.xml
 00EC1882-7DDD-4521-BEE7-14C5DD4A75EE,,dallenwil@nw.ch,"Gemeinde Dallenwil, Bauamt",geocat.ch,00EC1882-7DDD-4521-BEE7-14C5DD4A75EE.xml
 00f3ad98-10d0-450b-ac30-ebca5edfa18d,,daniel.gnerre@vevey.ch,Vevey,geocat.ch,00f3ad98-10d0-450b-ac30-ebca5edfa18d.xml
 019eb5ca-59ab-fd9d-ddb6-ec9c17f0996f,,Suzana.Trajkovic@zuerich.ch,Tiefbau- und Entsorgungsdepartement- Geomatik + Vermessung,geocat.ch,019eb5ca-59ab-fd9d-ddb6-ec9c17f0996f.xml
-01e4e67f-23a3-45d0-b2f4-5bc59d3e2fec,,geodaten@lu.ch,"Kanton Luzern, Abteilung Geoinformation",geocat.ch,01e4e67f-23a3-45d0-b2f4-5bc59d3e2fec.xml
-01e4e67f-23a3-45d0-b2f4-5bc59d3e2fec,,rawi@lu.ch,Dienststelle Raum und Wirtschaft (rawi),geocat.ch,01e4e67f-23a3-45d0-b2f4-5bc59d3e2fec.xml
 018D7B83-C651-4105-BEFC-D6BD85F098FF,,bauamt@stansstad.ch,"Gemeinde Stansstad, Bauamt",geocat.ch,018D7B83-C651-4105-BEFC-D6BD85F098FF.xml
 01ab5cad-577f-436a-bbcc-437fc01e16ea,,aue@bs.ch,Kanton Basel-Stadt,geocat.ch,01ab5cad-577f-436a-bbcc-437fc01e16ea.xml
 01DFFF4B-21D1-418E-A9B9-295561CEE992,,raumentwicklung@nw.ch,"Kanton Nidwalden, Amt für Raumentwicklung (ARE)",geocat.ch,01DFFF4B-21D1-418E-A9B9-295561CEE992.xml
 00aac3bf-e2de-4565-a074-4f2b888a9c26,,sfn@fr.ch,Service des forêts et de la nature,geocat.ch,00aac3bf-e2de-4565-a074-4f2b888a9c26.xml
 015e6d20-0d69-4ae7-adfe-85c588aac141,,contact@georhena.eu,GeoRhena,geocat.ch,015e6d20-0d69-4ae7-adfe-85c588aac141.xml
 015e6d20-0d69-4ae7-adfe-85c588aac141,,contact@atmo-grandest.eu,ATMO Grand Est,geocat.ch,015e6d20-0d69-4ae7-adfe-85c588aac141.xml
+00573233-565a-4ab4-a9c5-2a8c957aa6ad,,wald@bafu.admin.ch,Bundesamt für Umwelt / Abteilung Wald,geocat.ch,00573233-565a-4ab4-a9c5-2a8c957aa6ad.xml
 0068aac4-bc1f-4b73-9bcd-d1de34755ff5,,info@jermann-ag.ch,Jermann Ingenieure und Geometer AG,geocat.ch,0068aac4-bc1f-4b73-9bcd-d1de34755ff5.xml
