@@ -108,12 +108,12 @@ async def startup_event():
         fastapi_logger.info("Redis initialized with {} records".format(total_keys))
 
 
+# Can be removed:
+# @app.get("/api")
+# async def root():
+#     '''Root endpoint'''
 
-@app.get("/api")
-async def root():
-    '''Root endpoint'''
-
-    return {"message": "running"}
+#     return {"message": "running"}
 
 @app.get("/api/getData", response_model=GeoharvesterPage[GeoserviceModel])
 async def get_data(query_string: Union[str, None] = None,  service: EnumServiceType = EnumServiceType.none, provider:EnumProviderType = EnumProviderType.none, lang: EnumLangType = EnumLangType.de, page: int = 0, limit: int = 1000):
@@ -142,7 +142,7 @@ async def get_data(query_string: Union[str, None] = None,  service: EnumServiceT
         for known_term in known_terms:
             if len(known_term.split()) == 1:
                 known_terms.remove(known_term)
-        print(f"Knwon terms and synonyms from KG: {known_terms}")
+        print(f"Known terms and synonyms from KG: {known_terms}")
         # create word list without known terms
         word_list = split_search_string(query_string, known_terms)
         # stop words removal just for redis

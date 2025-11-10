@@ -6,6 +6,7 @@ import itertools
 import os
 import sys
 from string import punctuation
+import logging
 
 import matplotlib.pyplot as plt
 import numpy as np  # >= 1.23 < 1.26
@@ -34,6 +35,7 @@ from tqdm import tqdm
 
 load_dotenv(dotenv_path=sys.path[0]+"/translator.env")
 chatgpt_api_key = os.getenv("OPENAI_API_KEY")
+logger = logging.getLogger(__name__)
 
 def progress(token):
     """
@@ -77,7 +79,7 @@ def translate_text(text, to_lang, from_lang):
             trnd = GoogleTranslator(source='auto', target=to_lang).translate(text.replace('_',' '))
 
             if trnd is None:
-                print(f"⚠️ Translation failed for text: {text!r}")
+                logger.warning(f"⚠️ Translation failed for text: {text!r}")
                 trnd = ""
 
             trnd = trnd.replace("'", " ")
@@ -97,7 +99,7 @@ def translate_abstract(text, to_lang, from_lang):
                 trnd = GoogleTranslator(source='auto', target=to_lang).translate(text.replace('_',' '))
 
                 if trnd is None:
-                    print(f"⚠️ Translation failed for text: {text!r}")
+                    logger.warning(f"⚠️ Translation failed for text: {text!r}")
                     trnd = ""
 
                 trnd = trnd.replace("'", " ")
@@ -404,7 +406,7 @@ class LSI_LDA():
         dictionary, doc_term_matrix = self.prepare_matrix()
         # Generate LAS model with training data
         lsamodel = LsiModel(doc_term_matrix, num_topics=number_of_topics, id2word=dictionary)
-        print(lsamodel.print_topics(num_topics=number_of_topics, num_words=number_of_words))
+        logger.info(lsamodel.print_topics(num_topics=number_of_topics, num_words=number_of_words))
         return lsamodel
     
     def create_gensim_lda_model(self, categories = 'eCH'):
@@ -429,7 +431,7 @@ class LSI_LDA():
         elif categories == 'INSPIRE':
             cat = 34+1 # one more for empty fields
         else:
-            print('The categories must be <eCH> or <INSPIRE>')
+            logger.info('The categories must be <eCH> or <INSPIRE>')
             cat = 0
         self.main_topics_lda = LdaModel(corpus=self.doc_term_matrix, id2word=self.dictionary, num_topics=cat,
                                         alpha='auto', eta='auto', passes=100, eval_every=None, chunksize=2000)
@@ -491,7 +493,7 @@ class NLP_spacy():
         elif lang == 'italian':
             keywords = self.nlp_it(text).ents
         else:
-            print("The language model is not implemented for " + lang)
+            logger.info("The language model is not implemented for " + lang)
             keywords = []
         return list(keywords)
 
@@ -598,11 +600,11 @@ class NLP_spacy():
         """
         self.index = texts.index.values
         if use_rake:
-            print('Extracting keywords with RAKE...')
+            logger.info('Extracting keywords with RAKE...')
             keywords = [self.analyse_text_keywords(text, refine_keywords, keyword_length=keyword_length) for text in tqdm(texts[column].values.tolist())]
             self.topics = keywords
         else:
-            print('Extracting keywords with SpaCy...')
+            logger.info('Extracting keywords with SpaCy...')
             datasets = [self.fit_nlp(text) for text in tqdm(texts[column].values.tolist())]
             for dataset in datasets:
                 self.topics.update(dataset[:num_keywords])
@@ -666,9 +668,9 @@ class NLP_spacy():
             lists of summarized texts
         """
         if use_GPT:
-            print('Summarizing with openai. There is a limit of token for the free version!')
+            logger.warning('Summarizing with openai. There is a limit of token for the free version!')
         else:
-            print('Summarizing text with Bert')
+            logger.info('Summarizing text with Bert')
         self.index = texts.index.values
         summaries = [self.summarize(progress(text)) for text in texts[column].values.tolist()]
         return summaries

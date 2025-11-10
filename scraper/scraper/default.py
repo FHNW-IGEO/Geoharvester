@@ -13,6 +13,7 @@ import json
 import math
 import re
 import time
+import logging
 
 import requests
 from pyproj import Transformer
@@ -20,6 +21,8 @@ from requests.utils import requote_uri
 
 # Define a transformer to convert from WGS84 to LV95
 transformer = Transformer.from_crs("EPSG:4326", 'EPSG:2056')
+
+logger = logging.getLogger(__name__)
 
 def shorten_mapgeo(mapgeo):
     # Set the API endpoint URL
@@ -49,7 +52,7 @@ def shorten_mapgeo(mapgeo):
             # Wait for a few seconds before retrying
             time.sleep(5)
     # If all retries fail, print an error message and return None
-    print("Request failed after 3 retries. providing no shorted URL")
+    logger.error("Request failed after 3 retries. providing no shorted URL")
     data=mapgeo
     return data
 
@@ -356,7 +359,7 @@ def scrape(source,service,i,layertree, group,layer_data,prefix):
         
         return(layer_data)
     elif "STAC" in type:
-        print("STAC detected ..add config")
+        logger.info("STAC detected ..add config")
     else:
         return(False)        
 

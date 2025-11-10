@@ -49,6 +49,10 @@ sys.path.insert(0, config.SOURCE_SCRAPER_DIR)
 service_keys = (("WMSGetCap", "n.a."),
                 ("WMTSGetCap", "n.a."), ("WFSGetCap", "n.a."))
 
+# Initialize and configure the logger
+logging.config.dictConfig(config.LOGGING_CONFIG)
+logger = logging.getLogger("Scraping log")
+
 
 def service_result_empty():
     """
@@ -218,9 +222,9 @@ def get_service_info(source):
         service_type = None
         try:
             if source_version is not None:
-                service = WebMapService(server_url, version=source_version)
+                service = WebMapService(server_url, version=source_version, timeout=config.SCRAPER_REQUEST_TIMEOUT)
             else:
-                service = WebMapService(server_url)
+                service = WebMapService(server_url, timeout=config.SCRAPER_REQUEST_TIMEOUT)
             service_type = "WMS"
             # We assume WMSs can have child/parent relations
             children_possible = True
@@ -229,7 +233,7 @@ def get_service_info(source):
 
         if service_type is None:
             try:
-                service = WebMapTileService(server_url)
+                service = WebMapTileService(server_url, timeout=config.SCRAPER_REQUEST_TIMEOUT)
                 service_type = "WMTS"
                 # We assume WMTSs can't have child/parent relations
                 children_possible = False
@@ -239,10 +243,10 @@ def get_service_info(source):
         if service_type is None:
             try:
                 if source_version is None:
-                    service = WebFeatureService(server_url, version='2.0.0')
+                    service = WebFeatureService(server_url, version='2.0.0', timeout=config.SCRAPER_REQUEST_TIMEOUT)
                 else:
                     service = WebFeatureService(server_url,
-                                                version=source_version)
+                                                version=source_version, timeout=config.SCRAPER_REQUEST_TIMEOUT)
                 service_type = "WFS"
                 # We assume WFSs can't have child/parent relations
                 children_possible = False
@@ -677,16 +681,6 @@ if __name__ == "__main__":
     6 Logs and prints a message indicating that the scraper has completed.
     """
     process_startT=time()
-    # Initialize and configure the logger
-    logger = logging.getLogger("Scraping log")
-    logger.setLevel(logging.INFO)
-    fh = logging.FileHandler(config.LOG_FILE, "w", "utf-8")
-    fh.setLevel(logging.INFO)
-    formatter = logging.Formatter("%(asctime)s - %(name)s - %(filename)s >"
-                                  "%(funcName)17s(): Line %(lineno)s - "
-                                  "%(levelname)s - %(message)s")
-    fh.setFormatter(formatter)
-    logger.addHandler(fh)
 
     # Get the credentials for the Google Index API. The approach depends on
     # whether this script is running on GitHub (via GitHub Actions) or
@@ -724,7 +718,7 @@ if __name__ == "__main__":
     n = 1
 
     scraping_startT = time()
-    print(f"Startup time until scraping: {int((process_startT-scraping_startT) / 60)} mins")
+    logger.info(f"Startup time until scraping: {int((process_startT-scraping_startT) / 60)} mins")
     for source in sources:
         scrape_source_startT = time()
         server_operator = source['Description']
@@ -738,7 +732,6 @@ if __name__ == "__main__":
 
         status_msg = "Running %s scraper on %s > %s (source %s/%s)" % (
             scraper_type, server_operator, server_url, n, num_sources)
-        print(status_msg)
         logger.info(status_msg)
 
         # Check if this server is online. If yes, proceed to gather
@@ -754,7 +747,7 @@ if __name__ == "__main__":
         logger.info(f"Dataset {source['URL']} processed in {int(scrape_source_endT-scrape_source_startT)} seconds")
 
     scraping_endT = time()
-    print(f"Scraping took: {int((scraping_endT-scraping_startT) / 60)} mins")
+    logger.info(f"Scraping took: {int((scraping_endT-scraping_startT) / 60)} mins")
 
     write_dataset_info(config.GEOSERVICES_CH_CSV,config.GEOSERVICES_CH_CSV)
     # Copy to artifact folder
@@ -765,7 +758,6 @@ if __name__ == "__main__":
                    match_columns=['name','title','provider','keywords','abstract','endpoint', 'contact'],
                    output_path=os.path.split(config.GEOSERVICES_CH_CSV)[0])
     
-    print("\nKeeping "+str(len(data_to_keep))+" datasets from old database")
     logger.info(f"Keeping {len(data_to_keep)} datasets from old database")
 
     preprd_data = preprocessing_NLP(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],
@@ -779,4 +771,4 @@ if __name__ == "__main__":
     data_to_keep.to_csv(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'data_to_keep.csv'))
 
     process_endT = time()
-    print(f"Job took: {int((process_endT-process_startT) / 60)} mins")
+    logger.info(f"Job took: {int((process_endT-process_startT) / 60)} mins")

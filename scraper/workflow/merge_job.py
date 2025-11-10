@@ -10,6 +10,10 @@ sys.path.append('../')
 
 import scraper.configuration as config
 
+# Initialize and configure the logger
+logging.config.dictConfig(config.LOGGING_CONFIG)
+logger = logging.getLogger("Scraping log")
+
 
 def merge_with_data_to_keep(translated_data):
     """
@@ -32,12 +36,11 @@ def merge_with_data_to_keep(translated_data):
     """
     data_to_keep = pd.read_pickle(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'data_to_keep.pkl'))
     merged_database = pd.concat([data_to_keep, translated_data], axis=0)
-    print(f"Merged database has {len(merged_database.index)} rows, saving to pickle...")
+    logger.info(f"Merged database has {len(merged_database.index)} rows, saving to pickle...")
     merged_database = merged_database.drop_duplicates(keep='first')# remove duplicates
     merged_database = merged_database.replace(to_replace='nan', value="", regex=True) # replace nan with empty string!
     merged_database.to_pickle(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'merged_data.pkl'))
     merged_database.to_csv(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'merged_data.csv'))
-    print("\n Merge completed")
     logger.info("Merge completed")
 
 
@@ -65,11 +68,11 @@ if __name__ == "__main__":
 
     # Process and merge files
     if len(lang_found) < 1:
-        print(f"Merge not possible, {lang_found} languages found" )
+        logger.error(f"Merge not possible, {lang_found} languages found" )
 
     if len(lang_found) == 1:
         df1 = pd.read_pickle(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,  '{}_translated.pkl'.format(lang)))
-        print(f"First language has {len(df1.index)} rows")
+        logger.info(f"First language has {len(df1.index)} rows")
 
         merge_with_data_to_keep(df1)
 
@@ -80,5 +83,5 @@ if __name__ == "__main__":
             df2 = pd.read_pickle(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,  '{}_translated.pkl'.format(lang)))
             df1 = df1.merge(df2[translated_columns_to_add], on=config.WORKFLOW_MERGE_COLUMNS)
         
-        print(f"All languages combined have {len(df1.index)} rows")
+        logger.info(f"All languages combined have {len(df1.index)} rows")
         merge_with_data_to_keep(df1)
