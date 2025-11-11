@@ -36,6 +36,7 @@ from tqdm import tqdm
 load_dotenv(dotenv_path=sys.path[0]+"/translator.env")
 chatgpt_api_key = os.getenv("OPENAI_API_KEY")
 logger = logging.getLogger(__name__)
+tqdm.disable = not sys.stdout.isatty() # Silence tqdm as it is too verbose for the pipeline log.
 
 def progress(token):
     """

@@ -319,7 +319,7 @@ def get_service_info(source):
                         else:
                             layertree = "%s/%s" % (server_operator,
                                                    i.replace('"', ''))
-                        logger.info("Analysing %s > %s > %s" % (server_operator,
+                        logger.debug("Analysing %s > %s > %s" % (server_operator,
                                                                 server_url,
                                                                 this_layer))
                         write_service_info(source, service, this_layer,
@@ -345,7 +345,7 @@ def get_service_info(source):
                                 else:
                                     layertree = "%s/%s" % (server_operator,
                                                            i.replace('"', ''))
-                                logger.info("Analysing %s > %s > %s >> %s" % (
+                                logger.debug("Analysing %s > %s > %s >> %s" % (
                                     server_operator, server_url, this_layer,
                                     this_child_layer))
                                 write_service_info(source, service,

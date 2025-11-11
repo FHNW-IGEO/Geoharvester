@@ -351,6 +351,7 @@ jobs:
       - name: Push contents of data folder to repo
         uses: github-actions-x/commit@v2.9
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           push-branch: "main"
           commit-message: "Scraper done"
           force-add: "true"
