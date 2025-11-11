@@ -733,7 +733,7 @@ if __name__ == "__main__":
 
         status_msg = "Running %s scraper on %s > %s (source %s/%s)" % (
             scraper_type, server_operator, server_url, n, num_sources)
-        logger.info(status_msg)
+        logger.debug(status_msg)
 
         # Check if this server is online. If yes, proceed to gather
         # information
@@ -745,7 +745,7 @@ if __name__ == "__main__":
                 server_operator, server_url))
         n += 1
         scrape_source_endT = time()
-        logger.info(f"Dataset {source['URL']} processed in {int(scrape_source_endT-scrape_source_startT)} seconds")
+        logger.debug(f"Dataset {source['URL']} processed in {int(scrape_source_endT-scrape_source_startT)} seconds")
 
     scraping_endT = time()
     logger.info(f"Scraping took: {int((scraping_endT-scraping_startT) / 60)} mins")
