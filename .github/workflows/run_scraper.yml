@@ -22,6 +22,8 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Increase git buffer size
         run: |
@@ -80,7 +82,10 @@ jobs:
 
       - name: Push log files to repo
         uses: github-actions-x/commit@v2.9
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           push-branch: "main"
           commit-message: "Push logs"
           force-add: "true"
@@ -350,6 +355,8 @@ jobs:
 
       - name: Push contents of data folder to repo
         uses: github-actions-x/commit@v2.9
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           push-branch: "main"
