@@ -686,7 +686,7 @@ if __name__ == "__main__":
     6 Logs and prints a message indicating that the scraper has completed.
     """
     process_startT=time()
-
+    logger.info("Running scraper with a limit of {sourceProcessingLimit_raw}")
     # Get the credentials for the Google Index API. The approach depends on
     # whether this script is running on GitHub (via GitHub Actions) or
     # locally. In the latter case you need a valid config.JSON_KEY_FILE in
@@ -737,7 +737,7 @@ if __name__ == "__main__":
 
         status_msg = "Running %s scraper on %s > %s (source %s/%s)" % (
             scraper_type, server_operator, server_url, n, num_sources)
-        logger.debug(status_msg)
+        logger.info(status_msg)
 
         # Check if this server is online. If yes, proceed to gather
         # information
@@ -763,12 +763,12 @@ if __name__ == "__main__":
                    match_columns=['name','title','provider','keywords','abstract','endpoint', 'contact'],
                    output_path=os.path.split(config.GEOSERVICES_CH_CSV)[0])
     
-    logger.info(f"Keeping {len(data_to_keep)} datasets from old database")
+    logger.info(f"Keeping {len(data_to_keep)} datasets from old database without processing")
 
     preprd_data = preprocessing_NLP(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],
                                                  'to_preprocess.pkl'))
     pathpart = os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl')
-    logger.info(f"Found {len(data_to_keep)} for processing")
+    logger.info(f"Found {len(preprd_data)} datasets for processing")
 
 
     preprd_data.to_pickle(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl'))
