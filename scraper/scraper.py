@@ -686,7 +686,7 @@ if __name__ == "__main__":
     6 Logs and prints a message indicating that the scraper has completed.
     """
     process_startT=time()
-    logger.info("Running scraper with a limit of {sourceProcessingLimit_raw}")
+    logger.info(f"Running scraper with a limit of {sourceProcessingLimit_raw}")
     # Get the credentials for the Google Index API. The approach depends on
     # whether this script is running on GitHub (via GitHub Actions) or
     # locally. In the latter case you need a valid config.JSON_KEY_FILE in
