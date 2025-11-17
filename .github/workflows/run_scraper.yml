@@ -7,6 +7,11 @@ on:
     - cron: "0 0 * * 0"
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      sourceProcessingLimit:
+        description: "For debugging. Number (limit) of source urls to be used in the pipeline."
+        required: false
+        default: "" # Leave empty and check against None in the script
 
 permissions:
   contents: write
@@ -57,8 +62,9 @@ jobs:
       - name: Run Python script
         run: |
           python scraper.py
-        env: # Set the secrets as env var
+        env:
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          SOURCE_LIMIT: ${{ github.event.inputs.sourceProcessingLimit }}
 
       - uses: actions/upload-artifact@v4
         with:
@@ -79,6 +85,10 @@ jobs:
         with:
           name: data_to_keep_csv
           path: ./scraper/data/data_to_keep.csv
+
+      - name: Pull latest main
+        run: |
+          git pull origin main --rebase
 
       - name: Push log files to repo
         uses: github-actions-x/commit@v2.9

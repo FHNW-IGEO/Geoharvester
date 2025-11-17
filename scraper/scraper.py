@@ -26,10 +26,13 @@ from statistics import mean
 
 import configuration as config
 import requests
+from requests.exceptions import ReadTimeout, ConnectTimeout
 import utils
 from owslib.wfs import WebFeatureService
 from owslib.wms import WebMapService
 from owslib.wmts import WebMapTileService
+from io import BytesIO
+import random
 
 """ from oauth2client.service_account import ServiceAccountCredentials
 from googleapiclient.discovery import build
@@ -42,6 +45,10 @@ from time import time
 import httplib2
 import pandas as pd
 import pytz
+
+# From Github UI - to limit the source processing for debugging
+sourceProcessingLimit_raw = os.getenv("SOURCE_LIMIT")
+sourceProcessingLimit = int(sourceProcessingLimit_raw) if sourceProcessingLimit_raw else None
 
 # globals
 warnings.filterwarnings('ignore')
@@ -177,6 +184,40 @@ def is_online(source):
         log_to_operator_csv(server_operator, server_url, error_details)
     return success
 
+def safe_request(ws_call, retries=3):
+    for attempt in range(retries):
+        try:
+            return ws_call()
+        except Exception as e:
+            if "Read timed out" in str(e):
+                wait = 2 ** attempt + random.random()
+                time.sleep(wait)
+            else:
+                raise
+    raise TimeoutError("Service too slow after retries")
+
+def fetch_capabilities(url, timeout, version=None, service_type="WMS"):
+    """Fetch capabilities manually so OWSLib does NOT enforce its internal 10s timeout."""
+    params = {"request": "GetCapabilities"}
+
+    if service_type == "WMS":
+        params["service"] = "WMS"
+        if version:
+            params["version"] = version
+
+    elif service_type == "WMTS":
+        params["service"] = "WMTS"
+
+    elif service_type == "WFS":
+        params["service"] = "WFS"
+        params["version"] = version if version else "2.0.0"
+
+    response = requests.get(url, params=params, timeout=timeout)
+    response.raise_for_status()
+
+    # Return raw XML for OWSLib constructor
+    return BytesIO(response.content)
+
 
 def get_service_info(source):
     """
@@ -208,55 +249,56 @@ def get_service_info(source):
     server_url = source['URL']
 
     try:
-        # Check if this service has a valid service version number. If not,
-        # set version to None (i.e., use default)
+        # Check if this service has a valid service version number
         source_version = get_version(source['URL'])
         match = re.match(r"^\d+\.\d+\.\d+$", source_version)
         if not match:
             error_details = "Invalid service version number. Scraper will try the default."
             log_to_operator_csv(server_operator, server_url, error_details)
-            logger.warning("%s, %s: %s" % (server_operator, server_url,
-                                           error_details))
+            logger.warning(f"{server_operator}, {server_url}: {error_details}")
             source_version = None
 
-        # Check if this service is a WMS, a WMTS or a WFS
+        timeout = config.SCRAPER_REQUEST_TIMEOUT
+        service = None
         service_type = None
+        children_possible = False
+
+        # ---- Try WMS -----------------------------------------------------
         try:
-            if source_version is not None:
-                service = WebMapService(server_url, version=source_version, timeout=config.SCRAPER_REQUEST_TIMEOUT)
-            else:
-                service = WebMapService(server_url, timeout=config.SCRAPER_REQUEST_TIMEOUT)
+            xml = safe_request(lambda: fetch_capabilities(server_url, timeout, version=source_version, service_type="WMS"))
+            service = WebMapService(None, xml=xml)
             service_type = "WMS"
-            # We assume WMSs can have child/parent relations
-            children_possible = True
-        except:
-            pass
+            children_possible = True  # WMS can have sublayers
+            logger.info(f"WMS detected: {server_url}")
+        except Exception as e:
+            logger.debug(f"WMS failed for {server_url}: {e}")
 
+        # ---- Try WMTS ---------------------------------------------------------
         if service_type is None:
             try:
-                service = WebMapTileService(server_url, timeout=config.SCRAPER_REQUEST_TIMEOUT)
+                xml = safe_request(lambda: fetch_capabilities(server_url, timeout, service_type="WMTS"))
+                service = WebMapTileService(None, xml=xml)
                 service_type = "WMTS"
-                # We assume WMTSs can't have child/parent relations
                 children_possible = False
-            except:
-                pass
+                logger.info(f"WMTS detected: {server_url}")
+            except Exception as e:
+                logger.debug(f"WMTS failed for {server_url}: {e}")
 
+        # ---- Try WFS ----------------------------------------------------------
         if service_type is None:
             try:
-                if source_version is None:
-                    service = WebFeatureService(server_url, version='2.0.0', timeout=config.SCRAPER_REQUEST_TIMEOUT)
-                else:
-                    service = WebFeatureService(server_url,
-                                                version=source_version, timeout=config.SCRAPER_REQUEST_TIMEOUT)
+                xml = safe_request(lambda: fetch_capabilities(server_url, timeout, version=source_version, service_type="WFS"))
+                service = WebFeatureService(None, xml=xml)
                 service_type = "WFS"
-                # We assume WFSs can't have child/parent relations
                 children_possible = False
-            except:
-                pass
+                logger.info(f"WFS detected: {server_url}")
+            except Exception as e:
+                logger.debug(f"WFS failed for {server_url}: {e}")
 
-        if service_type is not None:
-            # I.e., we have found a valid service endpoint of type WMS, WTMS or
-            # WFS
+        # ---- Handle manually  -------------------------------------------------
+        if service_type is None:
+            error_details = "Failed to detect WMS/WMTS/WFS."
+            logger.warning(f"{server_operator}, {server_url}: {error_details}")
             service_title = service.identification.title
 
             # Extract all layer names
@@ -684,7 +726,7 @@ if __name__ == "__main__":
     6 Logs and prints a message indicating that the scraper has completed.
     """
     process_startT=time()
-
+    logger.info(f"Running scraper with a limit of {sourceProcessingLimit_raw}")
     # Get the credentials for the Google Index API. The approach depends on
     # whether this script is running on GitHub (via GitHub Actions) or
     # locally. In the latter case you need a valid config.JSON_KEY_FILE in
@@ -722,7 +764,7 @@ if __name__ == "__main__":
 
     scraping_startT = time()
     logger.info(f"Startup time until scraping: {int((process_startT-scraping_startT) / 60)} mins")
-    for source in sources:
+    for source in sources[:sourceProcessingLimit] if sourceProcessingLimit is not None else sources:
         scrape_source_startT = time()
         server_operator = source['Description']
         server_url = source['URL']
@@ -735,7 +777,7 @@ if __name__ == "__main__":
 
         status_msg = "Running %s scraper on %s > %s (source %s/%s)" % (
             scraper_type, server_operator, server_url, n, num_sources)
-        logger.debug(status_msg)
+        logger.info(status_msg)
 
         # Check if this server is online. If yes, proceed to gather
         # information
@@ -762,12 +804,12 @@ if __name__ == "__main__":
                    match_columns=['name','title','provider','keywords','abstract','endpoint'],
                    output_path=os.path.split(config.GEOSERVICES_CH_CSV)[0])
     
-    logger.info(f"Keeping {len(data_to_keep)} datasets from old database")
+    logger.info(f"Keeping {len(data_to_keep)} datasets from old database without processing")
 
     preprd_data = preprocessing_NLP(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],
                                                  'to_preprocess.pkl'))
     pathpart = os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl')
-    logger.info(f"Found {len(data_to_keep)} for processing")
+    logger.info(f"Found {len(preprd_data)} datasets for processing")
 
 
     preprd_data.to_pickle(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl'))
