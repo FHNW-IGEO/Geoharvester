@@ -9,6 +9,7 @@ SOURCE_COLLECTION_VERSION = {"KT_AI": "1.3.0",
 SOURCE_SCRAPER_DIR = "scraper"
 GEOSERVICES_CH_CSV = os.path.join("data", "geoservices_CH.csv")
 TEMP_PROCESSED_DATA_PKL = os.path.join("temp_data","merged_data.pkl")
+PROCESSED_DATA_PKL = os.path.join("data","merged_data.pkl")
 WORKFLOW_ARTIFACT_FOLDER = "artifacts"
 WORKFLOW_TRANSLATE_LANGUAGES = ['de','en','fr','it']
 WORKFLOW_TRANSLATE_COLUMNS = ["title","abstract","keywords","keywords_nlp"]
