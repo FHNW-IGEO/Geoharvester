@@ -43,6 +43,10 @@ import httplib2
 import pandas as pd
 import pytz
 
+# From Github UI - to limit the source processing for debugging
+sourceProcessingLimit_raw = os.getenv("SOURCE_LIMIT")
+sourceProcessingLimit = int(sourceProcessingLimit_raw) if sourceProcessingLimit_raw else None
+
 # globals
 warnings.filterwarnings('ignore')
 sys.path.insert(0, config.SOURCE_SCRAPER_DIR)
@@ -720,7 +724,7 @@ if __name__ == "__main__":
 
     scraping_startT = time()
     logger.info(f"Startup time until scraping: {int((process_startT-scraping_startT) / 60)} mins")
-    for source in sources:
+    for source in sources[:sourceProcessingLimit] if sourceProcessingLimit is not None else sources:
         scrape_source_startT = time()
         server_operator = source['Description']
         server_url = source['URL']
