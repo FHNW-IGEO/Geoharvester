@@ -11,7 +11,7 @@ on:
       sourceProcessingLimit:
         description: "For debugging. Number (limit) of source urls to be used in the pipeline."
         required: false
-        default: "default-value"
+        default: "" # Leave empty and check against None in the script
 
 permissions:
   contents: write
