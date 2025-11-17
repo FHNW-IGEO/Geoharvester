@@ -86,6 +86,13 @@ jobs:
           name: data_to_keep_csv
           path: ./scraper/data/data_to_keep.csv
 
+      - name: Pull main first
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git reset --soft origin/main
+
       - name: Push log files to repo
         uses: github-actions-x/commit@v2.9
         env:
