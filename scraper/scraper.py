@@ -26,6 +26,7 @@ from statistics import mean
 from pathlib import Path
 
 import configuration as config
+print("CONFIG IMPORTED FROM:", config.__file__)
 import requests
 from requests.exceptions import ReadTimeout, ConnectTimeout
 import utils
