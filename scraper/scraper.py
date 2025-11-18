@@ -793,10 +793,9 @@ if __name__ == "__main__":
     # Copy to artifact folder
     shutil.copyfile(config.GEOSERVICES_CH_CSV, os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'geoservices_CH.csv'))
 
-    #TODO: add column "contact" again after the  manual processing
     data_to_keep = check_new_data(os.path.join(config.PROCESSED_DATA_PKL),
                    config.GEOSERVICES_CH_CSV,
-                   match_columns=['name','title','provider','keywords','abstract','endpoint'],
+                   match_columns=['name','title','provider','keywords','abstract','endpoint', 'contact'],
                    output_path=os.path.split(config.GEOSERVICES_CH_CSV)[0])
     
     logger.info(f"Keeping {len(data_to_keep)} datasets from old database without processing")
