@@ -1,0 +1,21 @@
+2025-11-18 16:10:43,254 - Scraping log - scraper.py >         <module>(): Line 740 - INFO - Running scraper with a limit of 5
+2025-11-18 16:10:43,259 - Scraping log - scraper.py >         <module>(): Line 771 - INFO - Startup time until scraping: 0 mins
+2025-11-18 16:10:43,259 - Scraping log - scraper.py >         <module>(): Line 785 - INFO - Running default scraper on KT_AI > https://www.geoportal.ch/services/wms/ktai?SERVICE=WMS&REQUEST=GetCapabilities (source 1/1467)
+2025-11-18 16:10:51,220 - Scraping log - scraper.py > get_service_info(): Line 303 - WARNING - KT_AI, https://www.geoportal.ch/services/wms/ktai?SERVICE=WMS&REQUEST=GetCapabilities: Failed to detect WMS/WMTS/WFS.
+2025-11-18 16:10:51,234 - Scraping log - scraper.py > get_service_info(): Line 414 - ERROR - KT_AI > https://www.geoportal.ch/services/wms/ktai?SERVICE=WMS&REQUEST=GetCapabilities: 'NoneType' object has no attribute 'identification'
+2025-11-18 16:10:51,234 - Scraping log - scraper.py >         <module>(): Line 785 - INFO - Running default scraper on KT_AR > https://www.geoportal.ch/services/wms/ktar?SERVICE=WMS&REQUEST=GetCapabilities (source 2/1467)
+2025-11-18 16:10:58,912 - Scraping log - scraper.py > get_service_info(): Line 303 - WARNING - KT_AR, https://www.geoportal.ch/services/wms/ktar?SERVICE=WMS&REQUEST=GetCapabilities: Failed to detect WMS/WMTS/WFS.
+2025-11-18 16:10:58,912 - Scraping log - scraper.py > get_service_info(): Line 414 - ERROR - KT_AR > https://www.geoportal.ch/services/wms/ktar?SERVICE=WMS&REQUEST=GetCapabilities: 'NoneType' object has no attribute 'identification'
+2025-11-18 16:10:58,912 - Scraping log - scraper.py >         <module>(): Line 785 - INFO - Running default scraper on KT_AG > https://wms.geo.ag.ch/public/ows?SERVICE=WMS (source 3/1467)
+2025-11-18 16:11:03,820 - Scraping log - scraper.py > get_service_info(): Line 303 - WARNING - KT_AG, https://wms.geo.ag.ch/public/ows?SERVICE=WMS: Failed to detect WMS/WMTS/WFS.
+2025-11-18 16:11:03,820 - Scraping log - scraper.py > get_service_info(): Line 414 - ERROR - KT_AG > https://wms.geo.ag.ch/public/ows?SERVICE=WMS: 'NoneType' object has no attribute 'identification'
+2025-11-18 16:11:03,821 - Scraping log - scraper.py >         <module>(): Line 785 - INFO - Running default scraper on KT_BL > https://tile.geoview.bl.ch/1.0.0/WMTSCapabilities.xml (source 4/1467)
+2025-11-18 16:11:08,002 - Scraping log - scraper.py > get_service_info(): Line 303 - WARNING - KT_BL, https://tile.geoview.bl.ch/1.0.0/WMTSCapabilities.xml: Failed to detect WMS/WMTS/WFS.
+2025-11-18 16:11:08,002 - Scraping log - scraper.py > get_service_info(): Line 414 - ERROR - KT_BL > https://tile.geoview.bl.ch/1.0.0/WMTSCapabilities.xml: 'NoneType' object has no attribute 'identification'
+2025-11-18 16:11:08,002 - Scraping log - scraper.py >         <module>(): Line 785 - INFO - Running default scraper on KT_BL > http://geowms.bl.ch/?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities (source 5/1467)
+2025-11-18 16:11:22,078 - Scraping log - scraper.py > get_service_info(): Line 303 - WARNING - KT_BL, http://geowms.bl.ch/?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities: Failed to detect WMS/WMTS/WFS.
+2025-11-18 16:11:22,078 - Scraping log - scraper.py > get_service_info(): Line 414 - ERROR - KT_BL > http://geowms.bl.ch/?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities: 'NoneType' object has no attribute 'identification'
+2025-11-18 16:11:22,079 - Scraping log - scraper.py >         <module>(): Line 800 - INFO - Scraping took: 0 mins
+2025-11-18 16:15:47,424 - Scraping log - scraper.py >         <module>(): Line 811 - INFO - Keeping 41517 datasets from old database without processing
+2025-11-18 16:17:40,897 - Scraping log - scraper.py >         <module>(): Line 816 - INFO - Found 8866 datasets for processing
+2025-11-18 16:17:42,207 - Scraping log - scraper.py >         <module>(): Line 826 - INFO - Job took: 6 mins

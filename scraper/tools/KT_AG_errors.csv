@@ -1,0 +1,2 @@
+Timestamp,Operator,URL,Issue
+2025-11-18T17:11:03.820786+01:00,KT_AG,https://wms.geo.ag.ch/public/ows?SERVICE=WMS,"'NoneType' object has no attribute 'identification'"
