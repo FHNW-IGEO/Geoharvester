@@ -720,7 +720,6 @@ if __name__ == "__main__":
     n = 1
 
     scraping_startT = time()
-    logger.info(f"Startup time until scraping: {int((process_startT-scraping_startT) / 60)} mins")
     for source in sources[:sourceProcessingLimit] if sourceProcessingLimit is not None else sources:
         scrape_source_startT = time()
         server_operator = source['Description']

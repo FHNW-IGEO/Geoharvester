@@ -1,5 +1,6 @@
 import os
 import sys
+from datetime import datetime
 from pathlib import Path
 
 SCRAPER_REQUEST_TIMEOUT = 65 # Value in seconds - to be used in owslib requests when scraping
@@ -14,7 +15,7 @@ WORKFLOW_ARTIFACT_FOLDER = "artifacts"
 WORKFLOW_TRANSLATE_LANGUAGES = ['de','en','fr','it']
 WORKFLOW_TRANSLATE_COLUMNS = ["title","abstract","keywords","keywords_nlp"]
 WORKFLOW_MERGE_COLUMNS = ['name','title','provider','keywords','abstract','endpoint']
-LOG_FILE = os.path.join("tools", "debug.log")
+LOG_FILE = os.path.join("tools",  f"scraper-{datetime.now().strftime('%Y%m%d-%H%M')}.log")
 DEAD_SERVICES_PATH = "tools"
 preview_PREFIX = \
     "https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-grau&"
