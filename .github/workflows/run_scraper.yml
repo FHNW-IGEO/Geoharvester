@@ -62,8 +62,9 @@ jobs:
 
       - name: Debug data folder
         run: |
+          echo "CWD: $(pwd)"
           echo "=== DATA DIR ==="
-          ls -al scraper/data
+          ls -al ./data
 
       - name: Run Python script
         run: |
