@@ -26,9 +26,10 @@ jobs:
 
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@main
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Increase git buffer size
         run: |
@@ -58,11 +59,6 @@ jobs:
       - name: Download nltk stopwords
         run: |
           python -m nltk.downloader all
-
-      - name: Debug file paths
-        run: |
-          pwd
-          ls -R .
 
       - name: Run Python script
         run: |
@@ -116,7 +112,7 @@ jobs:
 
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@main # May need additional pull directive
+        uses: actions/checkout@v4 # May need additional pull directive
 
       - name: Increase git buffer size
         run: |
@@ -165,7 +161,7 @@ jobs:
 
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@main
+        uses: actions/checkout@v4
 
       - name: Increase git buffer size
         run: |
@@ -214,7 +210,7 @@ jobs:
 
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@main
+        uses: actions/checkout@v4
 
       - name: Increase git buffer size
         run: |
@@ -263,7 +259,7 @@ jobs:
 
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@main
+        uses: actions/checkout@v4
 
       - name: Increase git buffer size
         run: |
