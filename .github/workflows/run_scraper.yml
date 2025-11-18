@@ -59,6 +59,11 @@ jobs:
         run: |
           python -m nltk.downloader all
 
+      - name: Debug file paths
+        run: |
+          pwd
+          ls -R .
+
       - name: Run Python script
         run: |
           python scraper.py
