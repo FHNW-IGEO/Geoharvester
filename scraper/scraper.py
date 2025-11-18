@@ -23,8 +23,10 @@ import warnings
 import xml.etree.ElementTree as ET
 from collections import defaultdict
 from statistics import mean
+from pathlib import Path
 
 import configuration as config
+print("CONFIG IMPORTED FROM:", config.__file__)
 import requests
 from requests.exceptions import ReadTimeout, ConnectTimeout
 import utils
@@ -52,7 +54,7 @@ sourceProcessingLimit = int(sourceProcessingLimit_raw) if sourceProcessingLimit_
 
 # globals
 warnings.filterwarnings('ignore')
-sys.path.insert(0, config.SOURCE_SCRAPER_DIR)
+#sys.path.insert(0, config.SOURCE_SCRAPER_DIR)
 
 service_keys = (("WMSGetCap", "n.a."),
                 ("WMTSGetCap", "n.a."), ("WFSGetCap", "n.a."))
@@ -548,24 +550,38 @@ def write_dataset_info(csv_filename, output_file):
             # or WMTS if lst_layers is bigger
 
             for j in range(len(lst_layers)):
-                # check if multiple datasets are found, ege there must be WMS,
-                # WFS or WMTS if lst_layers is bigger
+                layer = lst_layers[j]
+
+                # Ensure all string fields are not None
+                service_value = (layer.get('service') or "").casefold()
+                preview_value = layer.get('preview') or ""
+                abstract_value = layer.get('abstract') if layer.get('abstract') not in (None, "n.a.") else dataset['abstract']
+                metadata_value = layer.get('metadata') if layer.get('metadata') not in (None, "n.a.") else dataset['metadata']
+                contact_value = layer.get('contact') if layer.get('contact') not in (None, "n.a.") else dataset['contact']
+                keywords_value = layer.get('keywords') or ""
+
+                # Determine preview
                 if "layers=WMS" in dataset['preview']:
                     dataset['preview'] = dataset['preview']
-                elif "layers=WMS" in lst_layers[j]['preview']:
-                    dataset['preview'] = lst_layers[j]['preview']
-                elif "layers=WMTS" in lst_layers[j]['preview']:
-                    dataset['preview'] = lst_layers[j]['preview']
-                dataset['abstract'] = lst_layers[j]['abstract'] if lst_layers[j]['abstract'] != "n.a." else dataset['abstract']
-                dataset['metadata'] = lst_layers[j]['metadata'] if lst_layers[j]['metadata'] != "n.a." else dataset['metadata']
-                dataset['contact'] = lst_layers[j]['contact'] if lst_layers[j]['contact'] != "n.a." else dataset['contact']
-                dataset['keywords'] = lst_layers[j]['keywords'] if lst_layers[j]['keywords'] != "n.a." else ""
-                dataset['WMSGetCap'] = lst_layers[j]['endpoint'] if "wms".casefold(
-                ) in lst_layers[j]['service'].casefold() else dataset['WMSGetCap']
-                dataset['WMTSGetCap'] = lst_layers[j]['endpoint'] if "wmts".casefold(
-                ) in lst_layers[j]['service'].casefold() else dataset['WMTSGetCap']
-                dataset['WFSGetCap'] = lst_layers[j]['endpoint'] if "wfs".casefold(
-                ) in lst_layers[j]['service'].casefold() else dataset['WFSGetCap']
+                elif "layers=WMS" in preview_value:
+                    dataset['preview'] = preview_value
+                elif "layers=WMTS" in preview_value:
+                    dataset['preview'] = preview_value
+
+                # Update dataset fields
+                dataset['abstract'] = abstract_value
+                dataset['metadata'] = metadata_value
+                dataset['contact'] = contact_value
+                dataset['keywords'] = keywords_value
+
+                # Update service endpoints safely
+                if "wms" in service_value:
+                    dataset['WMSGetCap'] = layer.get('endpoint') or dataset['WMSGetCap']
+                if "wmts" in service_value:
+                    dataset['WMTSGetCap'] = layer.get('endpoint') or dataset['WMTSGetCap']
+                if "wfs" in service_value:
+                    dataset['WFSGetCap'] = layer.get('endpoint') or dataset['WFSGetCap']
+                    
             # remove duplicates from keywords
             keywordlist = dataset['keywords']
             li = list(keywordlist.split(","))
@@ -738,12 +754,6 @@ if __name__ == "__main__":
     #    google_credentials = ServiceAccountCredentials.from_json_keyfile_dict(
     #    json.loads(client_secret_str), scopes=config.SCOPES)
 
-    # Clean up main data file and operator-specific error log files
-    try:
-        os.remove(config.GEOSERVICES_CH_CSV)
-    except OSError as e:
-        logger.error("Could not delete %s: %s" %
-                     (config.GEOSERVICES_CH_CSV, e))
     error_log_files = glob.glob(os.path.join(
         config.DEAD_SERVICES_PATH, "*_errors.csv"))
     for error_log_file in error_log_files:

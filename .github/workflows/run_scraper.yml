@@ -26,9 +26,11 @@ jobs:
 
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@main
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+          ref: main
 
       - name: Increase git buffer size
         run: |
@@ -86,10 +88,6 @@ jobs:
           name: data_to_keep_csv
           path: ./scraper/data/data_to_keep.csv
 
-      - name: Pull latest main
-        run: |
-          git pull origin main --rebase
-
       - name: Push log files to repo
         uses: github-actions-x/commit@v2.9
         env:
@@ -111,7 +109,7 @@ jobs:
 
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@main # May need additional pull directive
+        uses: actions/checkout@v4 # May need additional pull directive
 
       - name: Increase git buffer size
         run: |
@@ -160,7 +158,7 @@ jobs:
 
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@main
+        uses: actions/checkout@v4
 
       - name: Increase git buffer size
         run: |
@@ -209,7 +207,7 @@ jobs:
 
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@main
+        uses: actions/checkout@v4
 
       - name: Increase git buffer size
         run: |
@@ -258,7 +256,7 @@ jobs:
 
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@main
+        uses: actions/checkout@v4
 
       - name: Increase git buffer size
         run: |
