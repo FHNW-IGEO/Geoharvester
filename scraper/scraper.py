@@ -23,6 +23,7 @@ import warnings
 import xml.etree.ElementTree as ET
 from collections import defaultdict
 from statistics import mean
+from pathlib import Path
 
 import configuration as config
 import requests
@@ -788,6 +789,25 @@ if __name__ == "__main__":
 
     scraping_endT = time()
     logger.info(f"Scraping took: {int((scraping_endT-scraping_startT) / 60)} mins")
+
+
+    # ---------------------
+    file_path = config.GEOSERVICES_CH_CSV
+    print("CONFIG FILE:", __file__)
+    print("BASE_DIR:", Path(__file__).resolve().parent)
+    print("Expected FILE:", file_path)
+    print("CWD:", os.getcwd())
+    print("Exists? ", file_path.exists())
+
+    print("List around BASE_DIR:")
+    for p in Path(__file__).resolve().parent.iterdir():
+        print("  ", p)
+
+    print("List around CWD:")
+    for p in Path(".").iterdir():
+        print("  ", p)
+
+    #-------------------------
 
     write_dataset_info(config.GEOSERVICES_CH_CSV,config.GEOSERVICES_CH_CSV)
     # Copy to artifact folder
