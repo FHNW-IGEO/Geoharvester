@@ -607,18 +607,13 @@ def check_new_data(actual_db_path, new_data_path, match_columns,
     """
     old_db = pd.read_pickle(actual_db_path)
     old_db = old_db.fillna("nan")
-    old_db = old_db.replace(to_replace='None', value="nan")
-    # old_db = old_db.replace(to_replace='', value='nan', regex=True)
+    old_db = old_db.replace(to_replace='None', value="nan", regex=True)
+    old_db = old_db.replace(to_replace='n.a.', value='nan', regex=True)
     new_db = pd.read_csv(new_data_path, low_memory=False)
     new_db = new_db.drop_duplicates(keep='first') # check duplicates
     new_db = new_db.fillna("nan")
-    new_db = new_db.replace(to_replace='None', value="nan")
-    # new_db = new_db.replace(to_replace="'", value="nan", regex=True)
-    # new_db = new_db.replace(to_replace='\"', value="nan", regex=True)
-    # new_db = new_db.replace(to_replace="", value = "nan", regex=True)
-    # new_db = new_db.replace(to_replace=" ", value = "nan", regex=True)
-    # new_db = new_db.replace(to_replace="  ", value = "nan", regex=True)
-    # new_db = new_db.replace(to_replace="    ", value = "nan", regex=True)
+    new_db = new_db.replace(to_replace='None', value="nan", regex=True)
+    new_db = new_db.replace(to_replace="n.a.", value="nan", regex=True)
     
     to_preprocessing = new_db.merge(old_db, on=match_columns, how='left',
                                     indicator='_lmerge', suffixes=(None, "_drop"))
