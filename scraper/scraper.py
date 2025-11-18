@@ -740,12 +740,6 @@ if __name__ == "__main__":
     #    google_credentials = ServiceAccountCredentials.from_json_keyfile_dict(
     #    json.loads(client_secret_str), scopes=config.SCOPES)
 
-    # Clean up main data file and operator-specific error log files
-    try:
-        os.remove(config.GEOSERVICES_CH_CSV)
-    except OSError as e:
-        logger.error("Could not delete %s: %s" %
-                     (config.GEOSERVICES_CH_CSV, e))
     error_log_files = glob.glob(os.path.join(
         config.DEAD_SERVICES_PATH, "*_errors.csv"))
     for error_log_file in error_log_files:
@@ -790,25 +784,6 @@ if __name__ == "__main__":
 
     scraping_endT = time()
     logger.info(f"Scraping took: {int((scraping_endT-scraping_startT) / 60)} mins")
-
-
-    # ---------------------
-    file_path = config.GEOSERVICES_CH_CSV
-    print("CONFIG FILE:", __file__)
-    print("BASE_DIR:", Path(__file__).resolve().parent)
-    print("Expected FILE:", file_path)
-    print("CWD:", os.getcwd())
-    print("Exists? ", file_path.exists())
-
-    print("List around BASE_DIR:")
-    for p in Path(__file__).resolve().parent.iterdir():
-        print("  ", p)
-
-    print("List around CWD:")
-    for p in Path(".").iterdir():
-        print("  ", p)
-
-    #-------------------------
 
     write_dataset_info(config.GEOSERVICES_CH_CSV,config.GEOSERVICES_CH_CSV)
     # Copy to artifact folder

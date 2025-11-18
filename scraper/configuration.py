@@ -2,17 +2,12 @@ import os
 import sys
 from datetime import datetime
 
-from pathlib import Path
-
-BASE_DIR = Path(__file__).resolve().parent
-GEOSERVICES_CH_CSV = BASE_DIR / "data" / "geoservices_CH.csv"
-
 SCRAPER_REQUEST_TIMEOUT = 65 # Value in seconds - to be used in owslib requests when scraping
 SOURCE_COLLECTION_CSV = "sources.csv"
 SOURCE_COLLECTION_VERSION = {"KT_AI": "1.3.0",
                              "KT_AR": "1.3.0", "Geodienste": "1.3.0"}
 SOURCE_SCRAPER_DIR = "scraper"
-# GEOSERVICES_CH_CSV = os.path.join("data", "geoservices_CH.csv")
+GEOSERVICES_CH_CSV = os.path.join("data", "geoservices_CH.csv")
 TEMP_PROCESSED_DATA_PKL = os.path.join("temp_data","merged_data.pkl")
 PROCESSED_DATA_PKL = os.path.join("data","merged_data.pkl")
 WORKFLOW_ARTIFACT_FOLDER = "artifacts"

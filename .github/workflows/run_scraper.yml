@@ -61,12 +61,6 @@ jobs:
         run: |
           python -m nltk.downloader all
 
-      - name: Debug data folder
-        run: |
-          echo "CWD: $(pwd)"
-          echo "=== DATA DIR ==="
-          ls -al ./data
-
       - name: Run Python script
         run: |
           python scraper.py
