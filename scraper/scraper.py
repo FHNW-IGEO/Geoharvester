@@ -52,7 +52,7 @@ sourceProcessingLimit = int(sourceProcessingLimit_raw) if sourceProcessingLimit_
 
 # globals
 warnings.filterwarnings('ignore')
-sys.path.insert(0, config.SOURCE_SCRAPER_DIR)
+#sys.path.insert(0, config.SOURCE_SCRAPER_DIR)
 
 service_keys = (("WMSGetCap", "n.a."),
                 ("WMTSGetCap", "n.a."), ("WFSGetCap", "n.a."))
