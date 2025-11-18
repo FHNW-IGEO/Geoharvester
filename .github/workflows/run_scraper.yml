@@ -60,6 +60,11 @@ jobs:
         run: |
           python -m nltk.downloader all
 
+      - name: Debug data folder
+        run: |
+          echo "=== DATA DIR ==="
+          ls -al scraper/data
+
       - name: Run Python script
         run: |
           python scraper.py
