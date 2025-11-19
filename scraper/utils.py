@@ -7,6 +7,7 @@ import os
 import sys
 from string import punctuation
 import logging
+os.environ["TQDM_DISABLE"] = "1" # Important - otherwise it spams the github action output
 
 import matplotlib.pyplot as plt
 import numpy as np  # >= 1.23 < 1.26
