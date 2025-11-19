@@ -1,4 +1,0 @@
-Timestamp,Operator,URL,Issue
-2025-11-19T10:46:09.967189+01:00,KT_BS,https://wfs.geo.bs.ch/?SERVICE=WFS&REQUEST=GetCapabilities,"'NoneType' object has no attribute 'identification'"
-2025-11-19T10:46:14.934876+01:00,KT_BS,https://wmts.geo.bs.ch/EPSG/3857/1.0.0/WMTSCapabilities.xml,"'NoneType' object has no attribute 'identification'"
-2025-11-19T10:46:18.950664+01:00,KT_BS,https://wms.geo.bs.ch/?SERVICE=WMS&REQUEST=GetCapabilities,"'NoneType' object has no attribute 'identification'"

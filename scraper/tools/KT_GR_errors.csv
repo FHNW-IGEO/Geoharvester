@@ -1,11 +1,3 @@
 Timestamp,Operator,URL,Issue
-2025-11-19T10:50:31.726970+01:00,KT_GR,https://wms.geo.gr.ch/admineinteilung?service=WMS&request=GetCapabilities,"'NoneType' object has no attribute 'identification'"
-2025-11-19T10:50:32.847502+01:00,KT_GR,https://wms.geo.gr.ch/regionen?service=WMS&request=GetCapabilities,"expected string or bytes-like object"
-2025-11-19T10:50:35.737205+01:00,KT_GR,https://wms.geo.gr.ch/basisinfo?service=WMS&request=GetCapabilities,"'NoneType' object has no attribute 'identification'"
-2025-11-19T10:50:38.471838+01:00,KT_GR,https://wms.geo.gr.ch/basisplan?service=WMS&request=GetCapabilities,"'NoneType' object has no attribute 'identification'"
-2025-11-19T10:50:38.959079+01:00,KT_GR,https://wms.geo.gr.ch/bienenseuchen?service=WMS&request=GetCapabilities,"GET requested yielded HTTP response status code 404"
-2025-11-19T10:50:41.774848+01:00,KT_GR,https://wms.geo.gr.ch/erdwaermenutzung?service=WMS&request=GetCapabilities,"'NoneType' object has no attribute 'identification'"
-2025-11-19T10:50:44.468621+01:00,KT_GR,https://wms.geo.gr.ch/fruchtfolgeflaechen?service=WMS&request=GetCapabilities,"'NoneType' object has no attribute 'identification'"
-2025-11-19T10:50:47.780095+01:00,KT_GR,https://wms.geo.gr.ch/gebaeudeinformation?service=WMS&request=GetCapabilities,"'NoneType' object has no attribute 'identification'"
-2025-11-19T10:50:50.423324+01:00,KT_GR,https://wms.geo.gr.ch/geologie?service=WMS&request=GetCapabilities,"'NoneType' object has no attribute 'identification'"
-2025-11-19T10:50:52.950226+01:00,KT_GR,https://wms.geo.gr.ch/geologische_karten?service=WMS&request=GetCapabilities,"'NoneType' object has no attribute 'identification'"
+2025-11-19T16:03:41.026397+01:00,KT_GR,https://wms.geo.gr.ch/regionen?service=WMS&request=GetCapabilities,"expected string or bytes-like object"
+2025-11-19T16:04:01.841770+01:00,KT_GR,https://wms.geo.gr.ch/bienenseuchen?service=WMS&request=GetCapabilities,"GET requested yielded HTTP response status code 404"

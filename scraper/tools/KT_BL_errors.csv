@@ -1,3 +1,0 @@
-Timestamp,Operator,URL,Issue
-2025-11-19T10:45:50.381927+01:00,KT_BL,https://tile.geoview.bl.ch/1.0.0/WMTSCapabilities.xml,"'NoneType' object has no attribute 'identification'"
-2025-11-19T10:46:05.972371+01:00,KT_BL,http://geowms.bl.ch/?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities,"'NoneType' object has no attribute 'identification'"
