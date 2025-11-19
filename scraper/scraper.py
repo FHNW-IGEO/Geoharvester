@@ -428,9 +428,9 @@ def write_service_info(source, service, i, layertree, group):
 
         # run default scraper
         else:
-            BASE_DIR = Path(__file__).resolve().parent
+            BASE_DIR = Path(__file__).resolve().parent / "scraper"
             sys.path.insert(0, str(BASE_DIR))
-            scraper = importlib.import_module('default')
+            scraper = importlib.import_module('default') 
             layer_data = scraper.scrape(source, service, i, layertree, group,
                                         layer_data, config.preview_PREFIX)
 
