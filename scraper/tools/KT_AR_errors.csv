@@ -1,2 +1,2 @@
 Timestamp,Operator,URL,Issue
-2025-11-19T08:46:52.765524+01:00,KT_AR,https://www.geoportal.ch/services/wms/ktar?SERVICE=WMS&REQUEST=GetCapabilities,"'NoneType' object has no attribute 'identification'"
+2025-11-19T10:45:41.405543+01:00,KT_AR,https://www.geoportal.ch/services/wms/ktar?SERVICE=WMS&REQUEST=GetCapabilities,"'NoneType' object has no attribute 'identification'"
