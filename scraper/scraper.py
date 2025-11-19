@@ -186,41 +186,6 @@ def is_online(source):
         log_to_operator_csv(server_operator, server_url, error_details)
     return success
 
-def safe_request(ws_call, retries=3):
-    for attempt in range(retries):
-        try:
-            return ws_call()
-        except Exception as e:
-            if "Read timed out" in str(e):
-                wait = 2 ** attempt + random.random()
-                time.sleep(wait)
-            else:
-                raise
-    raise TimeoutError("Service too slow after retries")
-
-def fetch_capabilities(url, timeout, version=None, service_type="WMS"):
-    """Fetch capabilities manually so OWSLib does NOT enforce its internal 10s timeout."""
-    params = {"request": "GetCapabilities"}
-
-    if service_type == "WMS":
-        params["service"] = "WMS"
-        if version:
-            params["version"] = version
-
-    elif service_type == "WMTS":
-        params["service"] = "WMTS"
-
-    elif service_type == "WFS":
-        params["service"] = "WFS"
-        params["version"] = version if version else "2.0.0"
-
-    response = requests.get(url, params=params, timeout=timeout)
-    response.raise_for_status()
-
-    # Return raw XML for OWSLib constructor
-    return BytesIO(response.content)
-
-
 def get_service_info(source):
     """
     Extracts information from an OGC web service (WMS, WMTS, WFS) using the 
@@ -251,56 +216,55 @@ def get_service_info(source):
     server_url = source['URL']
 
     try:
-        # Check if this service has a valid service version number
+        # Check if this service has a valid service version number. If not,
+        # set version to None (i.e., use default)
         source_version = get_version(source['URL'])
         match = re.match(r"^\d+\.\d+\.\d+$", source_version)
         if not match:
             error_details = "Invalid service version number. Scraper will try the default."
             log_to_operator_csv(server_operator, server_url, error_details)
-            logger.warning(f"{server_operator}, {server_url}: {error_details}")
+            logger.warning("%s, %s: %s" % (server_operator, server_url,
+                                           error_details))
             source_version = None
 
-        timeout = config.SCRAPER_REQUEST_TIMEOUT
-        service = None
+        # Check if this service is a WMS, a WMTS or a WFS
         service_type = None
-        children_possible = False
-
-        # ---- Try WMS -----------------------------------------------------
         try:
-            xml = safe_request(lambda: fetch_capabilities(server_url, timeout, version=source_version, service_type="WMS"))
-            service = WebMapService(None, xml=xml)
+            if source_version is not None:
+                service = WebMapService(server_url, version=source_version, timeout=config.SCRAPER_REQUEST_TIMEOUT)
+            else:
+                service = WebMapService(server_url, timeout=config.SCRAPER_REQUEST_TIMEOUT)
             service_type = "WMS"
-            children_possible = True  # WMS can have sublayers
-            logger.info(f"WMS detected: {server_url}")
-        except Exception as e:
-            logger.debug(f"WMS failed for {server_url}: {e}")
+            # We assume WMSs can have child/parent relations
+            children_possible = True
+        except:
+            pass
 
-        # ---- Try WMTS ---------------------------------------------------------
         if service_type is None:
             try:
-                xml = safe_request(lambda: fetch_capabilities(server_url, timeout, service_type="WMTS"))
-                service = WebMapTileService(None, xml=xml)
+                service = WebMapTileService(server_url, timeout=config.SCRAPER_REQUEST_TIMEOUT)
                 service_type = "WMTS"
+                # We assume WMTSs can't have child/parent relations
                 children_possible = False
-                logger.info(f"WMTS detected: {server_url}")
-            except Exception as e:
-                logger.debug(f"WMTS failed for {server_url}: {e}")
+            except:
+                pass
 
-        # ---- Try WFS ----------------------------------------------------------
         if service_type is None:
             try:
-                xml = safe_request(lambda: fetch_capabilities(server_url, timeout, version=source_version, service_type="WFS"))
-                service = WebFeatureService(None, xml=xml)
+                if source_version is None:
+                    service = WebFeatureService(server_url, version='2.0.0', timeout=config.SCRAPER_REQUEST_TIMEOUT)
+                else:
+                    service = WebFeatureService(server_url,
+                                                version=source_version, timeout=config.SCRAPER_REQUEST_TIMEOUT)
                 service_type = "WFS"
+                # We assume WFSs can't have child/parent relations
                 children_possible = False
-                logger.info(f"WFS detected: {server_url}")
-            except Exception as e:
-                logger.debug(f"WFS failed for {server_url}: {e}")
+            except:
+                pass
 
-        # ---- Handle manually  -------------------------------------------------
-        if service_type is None:
-            error_details = "Failed to detect WMS/WMTS/WFS."
-            logger.warning(f"{server_operator}, {server_url}: {error_details}")
+        if service_type is not None:
+            # I.e., we have found a valid service endpoint of type WMS, WTMS or
+            # WFS
             service_title = service.identification.title
 
             # Extract all layer names
