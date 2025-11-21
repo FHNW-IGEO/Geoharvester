@@ -23,3 +23,6 @@ asttokens>=2.2.1
 
 # (Optional) If you use Jupyter notebooks (test.ipynb)
 notebook>=7.0.0
+
+# Fuzzy search for keyword finder
+fuzzy-search>=2.5.0

@@ -117,18 +117,42 @@ def extract_metadata(xml_file):
             log_error(f"Failed to extract keyword from element in {xml_file}", exception=e)
 
     distribution_formats = []
+
+    # 1) Extract ALL OnlineResources under transferOptions
     for el in safe_find_all(".//gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions//gmd:CI_OnlineResource"):
         try:
             distribution_formats.append({
                 "dataset_identifier": file_identifier,
                 "xml_filename": xml_file,   
                 "distribution_format": el.findtext("gmd:protocol/gco:CharacterString", default="N/A", namespaces=namespace),
+                "distribution_access_url": el.findtext("gmd:linkage/gmd:URL", default="N/A", namespaces=namespace),
                 "distribution_download_url": el.findtext("gmd:linkage/gmd:URL", default="N/A", namespaces=namespace),
                 "distribution_title_UNKNOWN": el.findtext("gmd:name/gco:CharacterString", default="N/A", namespaces=namespace),
                 "distribution_description_UNKNOWN": el.findtext("gmd:description/gco:CharacterString", default="N/A", namespaces=namespace)
             })
         except Exception as e:
             log_error(f"Failed to extract distribution format in {xml_file}", exception=e)
+
+    # 2) Extract the correct main URL from distributorTransferOptions
+    stac_url = safe_find_text(
+        ".//gmd:distributionInfo/gmd:MD_Distribution/"
+        "gmd:distributor/gmd:MD_Distributor/"
+        "gmd:distributorTransferOptions/gmd:MD_DigitalTransferOptions/"
+        "gmd:onLine/gmd:CI_OnlineResource/gmd:linkage/gmd:URL"
+    )
+
+    if stac_url != "N/A":
+        distribution_formats.append({
+            "dataset_identifier": file_identifier,
+            "xml_filename": xml_file,
+            "distribution_format": "WWW:DOWNLOAD-URL",
+            "distribution_access_url": stac_url,
+            "distribution_download_url": stac_url,
+            "distribution_title_UNKNOWN": "Main Distribution URL",
+            "distribution_description_UNKNOWN": "Primary online access URL"
+        })
+
+
 
     contact_points = []
     contact_elements = safe_find_all(".//gmd:identificationInfo//gmd:pointOfContact//gmd:CI_ResponsibleParty")
@@ -236,3 +260,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
