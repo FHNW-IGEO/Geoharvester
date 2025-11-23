@@ -1,0 +1,3 @@
+Timestamp,Operator,URL,Issue
+2025-11-23T07:28:58.779940+01:00,Geodienste,https://geodienste.ch/db/planungszonen_v1_0_0/deu?SERVICE=WMS&REQUEST=GetCapabilities,"GET requested yielded HTTP response status code 400"
+2025-11-23T07:30:21.620448+01:00,Geodienste,https://geodienste.ch/db/planungszonen_v1_0_0/deu?SERVICE=WFS&REQUEST=GetCapabilities,"GET requested yielded HTTP response status code 400"
