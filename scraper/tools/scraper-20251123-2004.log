@@ -1,0 +1,718 @@
+2025-11-23 20:04:19,674 - Scraping log - scraper.py >         <module>(): Line 706 - INFO - Running scraper with a limit of 50
+2025-11-23 20:04:19,679 - Scraping log - scraper.py >         <module>(): Line 737 - INFO - Startup time until scraping: 0 mins
+2025-11-23 20:04:19,679 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_AI > https://www.geoportal.ch/services/wms/ktai?SERVICE=WMS&REQUEST=GetCapabilities (source 1/1467)
+2025-11-23 20:04:24,260 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - ch.geoportal.ktai: 500 Server Error: Internal Server Error for url: https://www.geoportal.ch/services/wms/ktai?service=WMS&version=1.3.0&request=GetMap&layers=ch.geoportal.ktai&styles=&width=256&height=256&crs=EPSG%3A4326&bbox=47.225%2C9.297%2C47.453%2C9.632&format=image%2Fpng&transparent=TRUE&exceptions=XML&bgcolor=0xFFFFFF
+2025-11-23 20:04:25,095 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_AR > https://www.geoportal.ch/services/wms/ktar?SERVICE=WMS&REQUEST=GetCapabilities (source 2/1467)
+2025-11-23 20:04:29,570 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - ch.geoportal.ktar: 500 Server Error: Internal Server Error for url: https://www.geoportal.ch/services/wms/ktar?service=WMS&version=1.3.0&request=GetMap&layers=ch.geoportal.ktar&styles=&width=256&height=256&crs=EPSG%3A4326&bbox=47.238%2C9.178%2C47.478%2C9.644&format=image%2Fpng&transparent=TRUE&exceptions=XML&bgcolor=0xFFFFFF
+2025-11-23 20:04:32,100 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_AG > https://wms.geo.ag.ch/public/ows?SERVICE=WMS (source 3/1467)
+2025-11-23 20:08:27,926 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - ch_ag_geo_aw_wbep: HTTPSConnectionPool(host='wms.geo.ag.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 20:08:38,810 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - ch_ag_geo_aw_wbsp: HTTPSConnectionPool(host='wms.geo.ag.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 20:09:35,802 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - ch_ag_geo_va_avwms_va_lsgp_01: HTTPSConnectionPool(host='wms.geo.ag.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 20:09:44,770 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BL > https://tile.geoview.bl.ch/1.0.0/WMTSCapabilities.xml (source 4/1467)
+2025-11-23 20:09:47,162 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BL > http://geowms.bl.ch/?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities (source 5/1467)
+2025-11-23 20:09:59,799 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - OpenWMS_BL: msWMSApplyTime: WMS server error. No Time value was given, and the default time value 2023 is invalid or outside the time extent defined 2011/2022/P1Y msStyleSetGeomTransform(): General error message. unknown transform expression
+2025-11-23 20:16:49,085 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BS > https://wfs.geo.bs.ch/?SERVICE=WFS&REQUEST=GetCapabilities (source 6/1467)
+2025-11-23 20:17:22,443 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BS > https://wmts.geo.bs.ch/EPSG/3857/1.0.0/WMTSCapabilities.xml (source 7/1467)
+2025-11-23 20:17:30,924 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BS > https://wms.geo.bs.ch/?SERVICE=WMS&REQUEST=GetCapabilities (source 8/1467)
+2025-11-23 20:17:45,225 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - WMS_BS: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 20:18:26,872 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Parzellenplan_Bodenbedeckung_sw: GetMap request is blocked for this layer
+2025-11-23 20:18:39,414 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - AF_AbfuhrzoneGemeindeBasel: GetMap request is blocked for this layer
+2025-11-23 20:18:49,521 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - AI_GebietseinteilungArbeitsinspektorat: GetMap request is blocked for this layer
+2025-11-23 20:18:59,538 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - AK_KatasterDerBelastetenStandorte: GetMap request is blocked for this layer
+2025-11-23 20:19:09,552 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - AL_Alterspflegeheime: GetMap request is blocked for this layer
+2025-11-23 20:19:19,574 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - AQ_AnsprechpartnerImQuartier: GetMap request is blocked for this layer
+2025-11-23 20:19:29,592 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - AS_Akutspitaeler: GetMap request is blocked for this layer
+2025-11-23 20:19:39,618 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - AT_Ausnahmetransportrouten: GetMap request is blocked for this layer
+2025-11-23 20:19:49,634 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - AVBS_3000_farbig: GetMap request is blocked for this layer
+2025-11-23 20:19:59,890 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - AVBS_3000_grau: GetMap request is blocked for this layer
+2025-11-23 20:20:10,106 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - AVBS_3000_sw: GetMap request is blocked for this layer
+2025-11-23 20:20:20,421 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BA_Baeume: GetMap request is blocked for this layer
+2025-11-23 20:20:30,435 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BA_FaellUndBaumersatzliste: GetMap request is blocked for this layer
+2025-11-23 20:20:40,447 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Bodenkarten: GetMap request is blocked for this layer
+2025-11-23 20:20:51,050 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Nutzungseignungskarte: GetMap request is blocked for this layer
+2025-11-23 20:21:01,430 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Risikostufe: GetMap request is blocked for this layer
+2025-11-23 20:21:19,239 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - BI_FreizeitSport: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 20:21:29,257 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BI_GesundheitSoziales: GetMap request is blocked for this layer
+2025-11-23 20:21:41,769 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Öffentliche Einrichtungen: GetMap request is blocked for this layer
+2025-11-23 20:21:54,580 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BI_Sehenswuerdigkeiten: GetMap request is blocked for this layer
+2025-11-23 20:22:07,357 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BI_Hintergrund: GetMap request is blocked for this layer
+2025-11-23 20:22:17,461 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BI_Strassen: GetMap request is blocked for this layer
+2025-11-23 20:22:27,477 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BI_Autobahn: GetMap request is blocked for this layer
+2025-11-23 20:22:37,591 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BI_Gruenflaechen: GetMap request is blocked for this layer
+2025-11-23 20:22:47,802 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BI_Bebauung: GetMap request is blocked for this layer
+2025-11-23 20:22:57,820 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BI_Gewaesser: GetMap request is blocked for this layer
+2025-11-23 20:23:07,834 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BI_Eisenbahn: GetMap request is blocked for this layer
+2025-11-23 20:23:17,941 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BI_Konturen: GetMap request is blocked for this layer
+2025-11-23 20:23:28,045 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BI_Grenzen: GetMap request is blocked for this layer
+2025-11-23 20:23:38,176 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BI_Landmarks: GetMap request is blocked for this layer
+2025-11-23 20:23:48,191 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BI_OEV: GetMap request is blocked for this layer
+2025-11-23 20:23:58,209 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BI_Symbole: GetMap request is blocked for this layer
+2025-11-23 20:24:16,250 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Bohrungen verrohrt: GetMap request is blocked for this layer
+2025-11-23 20:24:26,482 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BK_BohrungenVerrohrt_DurchmesserKleiner200mm_A: GetMap request is blocked for this layer
+2025-11-23 20:24:36,496 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BK_BohrungenVerrohrt_DurchmesserKleiner200mm_B: GetMap request is blocked for this layer
+2025-11-23 20:24:46,511 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BK_BohrungenVerrohrt_DurchmesserGroesserGleich200mm_A: GetMap request is blocked for this layer
+2025-11-23 20:24:56,517 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BK_BohrungenVerrohrt_DurchmesserGroesserGleich200mm_B: GetMap request is blocked for this layer
+2025-11-23 20:25:06,626 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BK_BohrungenVerrohrt_Kassiert_A: GetMap request is blocked for this layer
+2025-11-23 20:25:16,858 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - BK_BohrungenVerrohrt_Kassiert_B: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 20:25:26,873 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BK_Erdwaermebohrung: GetMap request is blocked for this layer
+2025-11-23 20:25:38,977 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BK_Sondierbohrung: GetMap request is blocked for this layer
+2025-11-23 20:25:51,221 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BP_Oeffnungszeiten: GetMap request is blocked for this layer
+2025-11-23 20:26:03,845 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_GebaeudeProjektiert_Hausnummer_200: GetMap request is blocked for this layer
+2025-11-23 20:26:13,958 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_GebaeudeProjektiert_Hausnummer_500: GetMap request is blocked for this layer
+2025-11-23 20:26:23,973 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_GebaeudeProjektiert_Hausnummer_1000: GetMap request is blocked for this layer
+2025-11-23 20:26:33,985 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_GebaeudeProjektiert_Hausnummer_2000: GetMap request is blocked for this layer
+2025-11-23 20:26:44,003 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_GebaeudeProjektiert_Gebaeudenummer_200: GetMap request is blocked for this layer
+2025-11-23 20:26:54,134 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_GebaeudeProjektiert_Gebaeudenummer_500: GetMap request is blocked for this layer
+2025-11-23 20:27:11,610 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Bodenbedeckung: GetMap request is blocked for this layer
+2025-11-23 20:27:21,928 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Bodenbedeckungen_befestigt_Bahnareal: GetMap request is blocked for this layer
+2025-11-23 20:27:33,089 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Bodenbedeckungen_befestigt_Gewaesservorland: GetMap request is blocked for this layer
+2025-11-23 20:27:44,172 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Bodenbedeckungen_befestigt_Sportanlage: GetMap request is blocked for this layer
+2025-11-23 20:27:55,299 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Bodenbedeckungen_befestigt_Tramareal: GetMap request is blocked for this layer
+2025-11-23 20:28:05,412 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Bodenbedeckungen_befestigt_Trottoir: GetMap request is blocked for this layer
+2025-11-23 20:28:15,426 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Bodenbedeckungen_befestigt_Verkehrsinsel: GetMap request is blocked for this layer
+2025-11-23 20:28:25,540 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Bodenbedeckungen_befestigt_Wasserbecken: GetMap request is blocked for this layer
+2025-11-23 20:28:35,555 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Bodenbedeckungen_befestigt_uebrigeBefestigte: GetMap request is blocked for this layer
+2025-11-23 20:28:45,562 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Bodenbedeckungen_bestockt_geschlossenerWald: GetMap request is blocked for this layer
+2025-11-23 20:28:55,685 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Bodenbedeckungen_bestockt_uebrigeBestockte: GetMap request is blocked for this layer
+2025-11-23 20:29:05,699 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Bodenbedeckungen_Gebaeude_Gebaeude: GetMap request is blocked for this layer
+2025-11-23 20:29:15,805 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Bodenbedeckungen_Gebaeude_Tank: GetMap request is blocked for this layer
+2025-11-23 20:29:25,822 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Bodenbedeckungen_Gewaesser_fliessendes: GetMap request is blocked for this layer
+2025-11-23 20:29:35,948 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Bodenbedeckungen_Gewaesser_stehendes: GetMap request is blocked for this layer
+2025-11-23 20:29:46,068 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Bodenbedeckungen_humusiert_AckerWieseWeide: GetMap request is blocked for this layer
+2025-11-23 20:29:56,176 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Bodenbedeckungen_humusiert_Friedhof: GetMap request is blocked for this layer
+2025-11-23 20:30:06,185 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Bodenbedeckungen_humusiert_Gartenanlage: GetMap request is blocked for this layer
+2025-11-23 20:30:16,322 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - BS_Bodenbedeckungen_humusiert_ParkanlageSpielplatz: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 20:30:26,336 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Bodenbedeckungen_humusiert_Schrebergarten: GetMap request is blocked for this layer
+2025-11-23 20:30:38,786 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Bodenbedeckungen_humusiert_Reben: GetMap request is blocked for this layer
+2025-11-23 20:30:59,601 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Hoheitsgrenzen: GetMap request is blocked for this layer
+2025-11-23 20:31:09,739 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Liegenschaften: GetMap request is blocked for this layer
+2025-11-23 20:31:20,645 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Grundstücke: GetMap request is blocked for this layer
+2025-11-23 20:31:32,052 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Grundstücke (projektiert): GetMap request is blocked for this layer
+2025-11-23 20:31:42,312 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Liegenschaften_GrundstueckeProjektiert_andereDienstbarkeit_Geometrie: GetMap request is blocked for this layer
+2025-11-23 20:31:53,655 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Liegenschaften_GrundstueckeProjektiert_andereDienstbarkeit_NummerUnter700: GetMap request is blocked for this layer
+2025-11-23 20:32:03,670 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Liegenschaften_GrundstueckeProjektiert_andereDienstbarkeit_Nummer700bis2000: GetMap request is blocked for this layer
+2025-11-23 20:32:15,218 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Liegenschaften_GrundstueckeProjektiert_Allmendparzelle: GetMap request is blocked for this layer
+2025-11-23 20:32:25,499 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Liegenschaften_GrundstueckeProjektiert_Baurecht: GetMap request is blocked for this layer
+2025-11-23 20:32:36,949 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Nomenklatur: GetMap request is blocked for this layer
+2025-11-23 20:32:47,047 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Nomenklatur_Flurname_Text: GetMap request is blocked for this layer
+2025-11-23 20:32:59,967 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Rohrleitungen_Rohrleitung: GetMap request is blocked for this layer
+2025-11-23 20:33:10,315 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - Servitute: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 20:33:20,452 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Servitute_Servitute_Servitutflaechenelement: GetMap request is blocked for this layer
+2025-11-23 20:33:31,932 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Servitute_Servitute_Servitutkennzeichen: GetMap request is blocked for this layer
+2025-11-23 20:33:53,207 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - BS_Servitute_ServituteProjektiert_Servitutkennzeichen: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 20:34:03,313 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_SE_Servitut_Schlagwort: GetMap request is blocked for this layer
+2025-11-23 20:34:13,567 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Vermessungseinteilungen: GetMap request is blocked for this layer
+2025-11-23 20:34:23,698 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Vermessungseinteilungen_Toleranzstufen_Flaeche: GetMap request is blocked for this layer
+2025-11-23 20:34:33,804 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Vermessungseinteilungen_Toleranzstufen_Text: GetMap request is blocked for this layer
+2025-11-23 20:34:43,809 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Vermessungspunkte: GetMap request is blocked for this layer
+2025-11-23 20:34:54,125 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Vermessungspunkte_Grenzpunkte_GrenzpunktStein: GetMap request is blocked for this layer
+2025-11-23 20:35:04,329 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Vermessungspunkte_Grenzpunkte_GrenzpunktKunststoffzeichen: GetMap request is blocked for this layer
+2025-11-23 20:35:14,517 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Vermessungspunkte_Grenzpunkte_GrenzpunktBolzen: GetMap request is blocked for this layer
+2025-11-23 20:35:24,618 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Vermessungspunkte_Grenzpunkte_GrenzpunktKreuz: GetMap request is blocked for this layer
+2025-11-23 20:35:34,717 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Vermessungspunkte_Grenzpunkte_Grenzpunktunversichert: GetMap request is blocked for this layer
+2025-11-23 20:35:44,814 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Vermessungspunkte_Hoheitsgrenzpunkte_HoheitsgrenzpunktStein: GetMap request is blocked for this layer
+2025-11-23 20:35:55,007 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Vermessungspunkte_Hoheitsgrenzpunkte_HoheitsgrenzpunktBolzen: GetMap request is blocked for this layer
+2025-11-23 20:36:05,204 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Vermessungspunkte_Hoheitsgrenzpunkte_HoheitsgrenzpunktUnversichert: GetMap request is blocked for this layer
+2025-11-23 20:36:15,391 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Vermessungspunkte_Hoehenfixpunkte_HFP1BolzenHorizontal: GetMap request is blocked for this layer
+2025-11-23 20:36:25,579 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Vermessungspunkte_Hoehenfixpunkte_HFP3BolzenHorizontal: GetMap request is blocked for this layer
+2025-11-23 20:36:36,820 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BS_Vermessungspunkte_Hoehenfixpunkte_HoehenfixpunkteFilter: GetMap request is blocked for this layer
+2025-11-23 20:36:46,963 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - BS_Vermessungspunkte_Lagefixpunkte_LFP1: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 20:36:52,436 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - BS_Vermessungspunkte_Lagefixpunkte_LFP3Hilfspunkte: <html>  <head>   <title>401 Unauthorized</title>  </head>  <body>   <h1>401 Unauthorized</h1>   This server could not verify that you are authorized to access the document you requested.  Either you supplied the wrong credentials (e.g., bad password), or your browser does not understand how to supply the credentials required.<br/><br/>     </body> </html>
+2025-11-23 20:37:05,879 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BV_Baukontrolle: GetMap request is blocked for this layer
+2025-11-23 20:37:19,095 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BW_Allmendbewilligungen_OeffentlicheBaustelle: GetMap request is blocked for this layer
+2025-11-23 20:37:29,206 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BW_Allmendbewilligungen_Umleitung: GetMap request is blocked for this layer
+2025-11-23 20:37:39,223 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BW_Allmendbewilligungen_Veranstaltung: GetMap request is blocked for this layer
+2025-11-23 20:37:49,339 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BW_Allmendbewilligungen_Weitere: GetMap request is blocked for this layer
+2025-11-23 20:37:59,345 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BW_Aufgrabungssperren_SperrungDurchErledigteAufgrabung: GetMap request is blocked for this layer
+2025-11-23 20:38:09,360 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BW_Aufgrabungssperren_SperrungFuerZukuenftigeAufgrabung: GetMap request is blocked for this layer
+2025-11-23 20:38:19,471 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - DF_Defibrillator: GetMap request is blocked for this layer
+2025-11-23 20:38:29,485 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - DI_Denkmalinventar_Anlage: GetMap request is blocked for this layer
+2025-11-23 20:38:39,500 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - DI_Denkmalinventar_Objekt: GetMap request is blocked for this layer
+2025-11-23 20:38:49,605 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - DI_Denkmalinventar_Erarbeitet: GetMap request is blocked for this layer
+2025-11-23 20:38:59,714 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Datenmarkt - Gebäudepunkt: GetMap request is blocked for this layer
+2025-11-23 20:39:09,936 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Datenmarkt - Gebäude: GetMap request is blocked for this layer
+2025-11-23 20:39:20,179 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - DM_Gebaeudeinformationen_DatenmarktGebaeudekategorie: GetMap request is blocked for this layer
+2025-11-23 20:39:30,194 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Datenmarkt - Adressen: GetMap request is blocked for this layer
+2025-11-23 20:39:40,497 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - DP_GebietseinteilungBauberatungDenkmalpflege: GetMap request is blocked for this layer
+2025-11-23 20:39:50,608 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - DS_Denkmalverzeichnis_Anlage: GetMap request is blocked for this layer
+2025-11-23 20:40:03,091 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - EB_Zone: GetMap request is blocked for this layer
+2025-11-23 20:40:13,205 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - EL_Elternberatung: GetMap request is blocked for this layer
+2025-11-23 20:40:26,402 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - EP_Energierichtplan_Oekologie: GetMap request is blocked for this layer
+2025-11-23 20:40:36,420 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - EP_Energierichtplan_Entwicklung: GetMap request is blocked for this layer
+2025-11-23 20:40:46,438 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - EP_Energierichtplan_Grundwasser: GetMap request is blocked for this layer
+2025-11-23 20:40:56,555 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - EP_Energierichtplan_Eignungsgebiet: GetMap request is blocked for this layer
+2025-11-23 20:41:06,573 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - EP_Energierichtplan_Nachbargemeinde: GetMap request is blocked for this layer
+2025-11-23 20:41:16,587 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - EP_Energierichtplan_Machbarkeit: GetMap request is blocked for this layer
+2025-11-23 20:41:26,601 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Recycling und Entsorgung: GetMap request is blocked for this layer
+2025-11-23 20:41:37,122 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Wiederverwendung Brauchbares: GetMap request is blocked for this layer
+2025-11-23 20:41:47,344 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Verkauf: GetMap request is blocked for this layer
+2025-11-23 20:41:57,583 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - FE_Graeber: GetMap request is blocked for this layer
+2025-11-23 20:42:07,696 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - FE_Sektionen: GetMap request is blocked for this layer
+2025-11-23 20:42:17,704 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - FF_Fruchtfolgeflaechen: GetMap request is blocked for this layer
+2025-11-23 20:42:27,719 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - FF_Hinweisflaechen: GetMap request is blocked for this layer
+2025-11-23 20:42:37,828 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Betriebe: GetMap request is blocked for this layer
+2025-11-23 20:42:48,056 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - GE_Eisenbahnen_Eisenbahn: GetMap request is blocked for this layer
+2025-11-23 20:42:59,450 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - GE_KantonaleStrassen_KantonaleStrasse: GetMap request is blocked for this layer
+2025-11-23 20:43:11,952 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - GF_GebietseinteilungFeuerpolizei: GetMap request is blocked for this layer
+2025-11-23 20:43:23,283 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - GL_Toleranzzone: GetMap request is blocked for this layer
+2025-11-23 20:43:33,297 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - GL_InnenhoefeStoergrade: GetMap request is blocked for this layer
+2025-11-23 20:43:44,681 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - GN_IsohypseMittelwasser: GetMap request is blocked for this layer
+2025-11-23 20:43:54,696 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - GN_IsohypseHoechsthochwasser: GetMap request is blocked for this layer
+2025-11-23 20:44:04,801 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - GN_GrundwasserleiterLockergestein: GetMap request is blocked for this layer
+2025-11-23 20:44:14,910 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Untersuchungsperimeter: GetMap request is blocked for this layer
+2025-11-23 20:44:25,159 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - GO_GueteklassenOeV: GetMap request is blocked for this layer
+2025-11-23 20:44:35,277 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - GQ_Grundwasserqualitaet: GetMap request is blocked for this layer
+2025-11-23 20:44:45,385 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - GR_Grundwasserschutzzonen: GetMap request is blocked for this layer
+2025-11-23 20:44:55,505 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - GR_Gewaesserschutzbereiche: GetMap request is blocked for this layer
+2025-11-23 20:45:05,620 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - GU_Gebietseinteilung: GetMap request is blocked for this layer
+2025-11-23 20:45:15,744 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Ökomorphologisches Bezugssystem: GetMap request is blocked for this layer
+2025-11-23 20:45:25,842 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - GW_OekomorphologischesBezugssystem_OekomorphologischeKilometrierung_1000m: GetMap request is blocked for this layer
+2025-11-23 20:45:35,948 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - GW_OekomorphologischesBezugssystem_OekomorphologischeKilometrierung_100m: GetMap request is blocked for this layer
+2025-11-23 20:45:45,962 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - GW_OekomorphologischesBezugssystem_OekomorphologischeKilometrierung_50m: GetMap request is blocked for this layer
+2025-11-23 20:45:55,977 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - GW_OekomorphologischesBezugssystem_OekomorphologischeKilometrierung_StartEnd: GetMap request is blocked for this layer
+2025-11-23 20:46:05,994 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Ökomorphologie: GetMap request is blocked for this layer
+2025-11-23 20:46:17,465 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - Revitalisierung: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 20:46:27,604 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - GZ_Gewaesserachse: GetMap request is blocked for this layer
+2025-11-23 20:46:49,828 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SF_Siegfriedkarte_1890: GetMap request is blocked for this layer
+2025-11-23 20:47:03,175 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SF_Siegfriedkarte_1921: GetMap request is blocked for this layer
+2025-11-23 20:47:13,185 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SF_Siegfriedkarte_1928: GetMap request is blocked for this layer
+2025-11-23 20:47:23,502 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SF_Siegfriedkarte_1931: GetMap request is blocked for this layer
+2025-11-23 20:47:33,516 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SF_Siegfriedkarte_1939: GetMap request is blocked for this layer
+2025-11-23 20:47:44,025 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SF_Siegfriedkarte_1945: GetMap request is blocked for this layer
+2025-11-23 20:47:54,044 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Basel: GetMap request is blocked for this layer
+2025-11-23 20:48:04,402 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HP_Uebersichtsplan_Basel_1615: GetMap request is blocked for this layer
+2025-11-23 20:48:14,928 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HP_Uebersichtsplan_Basel_1786: GetMap request is blocked for this layer
+2025-11-23 20:48:24,937 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HP_Uebersichtsplan_Basel_1820: GetMap request is blocked for this layer
+2025-11-23 20:48:34,952 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HP_Uebersichtsplan_Basel_1860: GetMap request is blocked for this layer
+2025-11-23 20:48:45,178 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HP_Uebersichtsplan_Basel_1896: GetMap request is blocked for this layer
+2025-11-23 20:48:55,192 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HP_Uebersichtsplan_Basel_1905: GetMap request is blocked for this layer
+2025-11-23 20:49:05,210 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HP_Uebersichtsplan_Basel_1940: GetMap request is blocked for this layer
+2025-11-23 20:49:15,224 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HP_Uebersichtsplan_Basel_1961: GetMap request is blocked for this layer
+2025-11-23 20:49:25,238 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HP_Uebersichtsplan_Basel_digital_1961: GetMap request is blocked for this layer
+2025-11-23 20:49:35,253 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HP_Situationsplan_Basel_1862: GetMap request is blocked for this layer
+2025-11-23 20:49:45,692 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - Riehen und Bettingen: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 20:50:12,211 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HP_Planungen_Zonenplan_1969: GetMap request is blocked for this layer
+2025-11-23 20:50:24,521 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HP_Planungen_Zonenplan_2000: GetMap request is blocked for this layer
+2025-11-23 20:50:36,822 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HP_Bebauungsplan_2016: GetMap request is blocked for this layer
+2025-11-23 20:50:50,231 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HP_Stadtfunktionen_1961: GetMap request is blocked for this layer
+2025-11-23 20:51:00,245 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HS_Hundeverbot: GetMap request is blocked for this layer
+2025-11-23 20:51:10,250 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HS_GanzjaerigeLeinenpflicht: GetMap request is blocked for this layer
+2025-11-23 20:51:20,353 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HS_SaisonaleLeinenpflicht: GetMap request is blocked for this layer
+2025-11-23 20:51:30,456 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HS_FreilaufhundearealZaun: GetMap request is blocked for this layer
+2025-11-23 20:51:40,951 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HS_Freilaufhundeareal: GetMap request is blocked for this layer
+2025-11-23 20:51:51,180 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HW_Beratung: GetMap request is blocked for this layer
+2025-11-23 20:52:01,194 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HW_WohnenStationaer: GetMap request is blocked for this layer
+2025-11-23 20:52:11,434 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HW_WohnenTagesgestalltung: GetMap request is blocked for this layer
+2025-11-23 20:52:21,455 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HW_Tagesgestalltung: GetMap request is blocked for this layer
+2025-11-23 20:52:32,585 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - IG_InventarGartenanlagen: GetMap request is blocked for this layer
+2025-11-23 20:52:43,793 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - KJ_Jugendangebot: GetMap request is blocked for this layer
+2025-11-23 20:52:55,055 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - KJ_Kinderjugendangebot: GetMap request is blocked for this layer
+2025-11-23 20:53:05,073 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - KK_KatholischerKirchenkreis: GetMap request is blocked for this layer
+2025-11-23 20:53:18,189 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Klimaanalyse Tag (14 Uhr): GetMap request is blocked for this layer
+2025-11-23 20:53:28,340 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - KL_Arealentwicklung_2030: GetMap request is blocked for this layer
+2025-11-23 20:53:38,355 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Klimaanalyse 2030 Nacht (4 Uhr): GetMap request is blocked for this layer
+2025-11-23 20:53:48,582 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Klimaanalyse 2030 Tag (14 Uhr): GetMap request is blocked for this layer
+2025-11-23 20:53:58,735 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - KS_KonsultationsbereicheStoerfallvorsorge: GetMap request is blocked for this layer
+2025-11-23 20:54:08,750 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - KU_KunstImOeffentlichenRaum_Bestehend: GetMap request is blocked for this layer
+2025-11-23 20:54:18,764 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - KU_KunstImOeffentlichenRaum_BestehendMitZusatzinfo: GetMap request is blocked for this layer
+2025-11-23 20:54:28,893 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - KU_KunstImOeffentlichenRaum_Zurueckgebaut: GetMap request is blocked for this layer
+2025-11-23 20:54:38,909 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - KU_KunstImOeffentlichenRaum_ZurueckgebautMitZusatzinfo: GetMap request is blocked for this layer
+2025-11-23 20:54:49,047 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Kunst und Bau: GetMap request is blocked for this layer
+2025-11-23 20:54:59,231 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Bahnlärm: GetMap request is blocked for this layer
+2025-11-23 20:55:09,321 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Strassenlärm: GetMap request is blocked for this layer
+2025-11-23 20:55:19,627 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Bildmittelpunkt: GetMap request is blocked for this layer
+2025-11-23 20:55:29,854 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Footprint: GetMap request is blocked for this layer
+2025-11-23 20:55:40,038 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - S-Bahn: GetMap request is blocked for this layer
+2025-11-23 20:55:50,181 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Tram: GetMap request is blocked for this layer
+2025-11-23 20:56:03,001 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Schifffahrt: GetMap request is blocked for this layer
+2025-11-23 20:56:13,271 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - ÖV-Nachtnetz: GetMap request is blocked for this layer
+2025-11-23 20:56:25,210 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Lärmempfindlichkeitsstufenplan Basel: GetMap request is blocked for this layer
+2025-11-23 20:56:37,925 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - LP_LESP_Basel_LN: GetMap request is blocked for this layer
+2025-11-23 20:56:49,249 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Lärmempfindlichkeitsstufenplan Bettingen: GetMap request is blocked for this layer
+2025-11-23 20:56:59,353 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - MF_MobilUndRundfunkantenne: GetMap request is blocked for this layer
+2025-11-23 20:57:09,468 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - MF_Strahlungsperimeter: GetMap request is blocked for this layer
+2025-11-23 20:57:19,483 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - strassen_und_wege_stwe.kantonsstrassen_riehen_bettingen: GetMap request is blocked for this layer
+2025-11-23 20:57:29,596 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - strassen_und_wege_stwe.durchgangsstrassen: GetMap request is blocked for this layer
+2025-11-23 20:57:39,708 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Strassentypen (nach VSS) und Wege: GetMap request is blocked for this layer
+2025-11-23 20:57:49,952 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - strassen_und_wege_stwe.geschwindigkeit: GetMap request is blocked for this layer
+2025-11-23 20:58:00,068 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - strassen_und_wege_stwe.temporegime: GetMap request is blocked for this layer
+2025-11-23 20:58:10,075 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - strassen_und_wege_stwe.temporegime_innenstadt: GetMap request is blocked for this layer
+2025-11-23 20:58:20,089 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - MZ_Makrozoobenthos: GetMap request is blocked for this layer
+2025-11-23 20:58:30,103 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Zonenplan Bettingen: GetMap request is blocked for this layer
+2025-11-23 20:58:40,706 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NB_Nutzungsplanung_Orientierend_Naturobjekt: GetMap request is blocked for this layer
+2025-11-23 20:58:50,713 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NB_Nutzungsplanung_Orientierend_Wald: GetMap request is blocked for this layer
+2025-11-23 20:59:00,944 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - NB_Nutzungsplanung_Rekurs_Punkt: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 20:59:11,065 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NB_Nutzungsplanung_Rekurs_Linie: GetMap request is blocked for this layer
+2025-11-23 20:59:23,688 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Zonenplan Basel: GetMap request is blocked for this layer
+2025-11-23 20:59:36,191 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NP_Nutzungsplanung_Grundnutzung_Z3: GetMap request is blocked for this layer
+2025-11-23 20:59:48,589 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - NP_Nutzungsplanung_Grundnutzung_Z5: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 20:59:58,603 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NP_Nutzungsplanung_Grundnutzung_Z6: GetMap request is blocked for this layer
+2025-11-23 21:00:08,617 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NP_Nutzungsplanung_Grundnutzung_Z7: GetMap request is blocked for this layer
+2025-11-23 21:00:18,730 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NP_Nutzungsplanung_Grundnutzung_GR: GetMap request is blocked for this layer
+2025-11-23 21:00:28,744 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NP_Nutzungsplanung_Grundnutzung_GA: GetMap request is blocked for this layer
+2025-11-23 21:00:38,759 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NP_Nutzungsplanung_Grundnutzung_LZ: GetMap request is blocked for this layer
+2025-11-23 21:00:48,774 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NP_Nutzungsplanung_Grundnutzung_SO: GetMap request is blocked for this layer
+2025-11-23 21:00:58,880 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NP_Nutzungsplanung_Grundnutzung_SU: GetMap request is blocked for this layer
+2025-11-23 21:01:08,894 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NP_Nutzungsplanung_Grundnutzung_NOI: GetMap request is blocked for this layer
+2025-11-23 21:01:18,912 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NP_Nutzungsplanung_Grundnutzung_Label: GetMap request is blocked for this layer
+2025-11-23 21:01:28,926 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NP_Nutzungsplanung_OrientierenderPlaninhalt_WL: GetMap request is blocked for this layer
+2025-11-23 21:01:39,045 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NP_Nutzungsplanung_OrientierenderPlaninhalt_AB: GetMap request is blocked for this layer
+2025-11-23 21:01:49,063 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NP_Nutzungsplanung_OrientierenderPlaninhalt_Label: GetMap request is blocked for this layer
+2025-11-23 21:01:59,167 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NP_Nutzungsplanung_Linien_Landschaftsrichtplan: GetMap request is blocked for this layer
+2025-11-23 21:02:09,181 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NP_Nutzungsplanung_Ueberlagernd_Baumbestand: GetMap request is blocked for this layer
+2025-11-23 21:02:19,295 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NP_Nutzungsplanung_Ueberlagernd_Landschaftsschutzzone: GetMap request is blocked for this layer
+2025-11-23 21:02:29,310 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NP_Nutzungsplanung_Ueberlagernd_Naturschutzzone: GetMap request is blocked for this layer
+2025-11-23 21:02:39,324 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NP_Nutzungsplanung_Ueberlagernd_Naturschonzone: GetMap request is blocked for this layer
+2025-11-23 21:02:52,039 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - NP_Nutzungsplanung_Objekte_Naturschutzobjekte: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 21:03:02,055 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NP_Nutzungsplanung_Ueberlagernd_Label: GetMap request is blocked for this layer
+2025-11-23 21:03:14,440 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NP_Nutzungsplanung_Rekurs_Linie: GetMap request is blocked for this layer
+2025-11-23 21:03:27,303 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RN_Nutzungsplanung_Grundnutzung_Z2A: GetMap request is blocked for this layer
+2025-11-23 21:03:39,948 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RN_Nutzungsplanung_Grundnutzung_Z3: GetMap request is blocked for this layer
+2025-11-23 21:03:50,057 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RN_Nutzungsplanung_Grundnutzung_Z4: GetMap request is blocked for this layer
+2025-11-23 21:04:00,085 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RN_Nutzungsplanung_Grundnutzung_AZ2: GetMap request is blocked for this layer
+2025-11-23 21:04:10,199 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RN_Nutzungsplanung_Grundnutzung_AZ3: GetMap request is blocked for this layer
+2025-11-23 21:04:20,314 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RN_Nutzungsplanung_Grundnutzung_GR: GetMap request is blocked for this layer
+2025-11-23 21:04:30,328 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RN_Nutzungsplanung_Grundnutzung_GA: GetMap request is blocked for this layer
+2025-11-23 21:04:40,343 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RN_Nutzungsplanung_Grundnutzung_LZ: GetMap request is blocked for this layer
+2025-11-23 21:04:50,357 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RN_Nutzungsplanung_Grundnutzung_SO: GetMap request is blocked for this layer
+2025-11-23 21:05:00,376 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RN_Nutzungsplanung_Grundnutzung_SU: GetMap request is blocked for this layer
+2025-11-23 21:05:11,571 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RN_Nutzungsplanung_Grundnutzung_FZG: GetMap request is blocked for this layer
+2025-11-23 21:05:22,701 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RN_Nutzungsplanung_Grundnutzung_Label: GetMap request is blocked for this layer
+2025-11-23 21:05:33,866 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RN_Nutzungsplanung_OrientierenderPlaninhalt_WL: GetMap request is blocked for this layer
+2025-11-23 21:05:43,982 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RN_Nutzungsplanung_OrientierenderPlaninhalt_AB: GetMap request is blocked for this layer
+2025-11-23 21:05:55,299 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RN_Nutzungsplanung_Ueberlagernd_Landschaftsschutzzone: GetMap request is blocked for this layer
+2025-11-23 21:06:05,314 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RN_Nutzungsplanung_Ueberlagernd_Naturschutzzone: GetMap request is blocked for this layer
+2025-11-23 21:06:16,406 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RN_Nutzungsplanung_Ueberlagernd_Wohn_Arbeitsmischgebiet: GetMap request is blocked for this layer
+2025-11-23 21:06:26,420 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RN_Nutzungsplanung_Ueberlagernd_Baumbestand: GetMap request is blocked for this layer
+2025-11-23 21:06:37,453 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RN_Nutzungsplanung_Linien_Siedlungsgrenze: GetMap request is blocked for this layer
+2025-11-23 21:06:47,568 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RN_Nutzungsplanung_Linien_Aussichtsschutz: GetMap request is blocked for this layer
+2025-11-23 21:06:58,685 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RN_Nutzungsplanung_Ueberlagernd_Label: GetMap request is blocked for this layer
+2025-11-23 21:07:09,046 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RN_Nutzungsplanung_Rekurs_Linie: GetMap request is blocked for this layer
+2025-11-23 21:07:20,361 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Bebauungspläne Bettingen: GetMap request is blocked for this layer
+2025-11-23 21:07:30,463 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Bebauungspläne Basel: GetMap request is blocked for this layer
+2025-11-23 21:07:41,969 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NP_Bebauungsplan_Bebauungsplan_outline: GetMap request is blocked for this layer
+2025-11-23 21:07:52,078 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Bebauungspläne Riehen: GetMap request is blocked for this layer
+2025-11-23 21:08:04,137 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Intensitätskarten: GetMap request is blocked for this layer
+2025-11-23 21:08:15,555 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NJ_InventarGeschuetzterNaturobjekte: GetMap request is blocked for this layer
+2025-11-23 21:08:27,835 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - Stand 2025: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 21:08:39,270 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NI_2025_TaxonobjekteGruppen_Reptilien: GetMap request is blocked for this layer
+2025-11-23 21:08:51,625 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - NI_2025_TaxonobjekteGruppen_Heuschrecken: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 21:09:09,088 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2019_BeschriftungVerbreitung2019_AnzahlArten: GetMap request is blocked for this layer
+2025-11-23 21:09:21,964 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2019_Verbreitung_outline: GetMap request is blocked for this layer
+2025-11-23 21:09:34,441 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2019_Arten_Blauglockenbaum: GetMap request is blocked for this layer
+2025-11-23 21:09:46,877 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2019_Arten_Essigbaum: GetMap request is blocked for this layer
+2025-11-23 21:09:56,887 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2019_Arten_Goetterbaum: GetMap request is blocked for this layer
+2025-11-23 21:10:06,903 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2019_Arten_JapanischerStaudenknoeterich: GetMap request is blocked for this layer
+2025-11-23 21:10:17,015 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2019_Arten_KanadischeGoldrute: GetMap request is blocked for this layer
+2025-11-23 21:10:27,043 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2019_Arten_KanadischesBerufskraut: GetMap request is blocked for this layer
+2025-11-23 21:10:37,058 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2019_Arten_Kirschlorbeer: GetMap request is blocked for this layer
+2025-11-23 21:10:47,167 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2019_Arten_OrientalischesZackenschoetchen: GetMap request is blocked for this layer
+2025-11-23 21:10:57,181 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2019_Arten_RiesenBaerenklau: GetMap request is blocked for this layer
+2025-11-23 21:11:07,195 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2019_Arten_Robinie: GetMap request is blocked for this layer
+2025-11-23 21:11:17,205 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2019_Arten_Luzerne: GetMap request is blocked for this layer
+2025-11-23 21:11:27,322 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2019_Arten_SchmalblaettrigesGreiskraut: GetMap request is blocked for this layer
+2025-11-23 21:11:37,337 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2019_Arten_Sommerflieder: GetMap request is blocked for this layer
+2025-11-23 21:11:47,355 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - 2013: GetMap request is blocked for this layer
+2025-11-23 21:11:57,511 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2013_BeschriftungVerbreitung2013_AnzahlArten: GetMap request is blocked for this layer
+2025-11-23 21:12:07,644 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - NK_2013_BeschriftungVerbreitung2013_VorkommendeArten: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 21:12:17,658 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2013_Verbreitung_fill: GetMap request is blocked for this layer
+2025-11-23 21:12:29,777 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2013_Arten_ArmenischeGartenbrombeere: GetMap request is blocked for this layer
+2025-11-23 21:12:46,527 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - NK_2013_Arten_Essigbaum: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 21:13:04,240 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2013_Arten_Sommerflieder: GetMap request is blocked for this layer
+2025-11-23 21:13:18,378 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2009_BeschriftungVerbreitung2009_AnzahlArten: GetMap request is blocked for this layer
+2025-11-23 21:13:30,964 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2009_Verbreitung_outline: GetMap request is blocked for this layer
+2025-11-23 21:13:44,201 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2009_Arten_Goetterbaum: GetMap request is blocked for this layer
+2025-11-23 21:13:54,220 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2009_Arten_JapanischerStaudenknoeterich: GetMap request is blocked for this layer
+2025-11-23 21:14:04,333 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2009_Arten_KanadischeGoldrute: GetMap request is blocked for this layer
+2025-11-23 21:14:14,351 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2009_Arten_RiesenBaerenklau: GetMap request is blocked for this layer
+2025-11-23 21:14:24,456 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2009_Arten_SchmalblaettrigesGreiskraut: GetMap request is blocked for this layer
+2025-11-23 21:14:35,891 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2009_Arten_SpaetbluehendeGoldrute: GetMap request is blocked for this layer
+2025-11-23 21:14:48,512 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2006_BeschriftungVerbreitung2006_AnzahlArten: GetMap request is blocked for this layer
+2025-11-23 21:15:01,380 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2006_Verbreitung_outline: GetMap request is blocked for this layer
+2025-11-23 21:15:11,393 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2006_Arten_ArmenischeGartenbrombeere: GetMap request is blocked for this layer
+2025-11-23 21:15:22,596 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2006_Arten_Goetterbaum: GetMap request is blocked for this layer
+2025-11-23 21:15:32,609 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2006_Arten_JapanischerStaudenknoeterich: GetMap request is blocked for this layer
+2025-11-23 21:15:50,135 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - NK_2006_Arten_SchmalblaettrigesGreiskraut: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 21:16:00,245 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NK_2006_Arten_Sommerflieder: GetMap request is blocked for this layer
+2025-11-23 21:16:11,609 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NR_Gewaesser_Gewaesser: GetMap request is blocked for this layer
+2025-11-23 21:16:21,626 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NR_Gewaesser_Nummer: GetMap request is blocked for this layer
+2025-11-23 21:16:36,090 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - Wiesen und Weiden: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 21:16:46,191 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Hecken und Gehölze: GetMap request is blocked for this layer
+2025-11-23 21:16:58,676 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Grünanlagen und Friedhöfe: GetMap request is blocked for this layer
+2025-11-23 21:17:11,265 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Artvorkommen aus dem Naturinventar Basel-Stadt: GetMap request is blocked for this layer
+2025-11-23 21:17:24,000 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - OF_OrthofotoAktuell: GetMap request is blocked for this layer
+2025-11-23 21:17:34,110 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - OF_Orthofoto1926: GetMap request is blocked for this layer
+2025-11-23 21:17:44,225 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - OF_Orthofoto1933: GetMap request is blocked for this layer
+2025-11-23 21:17:54,352 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - OF_Orthofoto1979August: GetMap request is blocked for this layer
+2025-11-23 21:18:06,378 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - OF_Orthofoto1990Maerz: GetMap request is blocked for this layer
+2025-11-23 21:18:16,398 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - OF_Orthofoto1995Maerz: GetMap request is blocked for this layer
+2025-11-23 21:18:28,522 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - OF_Orthofoto2001Juli: GetMap request is blocked for this layer
+2025-11-23 21:18:41,169 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - OF_Orthofoto2005April: GetMap request is blocked for this layer
+2025-11-23 21:18:52,969 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - OF_Orthofoto2010April: GetMap request is blocked for this layer
+2025-11-23 21:19:02,984 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - OF_Orthofoto2012Maerz: GetMap request is blocked for this layer
+2025-11-23 21:19:12,998 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - OF_Orthofoto2012Juli: GetMap request is blocked for this layer
+2025-11-23 21:19:23,404 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - OF_Orthofoto2015April: GetMap request is blocked for this layer
+2025-11-23 21:19:33,511 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - OF_Orthofoto2017Maerz: GetMap request is blocked for this layer
+2025-11-23 21:19:43,621 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - OF_TrueOrthofoto2017Maerz: GetMap request is blocked for this layer
+2025-11-23 21:19:53,635 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - OF_TrueOrthofoto2020Maerz: GetMap request is blocked for this layer
+2025-11-23 21:20:03,743 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - OF_Orthofoto2020Maerz: GetMap request is blocked for this layer
+2025-11-23 21:20:13,758 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - OF_TrueOrthofoto2023Mai: GetMap request is blocked for this layer
+2025-11-23 21:20:24,083 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - OF_Orthofoto2023Mai: GetMap request is blocked for this layer
+2025-11-23 21:20:34,098 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SI_Swissimage2024: GetMap request is blocked for this layer
+2025-11-23 21:20:44,112 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - OG_SelbstaendigesDauerndesBauUnterbaurecht: GetMap request is blocked for this layer
+2025-11-23 21:20:54,225 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - OG_Miteigentum: GetMap request is blocked for this layer
+2025-11-23 21:21:04,453 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - OR_OeffentlicherRaum: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 21:21:14,661 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - OW_SportBewegung: GetMap request is blocked for this layer
+2025-11-23 21:21:27,047 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - PA_Ladestation: GetMap request is blocked for this layer
+2025-11-23 21:21:39,625 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - PA_RBHalteort: GetMap request is blocked for this layer
+2025-11-23 21:21:52,351 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - XP_Parkhausauslastung: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 21:22:02,366 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - PM_Schallpegelmessungen: GetMap request is blocked for this layer
+2025-11-23 21:22:12,676 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - PP_PolizeilichePraevention_GebietseinteilungPolizeilichePraevention_Kriminal: GetMap request is blocked for this layer
+2025-11-23 21:22:22,690 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - PP_PolizeilichePraevention_GebietseinteilungPolizeilichePraevention_Jugend: GetMap request is blocked for this layer
+2025-11-23 21:22:32,710 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - PP_PolizeilichePraevention_GebietseinteilungPolizeilichePraevention_Verkehr: GetMap request is blocked for this layer
+2025-11-23 21:22:42,724 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - PW_PolitischerWahlkreis: GetMap request is blocked for this layer
+2025-11-23 21:22:52,737 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - PX_Planungszone_Bettingen: GetMap request is blocked for this layer
+2025-11-23 21:23:02,929 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - PY_Planungszone_Riehen: GetMap request is blocked for this layer
+2025-11-23 21:23:13,032 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - PZ_Planungszone_Basel: GetMap request is blocked for this layer
+2025-11-23 21:23:23,138 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - QT_Quartiertreffpunkte: GetMap request is blocked for this layer
+2025-11-23 21:23:33,153 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RM_Geschwindigkeitsmonitoring: GetMap request is blocked for this layer
+2025-11-23 21:23:43,168 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Grundkarte: GetMap request is blocked for this layer
+2025-11-23 21:23:53,580 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Siedlung: GetMap request is blocked for this layer
+2025-11-23 21:24:04,702 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_Siedlung_Siedlungsgebiet_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:24:14,716 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_Siedlung_Siedlungsgebiet_Flaeche: GetMap request is blocked for this layer
+2025-11-23 21:24:24,734 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_Siedlung_Landesgrenze_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:24:34,850 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_Siedlung_Landesgrenze_Linie: GetMap request is blocked for this layer
+2025-11-23 21:24:51,327 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - RP_Ausgangslage_Siedlung_Kantonsgrenze_Abfrage: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 21:25:01,466 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - RP_Ausgangslage_Siedlung_Kantonsgrenze_Linie: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 21:25:33,743 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Siedlung_GebietUmSBahnHaltestelle_Punkt: GetMap request is blocked for this layer
+2025-11-23 21:25:43,757 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Siedlung_SchwerpunktArbeiten_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:25:53,777 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Siedlung_SchwerpunktArbeiten_Flaeche: GetMap request is blocked for this layer
+2025-11-23 21:26:04,028 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Siedlung_SchwerpunktArbeitenUndWohnen_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:26:14,057 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Siedlung_SchwerpunktArbeitenUndWohnen_Flaeche: GetMap request is blocked for this layer
+2025-11-23 21:26:24,066 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Siedlung_SchwerpunktWohnen_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:26:34,465 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Siedlung_SchwerpunktWohnen_Flaeche: GetMap request is blocked for this layer
+2025-11-23 21:26:44,480 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Siedlung_SiedlungsgliedernderFreiraum_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:26:54,702 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Siedlung_SiedlungsgliedernderFreiraum_Flaeche: GetMap request is blocked for this layer
+2025-11-23 21:27:04,716 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Siedlung_FreizeitUndSportgebiet_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:27:17,132 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Siedlung_VorzugsgebietVerbesserungFreiraumversorgung_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:27:28,471 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Siedlung_AufhebungFreiraumerweiterung_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:27:39,851 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Siedlung_Ortszentrum_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:27:49,883 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Siedlung_Ortszentrum_Flaeche: GetMap request is blocked for this layer
+2025-11-23 21:27:59,892 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Siedlung_Laermschutz_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:28:10,395 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Siedlung_Laermschutz_Linie: GetMap request is blocked for this layer
+2025-11-23 21:28:21,921 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - RP_Siedlung_NutzungImOeffentlichenInteresse_Punkt: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 21:28:31,929 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Siedlung_AufhebungSiedlungstrennwirkung_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:28:44,399 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Siedlung_FokusgebietHitze_Flaeche: GetMap request is blocked for this layer
+2025-11-23 21:28:56,055 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Siedlung_Kaltluftfluss_Punkt: GetMap request is blocked for this layer
+2025-11-23 21:29:06,070 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Siedlung_VerkehrsintensiveEinrichtung_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:29:17,188 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Mobilität: GetMap request is blocked for this layer
+2025-11-23 21:29:28,693 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_Mobilitaet_HafenarealKantonal_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:29:40,001 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_Mobilitaet_StrassennetzAusserkantonal_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:29:50,129 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_Mobilitaet_StrassennetzAusserkantonal_Linie: GetMap request is blocked for this layer
+2025-11-23 21:30:01,684 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_Mobilitaet_SchieneNormalspurStrecke_Linie: GetMap request is blocked for this layer
+2025-11-23 21:30:11,697 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_Mobilitaet_SchieneSchmalspurStrecke_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:30:23,040 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_Mobilitaet_KantonsstrasseStrecke_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:30:38,715 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_Mobilitaet_NationalstrasseStrecke_Linie: GetMap request is blocked for this layer
+2025-11-23 21:30:48,849 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_Mobilitaet_NationalstrasseVollanschluss_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:31:00,096 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_Mobilitaet_NationalstrasseHalbanschluss_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:31:10,208 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_Mobilitaet_NationalstrasseHalbanschluss_Punkt: GetMap request is blocked for this layer
+2025-11-23 21:31:23,600 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_Mobilitaet_LangsamverkehrVeloparkierungsanlage_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:31:36,118 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_Mobilitaet_Hafenbahnhof_Punkt: GetMap request is blocked for this layer
+2025-11-23 21:31:48,576 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_Mobilitaet_EuroAirportBaselMulhouseFreiburg_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:31:58,691 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_Mobilitaet_EuroAirportBaselMulhouseFreiburg_Punkt: GetMap request is blocked for this layer
+2025-11-23 21:32:08,710 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_HinweisRheintunnel_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:32:18,717 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_HinweisRheintunnel_Punkt: GetMap request is blocked for this layer
+2025-11-23 21:32:28,732 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_SchieneNormalspurStrecke_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:32:38,746 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_SchieneNormalspurStrecke_Linie: GetMap request is blocked for this layer
+2025-11-23 21:32:48,765 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_SchieneNormalspurKorridor_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:32:58,779 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_SchieneNormalspurKorridor_Linie: GetMap request is blocked for this layer
+2025-11-23 21:33:08,895 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_SchieneNormalspurKapazitaetssteigerungUndEntflechtung_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:33:19,005 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_SchieneNormalspurKapazitaetssteigerungUndEntflechtung_Linie: GetMap request is blocked for this layer
+2025-11-23 21:33:31,385 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - RP_Mobilitaet_BahnhofOderSBahnHaltestelle_Abfrage: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 21:33:41,399 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_BahnhofOderSBahnHaltestelle_Punkt: GetMap request is blocked for this layer
+2025-11-23 21:33:51,514 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_SchieneSchmalspurStrecke_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:34:01,623 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_SchieneSchmalspurStrecke_Linie: GetMap request is blocked for this layer
+2025-11-23 21:34:11,641 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_SchieneSchmalspurKorridor_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:34:21,656 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_SchieneSchmalspurKorridor_Linie: GetMap request is blocked for this layer
+2025-11-23 21:34:31,670 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_NationalstrasseStrecke_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:34:51,628 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_NationalstrasseHalbanschluss_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:35:01,643 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_NationalstrasseHalbanschluss_Punkt: GetMap request is blocked for this layer
+2025-11-23 21:35:11,661 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_KantonsstrasseKorridor_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:35:21,675 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_KantonsstrasseKorridor_Linie: GetMap request is blocked for this layer
+2025-11-23 21:35:31,694 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_KantonsstrasseVerkehrsentlastung_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:35:41,708 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_KantonsstrasseVerkehrsentlastung_Linie: GetMap request is blocked for this layer
+2025-11-23 21:35:51,724 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_KantonsstrasseVerbesserungsmassnahmen_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:36:01,838 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_KantonsstrasseVerbesserungsmassnahmen_Linie: GetMap request is blocked for this layer
+2025-11-23 21:36:11,944 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_LangsamverkehrVeloFussgaenger_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:36:21,958 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_LangsamverkehrVeloFussgaenger_Linie: GetMap request is blocked for this layer
+2025-11-23 21:36:32,082 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_LangsamverkehrFussgaenger_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:36:42,101 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_LangsamverkehrFussgaenger_Linie: GetMap request is blocked for this layer
+2025-11-23 21:36:52,207 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_LangsamverkehrVeloparkierungsanlage_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:37:02,226 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_LangsamverkehrVeloparkierungsanlage_Punkt: GetMap request is blocked for this layer
+2025-11-23 21:37:12,334 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_StandorteGueterlogistik_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:37:22,345 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Mobilitaet_StandorteGueterlogistik_Punkt: GetMap request is blocked for this layer
+2025-11-23 21:37:36,762 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - RP_Mobilitaet_Hafenbahnhof_Abfrage: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 21:38:02,153 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Ver- und Entsorgung: GetMap request is blocked for this layer
+2025-11-23 21:38:14,681 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_VerUndEntsorgung_Uebertragungsleitung_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:38:27,640 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_VerUndEntsorgung_Wasserkraftwerk_Punkt: GetMap request is blocked for this layer
+2025-11-23 21:38:39,007 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_VerUndEntsorgung_Geothermieanlage_Punkt: GetMap request is blocked for this layer
+2025-11-23 21:38:49,119 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_VerUndEntsorgung_Abwasserreinigungsanlage_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:38:59,137 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_VerUndEntsorgung_Abwasserreinigungsanlage_Punkt: GetMap request is blocked for this layer
+2025-11-23 21:39:09,264 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_VerUndEntsorgung_Abfallverbrennungsanlage_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:39:19,382 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_VerUndEntsorgung_Abfallverbrennungsanlage_Punkt: GetMap request is blocked for this layer
+2025-11-23 21:39:29,397 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_VerUndEntsorgung_Geothermieanlage_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:39:39,411 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_VerUndEntsorgung_Geothermieanlage_Punkt: GetMap request is blocked for this layer
+2025-11-23 21:39:51,559 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_NaturUndLandschaft_Gewaesser_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:40:02,966 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_NaturUndLandschaft_WaldAusserkantonal_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:40:14,249 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_NaturUndLandschaft_WaldKantonal_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:40:24,360 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_NaturUndLandschaft_WaldKantonal_Flaeche: GetMap request is blocked for this layer
+2025-11-23 21:40:34,374 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_NaturUndLandschaft_Landwirtschaft_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:40:44,393 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_NaturUndLandschaft_Landwirtschaft_Flaeche: GetMap request is blocked for this layer
+2025-11-23 21:40:54,620 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - RP_Ausgangslage_NaturUndLandschaft_Naturwert_Abfrage: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 21:41:04,633 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_Ausgangslage_NaturUndLandschaft_Naturwert_Flaeche: GetMap request is blocked for this layer
+2025-11-23 21:41:14,746 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_NaturUndLandschaft_Naturwert_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:41:24,757 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_NaturUndLandschaft_Naturwert_Flaeche: GetMap request is blocked for this layer
+2025-11-23 21:41:37,004 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_NaturUndLandschaft_Biotopverbund_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:41:47,016 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_NaturUndLandschaft_Biotopverbund_Linie: GetMap request is blocked for this layer
+2025-11-23 21:41:57,030 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_NaturUndLandschaft_Wildtierkorridor_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:42:07,051 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_NaturUndLandschaft_Wildtierkorridor_Punkt: GetMap request is blocked for this layer
+2025-11-23 21:42:17,175 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_NaturUndLandschaft_VernetzungsachseEntlangFliessgewaesser_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:42:27,190 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_NaturUndLandschaft_VernetzungsachseEntlangFliessgewaesser_Punkt: GetMap request is blocked for this layer
+2025-11-23 21:42:37,205 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_NaturUndLandschaft_Fruchtfolgeflaeche_Abfrage: GetMap request is blocked for this layer
+2025-11-23 21:42:47,697 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RP_NaturUndLandschaft_Fruchtfolgeflaeche_Flaeche: GetMap request is blocked for this layer
+2025-11-23 21:42:57,811 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - RW_RechtlicherWald: GetMap request is blocked for this layer
+2025-11-23 21:43:07,930 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SB_Satellitenbild_2016_swisstopo_30cm: GetMap request is blocked for this layer
+2025-11-23 21:43:21,863 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SB_Satellitenbild_2017_swisstopo_25cm: GetMap request is blocked for this layer
+2025-11-23 21:43:31,881 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SB_Satellitenbild_2019_swisstopo_50cm: GetMap request is blocked for this layer
+2025-11-23 21:43:41,896 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SB_Satellitenbild_2022_swisstopo_30cm: GetMap request is blocked for this layer
+2025-11-23 21:43:51,911 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SB_Satellitenbild_2025_swisstopo_30cm: GetMap request is blocked for this layer
+2025-11-23 21:44:03,110 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SC_Schwimmhalle: GetMap request is blocked for this layer
+2025-11-23 21:44:13,221 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SC_Turnhalle: GetMap request is blocked for this layer
+2025-11-23 21:44:30,777 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - SC_Kindergarten: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 21:44:40,883 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SC_Primarschule: GetMap request is blocked for this layer
+2025-11-23 21:44:53,008 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SC_ZentrumBrueckenangebote: GetMap request is blocked for this layer
+2025-11-23 21:45:05,224 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Um 1860: GetMap request is blocked for this layer
+2025-11-23 21:45:17,765 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SE_1925bis1950: GetMap request is blocked for this layer
+2025-11-23 21:45:27,780 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SE_1950bis1975: GetMap request is blocked for this layer
+2025-11-23 21:45:37,794 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SE_1975bis2003: GetMap request is blocked for this layer
+2025-11-23 21:45:47,812 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SG_AnlageGeschlossen: GetMap request is blocked for this layer
+2025-11-23 21:45:57,826 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SG_Dusche: GetMap request is blocked for this layer
+2025-11-23 21:46:07,941 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SG_Pissoir: GetMap request is blocked for this layer
+2025-11-23 21:46:18,073 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - SG_WCAnlage: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 21:46:28,091 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SG_WCAnlagerollstuhlgaengig: GetMap request is blocked for this layer
+2025-11-23 21:46:38,105 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SL_Verkehrsberuhigung: GetMap request is blocked for this layer
+2025-11-23 21:46:48,123 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SL_LaermarmerBelag: GetMap request is blocked for this layer
+2025-11-23 21:46:58,129 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SL_KombinierteMassnahme: GetMap request is blocked for this layer
+2025-11-23 21:47:08,235 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SN_Strassennamen: GetMap request is blocked for this layer
+2025-11-23 21:47:19,430 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SO_BezeichnungStandort_Kindergarten: GetMap request is blocked for this layer
+2025-11-23 21:47:29,447 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SO_BezeichnungStandort_Primarschule: GetMap request is blocked for this layer
+2025-11-23 21:47:40,552 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SO_Kindergarten: GetMap request is blocked for this layer
+2025-11-23 21:47:50,567 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SO_Primarschule: GetMap request is blocked for this layer
+2025-11-23 21:48:03,852 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - 2002 - 2010: GetMap request is blocked for this layer
+2025-11-23 21:48:32,583 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SQ_Stromversorgungsgebiete_Netzebene5: GetMap request is blocked for this layer
+2025-11-23 21:48:43,940 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - ST_StockwerkeigentumVerkaufspreise_QuadratmeterpreisAltbau: GetMap request is blocked for this layer
+2025-11-23 21:48:53,954 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - ST_StockwerkeigentumVerkaufspreise_QuadratmeterpreisNeubau: GetMap request is blocked for this layer
+2025-11-23 21:49:03,969 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SW_Jugendlichenanteil: GetMap request is blocked for this layer
+2025-11-23 21:49:13,983 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SW_Seniorenanteil: GetMap request is blocked for this layer
+2025-11-23 21:49:24,113 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SW_Auslaenderanteil: GetMap request is blocked for this layer
+2025-11-23 21:49:34,127 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SW_Sesshaftigkeit: GetMap request is blocked for this layer
+2025-11-23 21:49:44,142 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SW_Arbeitsstaetten: GetMap request is blocked for this layer
+2025-11-23 21:49:54,341 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SW_Beschaeftigte: GetMap request is blocked for this layer
+2025-11-23 21:50:04,452 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SW_Vollzeitaequivalente: GetMap request is blocked for this layer
+2025-11-23 21:50:14,663 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SW_Sozialhilfe: GetMap request is blocked for this layer
+2025-11-23 21:50:24,870 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SW_MedianDesReineinkommens: GetMap request is blocked for this layer
+2025-11-23 21:50:34,973 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SW_MedianDesReinvermoegens: GetMap request is blocked for this layer
+2025-11-23 21:50:45,281 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Solarpotenzial Photovoltaik: GetMap request is blocked for this layer
+2025-11-23 21:50:55,484 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Solarpotenzial Solarthermie: GetMap request is blocked for this layer
+2025-11-23 21:51:05,683 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Informativer Planinhalt (Fusswegnetz Riehen Bettingen): GetMap request is blocked for this layer
+2025-11-23 21:51:20,185 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - TF_InformativerPlaninhalt_Geplant_ohneAnschluss: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 21:51:30,201 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - TF_InformativerPlaninhalt_Geplant_mitAnschluss: GetMap request is blocked for this layer
+2025-11-23 21:51:52,210 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Fusswegnetz Stadt Basel: GetMap request is blocked for this layer
+2025-11-23 21:52:05,066 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - TF_Fusswegnetz_Basel_Zwischenergebnis_ohneAnschluss: GetMap request is blocked for this layer
+2025-11-23 21:52:15,184 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - TF_Fusswegnetz_Basel_Zwischenergebnis_mitAnschluss: GetMap request is blocked for this layer
+2025-11-23 21:52:25,198 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - TF_Fusswegnetz_Basel_Festsetzung_ohneAnschluss: GetMap request is blocked for this layer
+2025-11-23 21:52:36,338 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - TF_Fusswegnetz_Basel_Bestand_ohneAnschluss: GetMap request is blocked for this layer
+2025-11-23 21:52:47,755 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Fusswegnetz Kanton Basel-Stadt: GetMap request is blocked for this layer
+2025-11-23 21:52:59,201 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - TF_Fusswegnetz_KantonBS_Vororientierung_mitAnschluss: GetMap request is blocked for this layer
+2025-11-23 21:53:09,209 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - TF_Fusswegnetz_KantonBS_Zwischenergebnis_ohneAnschluss: GetMap request is blocked for this layer
+2025-11-23 21:53:19,224 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - TF_Fusswegnetz_KantonBS_Zwischenergebnis_mitAnschluss: GetMap request is blocked for this layer
+2025-11-23 21:53:29,238 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - TF_Fusswegnetz_KantonBS_Festsetzung_ohneAnschluss: GetMap request is blocked for this layer
+2025-11-23 21:53:39,252 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - TF_Fusswegnetz_KantonBS_Festsetzung_mitAnschluss: GetMap request is blocked for this layer
+2025-11-23 21:53:49,266 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - TF_Fusswegnetz_KantonBS_Bestand_ohneAnschluss: GetMap request is blocked for this layer
+2025-11-23 21:53:59,371 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - TF_Fusswegnetz_KantonBS_Bestand_mitAnschluss: GetMap request is blocked for this layer
+2025-11-23 21:54:09,477 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - TI_Tigermuecke_Bekaempfung: GetMap request is blocked for this layer
+2025-11-23 21:54:19,495 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - TK_TagesheimKita: GetMap request is blocked for this layer
+2025-11-23 21:54:29,510 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - genehmigt: GetMap request is blocked for this layer
+2025-11-23 21:54:39,850 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - in Erarbeitung: GetMap request is blocked for this layer
+2025-11-23 21:54:50,006 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - kommunale Richtpläne: GetMap request is blocked for this layer
+2025-11-23 21:55:00,335 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - TR_Teilrichtplaene_KommunaleRichtplaene_Riehen_abfrage: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 21:55:10,355 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - TR_Teilrichtplaene_KommunaleRichtplaene_Riehen_anzeige: GetMap request is blocked for this layer
+2025-11-23 21:55:23,201 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VB_Veloabstellplaetze_Velostation: GetMap request is blocked for this layer
+2025-11-23 21:55:35,657 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VB_Veloabstellplaetze_gedeckt: GetMap request is blocked for this layer
+2025-11-23 21:55:53,085 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VO_Velostadtplan_Velostrasse: GetMap request is blocked for this layer
+2025-11-23 21:56:03,194 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VO_Velostadtplan_Eignung_gutBefahrbaresVelonetz: GetMap request is blocked for this layer
+2025-11-23 21:56:13,302 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VO_Velostadtplan_Eignung_sonstigeFuerVelosGeeigneteStrassen: GetMap request is blocked for this layer
+2025-11-23 21:56:23,401 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VO_Velostadtplan_Schiebestrecke: GetMap request is blocked for this layer
+2025-11-23 21:56:33,509 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VO_Velostadtplan_Fussgaengerzone: GetMap request is blocked for this layer
+2025-11-23 21:56:44,006 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VP_Handpumpe: GetMap request is blocked for this layer
+2025-11-23 21:56:54,118 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VP_Kompressor: GetMap request is blocked for this layer
+2025-11-23 21:57:04,132 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VP_Unbekannt: GetMap request is blocked for this layer
+2025-11-23 21:57:14,246 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VR_Begegnungszone: GetMap request is blocked for this layer
+2025-11-23 21:57:24,362 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VR_Fussgaengerzone: GetMap request is blocked for this layer
+2025-11-23 21:57:35,534 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VR_Tempo30Zone: GetMap request is blocked for this layer
+2025-11-23 21:57:45,549 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VS_Vektorstadtplan_farbig: GetMap request is blocked for this layer
+2025-11-23 21:57:58,183 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VS_Vektorstadtplan_grau: GetMap request is blocked for this layer
+2025-11-23 21:58:11,309 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VS_Vektorstadtplan_sw: GetMap request is blocked for this layer
+2025-11-23 21:58:24,661 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VU_SchleuderunfallSelbstunfall: GetMap request is blocked for this layer
+2025-11-23 21:58:34,681 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VU_UeberholunfallFahrstreifenwechsel: GetMap request is blocked for this layer
+2025-11-23 21:58:48,119 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VU_Abbiegeunfall: GetMap request is blocked for this layer
+2025-11-23 21:58:58,133 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VU_Einbiegeunfall: GetMap request is blocked for this layer
+2025-11-23 21:59:08,148 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VU_UeberquerenDerFahrbahn: GetMap request is blocked for this layer
+2025-11-23 21:59:18,162 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VU_Frontalkollision: GetMap request is blocked for this layer
+2025-11-23 21:59:28,177 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VU_Parkierunfall: GetMap request is blocked for this layer
+2025-11-23 21:59:38,185 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VU_Fussgaengerunfall: GetMap request is blocked for this layer
+2025-11-23 21:59:48,193 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VU_Tierunfall: GetMap request is blocked for this layer
+2025-11-23 21:59:58,207 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VU_Andere: GetMap request is blocked for this layer
+2025-11-23 22:00:08,224 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - MIV-Zählstellen: GetMap request is blocked for this layer
+2025-11-23 22:00:18,877 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Velo-Zählstellen: GetMap request is blocked for this layer
+2025-11-23 22:00:29,082 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Fussgänger-Zählstellen: GetMap request is blocked for this layer
+2025-11-23 22:00:39,374 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - WA_Wohnanteilplan_kA: GetMap request is blocked for this layer
+2025-11-23 22:00:49,388 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - WA_Wohnanteilplan_AG1: GetMap request is blocked for this layer
+2025-11-23 22:00:59,702 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - WA_Wohnanteilplan_AG2: GetMap request is blocked for this layer
+2025-11-23 22:01:09,852 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - WA_Wohnanteilplan_AG3: GetMap request is blocked for this layer
+2025-11-23 22:01:19,984 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - WA_Wohnanteilplan_AG4: GetMap request is blocked for this layer
+2025-11-23 22:01:32,908 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - WA_Wohnanteilplan_Innenstadt: GetMap request is blocked for this layer
+2025-11-23 22:01:42,922 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - WA_Wohnanteilplan_Bebauungsplan: GetMap request is blocked for this layer
+2025-11-23 22:01:55,840 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - WE_Bezirk: GetMap request is blocked for this layer
+2025-11-23 22:02:05,855 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - WE_Block: GetMap request is blocked for this layer
+2025-11-23 22:02:16,174 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - WE_Blockseite: GetMap request is blocked for this layer
+2025-11-23 22:02:26,576 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - WG_Waldgrenze: GetMap request is blocked for this layer
+2025-11-23 22:02:36,594 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Informativer Planinhalt: GetMap request is blocked for this layer
+2025-11-23 22:02:46,752 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - TV_InformativerPlaninhalt_BestandVerbindung_ohneAnschluss: GetMap request is blocked for this layer
+2025-11-23 22:02:56,866 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - TV_InformativerPlaninhalt_BestandVerbindung_mitAnschluss: GetMap request is blocked for this layer
+2025-11-23 22:03:07,260 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Pendlerrouten: GetMap request is blocked for this layer
+2025-11-23 22:03:17,463 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Basisrouten: GetMap request is blocked for this layer
+2025-11-23 22:03:28,096 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Bike und Ride Anlagen: GetMap request is blocked for this layer
+2025-11-23 22:03:38,301 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Velostationen: GetMap request is blocked for this layer
+2025-11-23 22:03:48,506 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - PN_Polizeiposten: GetMap request is blocked for this layer
+2025-11-23 22:03:58,521 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - AN_ArchaeologischeInformationsstellen: GetMap request is blocked for this layer
+2025-11-23 22:04:08,535 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - WW_Wegweiser: GetMap request is blocked for this layer
+2025-11-23 22:04:18,545 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - WW_Wanderwegnetz: GetMap request is blocked for this layer
+2025-11-23 22:04:28,558 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Wandernahes Angebot: GetMap request is blocked for this layer
+2025-11-23 22:04:48,505 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - PB_Erschliessungsqualitaet: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 22:04:58,519 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - PB_Parkplatzauslastung: GetMap request is blocked for this layer
+2025-11-23 22:05:10,758 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - US_BereitsGetroffeneMassnahmen: GetMap request is blocked for this layer
+2025-11-23 22:05:24,361 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - GX_Temperatur: GetMap request is blocked for this layer
+2025-11-23 22:05:36,871 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Infrastruktur: GetMap request is blocked for this layer
+2025-11-23 22:05:46,981 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - AH_AbfuhrzoneGemeindenRiehenBettingen: GetMap request is blocked for this layer
+2025-11-23 22:05:57,096 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - FD_Spielgruppe: GetMap request is blocked for this layer
+2025-11-23 22:06:07,111 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SY_SmileyGeschwindigkeitsanzeigen_ausserBetrieb: GetMap request is blocked for this layer
+2025-11-23 22:06:17,125 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SY_SmileyGeschwindigkeitsanzeigen_inBetrieb: GetMap request is blocked for this layer
+2025-11-23 22:06:27,139 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - ZS_Block: GetMap request is blocked for this layer
+2025-11-23 22:06:37,245 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - ZS_Quartier: GetMap request is blocked for this layer
+2025-11-23 22:06:47,755 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - ZS_Sektor: GetMap request is blocked for this layer
+2025-11-23 22:06:57,862 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NE_Naturersatzflaechen_Naturersatzflaeche: GetMap request is blocked for this layer
+2025-11-23 22:07:08,000 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NE_Naturersatzflaechen_NaturersatzflaecheImAuftrag: GetMap request is blocked for this layer
+2025-11-23 22:07:18,014 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - WR_Waldreservate_Eichenfoerderung: GetMap request is blocked for this layer
+2025-11-23 22:07:28,029 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - WR_Waldreservate_Mittelwald: GetMap request is blocked for this layer
+2025-11-23 22:07:39,144 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - WR_Waldreservate_Nutzungsverzicht: GetMap request is blocked for this layer
+2025-11-23 22:07:49,158 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - WR_Waldreservate_LichterWald: GetMap request is blocked for this layer
+2025-11-23 22:07:59,273 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - FW_IWBFernwaermeVersorgungsgebiet: GetMap request is blocked for this layer
+2025-11-23 22:08:09,292 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - WK_Anlage: GetMap request is blocked for this layer
+2025-11-23 22:08:19,404 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - WK_Anlageteil: GetMap request is blocked for this layer
+2025-11-23 22:08:29,515 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Baulinien Basel-Stadt: GetMap request is blocked for this layer
+2025-11-23 22:08:39,936 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - Strassenlinien Basel-Stadt: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 22:08:50,327 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BN_BSWL_Basel_Label: GetMap request is blocked for this layer
+2025-11-23 22:09:03,381 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BM_BSWL_Riehen_Label: GetMap request is blocked for this layer
+2025-11-23 22:09:13,495 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Baulinien Bettingen: GetMap request is blocked for this layer
+2025-11-23 22:09:23,812 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Strassenlinien Bettingen: GetMap request is blocked for this layer
+2025-11-23 22:09:34,110 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - BO_BSWL_Bettingen_Label: GetMap request is blocked for this layer
+2025-11-23 22:09:44,220 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - SJ_Sharingzone: GetMap request is blocked for this layer
+2025-11-23 22:09:54,382 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VM_Sperrzone: GetMap request is blocked for this layer
+2025-11-23 22:10:04,507 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VM_Parkverbotszone: GetMap request is blocked for this layer
+2025-11-23 22:10:14,524 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - GY_Entnahme: GetMap request is blocked for this layer
+2025-11-23 22:10:31,034 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - GY_Rueckgabe: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 22:10:41,041 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VT_Gebietsverantwortliche: GetMap request is blocked for this layer
+2025-11-23 22:10:53,192 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Aktuelle Verfügbarkeit: GetMap request is blocked for this layer
+2025-11-23 22:11:08,261 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - EN_GebietseinteilungEnergiefachstellen: GetMap request is blocked for this layer
+2025-11-23 22:11:21,351 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Information: GetMap request is blocked for this layer
+2025-11-23 22:11:33,284 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Auswertung: GetMap request is blocked for this layer
+2025-11-23 22:11:43,497 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Auswertungskriterien: GetMap request is blocked for this layer
+2025-11-23 22:11:59,049 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - HD_HistorischerOrtskern: GetMap request is blocked for this layer
+2025-11-23 22:12:09,159 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VG_Mauersegler_belegt: GetMap request is blocked for this layer
+2025-11-23 22:12:19,173 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VG_Mauersegler_verlassen: GetMap request is blocked for this layer
+2025-11-23 22:12:29,292 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VG_Mauersegler_kuenstlich: GetMap request is blocked for this layer
+2025-11-23 22:12:39,309 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VG_Mauersegler_vermutet: GetMap request is blocked for this layer
+2025-11-23 22:12:49,321 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VG_Alpensegler_belegt: GetMap request is blocked for this layer
+2025-11-23 22:12:59,336 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VG_Alpensegler_verlassen: GetMap request is blocked for this layer
+2025-11-23 22:13:09,351 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VG_Alpensegler_kuenstlich: GetMap request is blocked for this layer
+2025-11-23 22:13:19,465 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VG_Alpensegler_vermutet: GetMap request is blocked for this layer
+2025-11-23 22:13:29,479 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VG_Rauchschwalbe_belegt: GetMap request is blocked for this layer
+2025-11-23 22:13:39,493 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VG_Rauchschwalbe_verlassen: GetMap request is blocked for this layer
+2025-11-23 22:13:49,519 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VG_Rauchschwalbe_kuenstlich: GetMap request is blocked for this layer
+2025-11-23 22:13:59,628 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VG_Mehlschwalbe_belegt: GetMap request is blocked for this layer
+2025-11-23 22:14:09,642 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VG_Mehlschwalbe_verlassen: GetMap request is blocked for this layer
+2025-11-23 22:14:19,751 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - VG_Mehlschwalbe_kuenstlich: GetMap request is blocked for this layer
+2025-11-23 22:14:29,765 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - NO_Notfalltreffpunkt: GetMap request is blocked for this layer
+2025-11-23 22:14:42,159 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - GT_Eingedolt: GetMap request is blocked for this layer
+2025-11-23 22:14:52,291 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - GT_Rekurse: GetMap request is blocked for this layer
+2025-11-23 22:15:03,861 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - Baugruppe: HTTPSConnectionPool(host='wms.geo.bs.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 22:15:14,022 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - Gebiet: GetMap request is blocked for this layer
+2025-11-23 22:15:26,983 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - tagesfamilien_pro_bezirk_tafa.bezirk: GetMap request is blocked for this layer
+2025-11-23 22:15:39,881 - Scraping log - scraper.py > get_service_info(): Line 316 - WARNING - velofuehrungselemente_an_kreuzungen_vefe.indirekter_linksabbieger: GetMap request is blocked for this layer
+2025-11-23 22:15:42,638 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_climatologymeteorologyatmosphere01_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS (source 9/1467)
+2025-11-23 22:15:58,056 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - KLIMAPHK_GRFL60_VW_13829: HTTPSConnectionPool(host='www.geoservice.apps.be.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 22:16:08,393 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - KLIMAPHK_GRFL20_VW_15365: HTTPSConnectionPool(host='www.geoservice.apps.be.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 22:16:18,626 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - KLIMAPHK_VERK60_VW_16007: HTTPSConnectionPool(host='www.geoservice.apps.be.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 22:16:28,856 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - KLIMAPHK_VERK20_VW_15302: HTTPSConnectionPool(host='www.geoservice.apps.be.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 22:17:01,581 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - KLIMAPHK_GRFL60_VW_13880: HTTPSConnectionPool(host='www.geoservice.apps.be.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 22:17:11,821 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - KLIMAPHK_GRFL20_VW_13786: HTTPSConnectionPool(host='www.geoservice.apps.be.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 22:17:22,061 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - KLIMAPHK_VERK60_VW_15458: HTTPSConnectionPool(host='www.geoservice.apps.be.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 22:17:32,493 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - KLIMAPHK_VERK20_VW_15459: HTTPSConnectionPool(host='www.geoservice.apps.be.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 22:18:01,725 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_climatologymeteorologyatmosphere01_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS (source 10/1467)
+2025-11-23 22:18:05,263 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_climatologymeteorologyatmosphere02_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS (source 11/1467)
+2025-11-23 22:18:24,806 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_climatologymeteorologyatmosphere02_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS (source 12/1467)
+2025-11-23 22:18:27,381 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_imagerybasemapsearthcover01_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS (source 13/1467)
+2025-11-23 22:18:32,276 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_imagerybasemapsearthcover01_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS (source 14/1467)
+2025-11-23 22:18:34,592 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_society01_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS (source 15/1467)
+2025-11-23 22:18:50,564 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_society01_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS (source 16/1467)
+2025-11-23 22:18:53,971 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_society02_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS (source 17/1467)
+2025-11-23 22:19:21,475 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_society02_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS (source 18/1467)
+2025-11-23 22:19:25,124 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_society03_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS (source 19/1467)
+2025-11-23 22:19:31,304 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_society03_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS (source 20/1467)
+2025-11-23 22:19:33,750 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_structure01_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS (source 21/1467)
+2025-11-23 22:19:49,736 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - BAUINV_GRUPPEN_VW_13691: HTTPSConnectionPool(host='www.geoservice.apps.be.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 22:19:50,149 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_structure01_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS (source 22/1467)
+2025-11-23 22:19:52,674 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_geoscientificinformation01_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS (source 23/1467)
+2025-11-23 22:20:13,357 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - NGKAT_PROZESSR_VW_24423: HTTPSConnectionPool(host='www.geoservice.apps.be.ch', port=443): Read timed out. (read timeout=10)
+2025-11-23 22:20:15,132 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_geoscientificinformation01_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS (source 24/1467)
+2025-11-23 22:20:18,572 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_geoscientificinformation02_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS (source 25/1467)
+2025-11-23 22:20:38,909 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_geoscientificinformation02_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS (source 26/1467)
+2025-11-23 22:20:42,574 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_geoscientificinformation03_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS (source 27/1467)
+2025-11-23 22:21:16,324 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_geoscientificinformation03_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS (source 28/1467)
+2025-11-23 22:21:19,870 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_health01_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS (source 29/1467)
+2025-11-23 22:21:34,785 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_health01_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS (source 30/1467)
+2025-11-23 22:21:38,105 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_inlandwaters01_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS (source 31/1467)
+2025-11-23 22:22:20,350 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_inlandwaters01_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS (source 32/1467)
+2025-11-23 22:22:24,826 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_inlandwaters02_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS (source 33/1467)
+2025-11-23 22:22:48,729 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_inlandwaters02_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS (source 34/1467)
+2025-11-23 22:22:52,715 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_inlandwaters03_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS (source 35/1467)
+2025-11-23 22:23:18,884 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_inlandwaters03_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS (source 36/1467)
+2025-11-23 22:23:23,187 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_elevation01_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS (source 37/1467)
+2025-11-23 22:23:45,075 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_elevation01_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS (source 38/1467)
+2025-11-23 22:23:48,054 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_farming01_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS (source 39/1467)
+2025-11-23 22:24:04,077 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_farming01_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS (source 40/1467)
+2025-11-23 22:24:07,739 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_farming02_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS (source 41/1467)
+2025-11-23 22:24:21,965 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_farming02_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS (source 42/1467)
+2025-11-23 22:24:25,088 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_farming03_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS (source 43/1467)
+2025-11-23 22:24:40,383 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_farming03_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS (source 44/1467)
+2025-11-23 22:24:43,878 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_location01_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS (source 45/1467)
+2025-11-23 22:24:53,034 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_location01_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS (source 46/1467)
+2025-11-23 22:24:55,516 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_boundaries01_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS (source 47/1467)
+2025-11-23 22:25:21,346 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_boundaries01_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS (source 48/1467)
+2025-11-23 22:25:24,737 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_boundaries02_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS (source 49/1467)
+2025-11-23 22:25:50,111 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_BE > https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_boundaries02_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS (source 50/1467)
+2025-11-23 22:25:53,557 - Scraping log - scraper.py >         <module>(): Line 766 - INFO - Scraping took: 141 mins
+2025-11-23 22:34:02,298 - Scraping log - scraper.py >         <module>(): Line 777 - INFO - Keeping 548 datasets from old database without processing
+2025-11-23 22:49:17,670 - Scraping log - scraper.py >         <module>(): Line 782 - INFO - Found 58794 datasets for processing
+2025-11-23 22:49:18,593 - Scraping log - scraper.py >         <module>(): Line 792 - INFO - Job took: 164 mins
