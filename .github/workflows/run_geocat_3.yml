@@ -122,6 +122,7 @@ jobs:
         with:
           name: data_to_keep
           path: ./scraper/data/merged_data_with_geocat_keywords.pkl
+          overwrite: true
 
       - name: Commit and push updated geocat data
         uses: github-actions-x/commit@v2.9
