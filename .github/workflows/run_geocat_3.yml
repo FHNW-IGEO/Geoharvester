@@ -2,13 +2,14 @@ name: Run geocat scraper and preprocessing V4
 
 on:
   schedule:
-    - cron: "0 0 * * 0" # Runs weekly (every Sunday at midnight)
-  workflow_dispatch:     # Allows manual execution from GitHub Actions tab
+    - cron: "0 0 * * 0"   # Runs weekly (every Sunday at midnight)
+  workflow_dispatch:       # Allows manual execution from GitHub Actions tab
 
 permissions:
   contents: write
 
 jobs:
+
   scrape_geocat:
     runs-on: ubuntu-latest
     defaults:
@@ -19,8 +20,8 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0                 # required for git pull to work
-          ref: geocat_integration        # checkout the same branch you will push to
+          fetch-depth: 0
+          ref: geocat_integration
 
       - name: Set up Git identity
         run: |
@@ -53,7 +54,6 @@ jobs:
           git pull --rebase origin geocat_integration
           git stash pop || true
 
-
       - name: Upload geocat_metadata (PKL)
         uses: actions/upload-artifact@v4
         with:
@@ -63,23 +63,28 @@ jobs:
       - name: Commit and push updated geocat data
         uses: github-actions-x/commit@v2.9
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           push-branch: "geocat_integration"
           commit-message: "geocat_data"
           force-add: "true"
           files: ./scraper/data/geocat_data/
           name: autoupdate
+
+
   find_matching_keywords_in_geocat:
-  #  needs: scrape_geocat # Wait on the scrape_geocat job to complete
-   runs-on: ubuntu-latest
-   defaults:
-     run:
-       working-directory: ./scraper
+    # needs: scrape_geocat   # Uncomment later if needed
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./scraper
+
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0                 # required for git pull to work
-          ref: geocat_integration        # checkout the same branch you will push to
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+          ref: geocat_integration
 
       - name: Set up Git identity
         run: |
@@ -99,7 +104,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install --upgrade --force-reinstall -r requirements_geocat.txt
 
-      - name: Run geocat scraper
+      - name: Run keyword finder
         run: python keyword_finder_in_geocat.py
         env:
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
@@ -112,8 +117,7 @@ jobs:
           git pull --rebase origin geocat_integration
           git stash pop || true
 
-
-      - name: Upload geocat_metadata (PKL)
+      - name: Upload merged keywords (PKL)
         uses: actions/upload-artifact@v4
         with:
           name: data_to_keep
@@ -122,6 +126,7 @@ jobs:
       - name: Commit and push updated geocat data
         uses: github-actions-x/commit@v2.9
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}     
           push-branch: "geocat_integration"
           commit-message: "geocat_data"
           force-add: "true"
