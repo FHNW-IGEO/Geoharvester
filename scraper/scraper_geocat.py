@@ -106,7 +106,7 @@ if __name__ == "__main__":
 
         language_correction(
             base_dir = config.WORKFLOW_GEOCAT_DATA,
-            db_name = "geocat_metadata",
+            db_name = config.WORKFLOW_GEOCAT_DATABASE_NAME,
             table_name = "dataset",
             language_prefixes = ["de", "en", "fr", "it" , "unknown"],
             base_columns = ["dataset_title", "dataset_keyword", "dataset_description"],
@@ -117,7 +117,7 @@ if __name__ == "__main__":
         
         language_correction(
             base_dir = config.WORKFLOW_GEOCAT_DATA,
-            db_name = "geocat_metadata",
+            db_name = config.WORKFLOW_GEOCAT_DATABASE_NAME,
             table_name = "distribution",
             language_prefixes = ["de", "en", "fr", "it","unknown"],   
             base_columns = ["distribution_title","distribution_description"],

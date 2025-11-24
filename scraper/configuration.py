@@ -40,3 +40,6 @@ WORKFLOW_GEOCAT_FILES = [
 
 WORKFLOW_GEOCAT_DATABASE_NAME = "geocat_metadata"  # Name of the pickle database file
 
+WORKFLOW_KEYWORD_FINDER_MERGED_DATA = "merged_data"
+WORKFLOW_KEYWORD_FINDER_MERGED_DATA_WITH_GEOCAT_KEYWORDS = "merged_data_with_geocat_keywords"
+
