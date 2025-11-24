@@ -1,4 +1,4 @@
-name: Run geocat scraper and preprocessing V3
+name: Run geocat scraper and preprocessing V4
 
 on:
   schedule:
@@ -69,7 +69,7 @@ jobs:
           files: ./scraper/data/geocat_data/
           name: autoupdate
   find_matching_keywords_in_geocat:
-   needs: scrape_geocat # Wait on the scrape_geocat job to complete
+  #  needs: scrape_geocat # Wait on the scrape_geocat job to complete
    runs-on: ubuntu-latest
    defaults:
      run:
