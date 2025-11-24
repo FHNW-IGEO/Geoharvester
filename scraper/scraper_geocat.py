@@ -1,5 +1,5 @@
 """
-title: geocat data scraping job for the keyword enrichment of the GeoHarvestr 
+title: geocat data scraping job for the keyword enrichment of the GeoHarvester 
 Author: xx
 Date: 2025-10-20
 """
@@ -8,7 +8,7 @@ Date: 2025-10-20
 
 import os
 import sys
-import logging
+
 
 
 
@@ -44,31 +44,31 @@ if __name__ == "__main__":
         # 2.0 Parse metadatacatalog geocat.ch and save dataset list to CSV
         # -------------------------------
 
-        # download_geocat_metadata(
-        #     save_dir=config.WORKFLOW_GEOCAT_DATA,
-        #     csv_file= config.WORKFLOW_GEOCAT_DATASET_LIST,
-        #     log_file="logfile_geocat.log",
-        #     start_pos=1,
-        #     batch_size=250
-        # )
+        download_geocat_metadata(
+            save_dir=config.WORKFLOW_GEOCAT_DATA,
+            csv_file= config.WORKFLOW_GEOCAT_DATASET_LIST,
+            log_file="logfile_geocat.log",
+            start_pos=1,
+            batch_size=250
+        )
 
         # -------------------------------
         # 2.1 Download XML-files from geocat.ch based on CSV list
         # -------------------------------
 
-        # download_xml_metadata_from_csv(
-        #     save_dir=config.WORKFLOW_GEOCAT_XML,
-        #     csv_file=config.WORKFLOW_GEOCAT_DATASET_LIST,
-        #     max_files=None  # oder None für alle
-        # )
+        download_xml_metadata_from_csv(
+            save_dir=config.WORKFLOW_GEOCAT_XML,
+            csv_file=config.WORKFLOW_GEOCAT_DATASET_LIST,
+            max_files=None  # oder None für alle
+        )
 
         # -------------------------------
         # 2.2 Clean XML-files
         # -------------------------------
 
-        # xml_cleaner.process_folders([
-        #     config.WORKFLOW_GEOCAT_XML
-        # ])
+        xml_cleaner.process_folders([
+            config.WORKFLOW_GEOCAT_XML
+        ])
 
         # -------------------------------
         # 2.3 Extract metadata and save to new folder
