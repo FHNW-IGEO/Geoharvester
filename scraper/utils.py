@@ -69,26 +69,35 @@ def detect_language(phrase, not_found=False):
         lang = exception
     return lang
 
-def translate_text(text, to_lang, from_lang):
+def translate_text(text, to_lang, from_lang, one_shot=False):
     """
     Translate title column
     """
     language_dict = {'ENG':'en', 'FRA':'fr', 'DEU':'de', 'ITA':'it','NAN':'na'}
     if language_dict[from_lang] == to_lang:
         return text
-    else:
-        try:
-            trnd = GoogleTranslator(source='auto', target=to_lang).translate(text.replace('_',' '))
+    if isinstance(text, str):
+        text = [text]
+    try:
+        if one_shot:
+            if from_lang != 'NAN':
+                lang_in = language_dict[from_lang]
+            else:
+                lang_in = 'auto'
+            trnd = GoogleTranslator(source=lang_in, target=to_lang).translate_batch([t.replace('_',' ') for t in text])
+        else:
+            trnd = [GoogleTranslator(source='auto', target=to_lang).translate(text[0].replace('_',' '))]
+        if trnd is None:
+            logger.warning(f"⚠️ Translation failed for text: {text!r}")
+            trnd = ['nan']
 
-            if trnd is None:
-                logger.warning(f"⚠️ Translation failed for text: {text!r}")
-                trnd = ""
+        trnd = [t.replace("'", " ") for t in trnd]
 
-            trnd = trnd.replace("'", " ")
-
-        except exceptions.TranslationNotFound:
-            trnd = 'nan'
-        return trnd
+    except exceptions.TranslationNotFound:
+        trnd = ['nan']
+    if len(trnd) == 1:
+        trnd = trnd[0]
+    return trnd
 
 def translate_abstract(text, to_lang, from_lang):
     """
@@ -112,34 +121,52 @@ def translate_abstract(text, to_lang, from_lang):
             return 'nan'
     else:
         return text
-def translate_keywords(text, to_lang, from_lang):
+def translate_keywords(text, to_lang, from_lang, one_shot=False):
     """
     Translate keywords column und keywords_nlp column
     """
-    if type(text) == str:
+    if isinstance(text, str):
         text = [text]
-    kwds, kwds_one = [], []
+    kwds_one, kwds_one_list = [], []
     language_dict = {'ENG':'en', 'FRA':'fr', 'DEU':'de', 'ITA':'it','NAN':'na'}
-    for kwd in text:
-        if kwd != 'nan' and kwd != '':
-            if not kwd.startswith('http') or not kwd.startswith('Link zu Metadaten:'):
-                kwds_one.append(kwd)
+    for kwds in text:
+        if not isinstance(kwds, str) or not isinstance(kwds, list):
+            kwds = str(kwds)
+        for kwd in kwds.split(','):
+            kwd = kwd.strip(' ')
+            if kwd not in ['nan', '','n.a.']:
+                if not kwd.startswith('http') or not kwd.startswith('Link zu Metadaten:'):
+                    kwds_one.append(kwd.replace('_',' '))
+                else:
+                    kwds_one.append('!')
             else:
-                kwds_one.append('nan')
-        else:
-            kwds_one.append('nan')
-        if language_dict[from_lang] != to_lang:
-            try:
-                kwd_trnsd = GoogleTranslator(source='auto', target=to_lang).translate(';'.join(kwds_one).replace('_',' '))
-                if not kwd_trnsd:
-                    kwd_trnsd = 'nan'
-                kwd_trnsd = kwd_trnsd.replace("'", " ")
-            except exceptions.TranslationNotFound:
-                kwd_trnsd = 'nan'
-            kwds = kwd_trnsd.split(';')
-        else:
-            kwds = kwds_one
-    return ','.join(kwds)
+                kwds_one.append('!')
+        kwds_one_list.append(','.join(kwds_one))
+
+    if language_dict[from_lang] != to_lang:
+        try:
+            t1 = t
+            if one_shot:
+                if from_lang != 'NAN':
+                    lang_in = language_dict[from_lang]
+                else:
+                    lang_in = 'auto'
+                kwd_trnsd = GoogleTranslator(source=lang_in, target=to_lang).translate_batch(kwds_one_list, one_shot=one_shot)
+            else:
+                kwd_trnsd = [GoogleTranslator(source='auto', target=to_lang).translate(kwds_one_list[0])]
+            if not kwd_trnsd:
+                kwd_trnsd = ['nan']*len(kwds_one_list)
+            kwd_trnsd = [k.replace("'", " ") if k is not None else '!' for k in kwd_trnsd]
+        except exceptions.TranslationNotFound:
+            kwd_trnsd = ['nan']*len(kwds_one_list)
+        kwd_trnsd = [k.replace('!', 'nan') for k in kwd_trnsd]
+    else:
+        kwd_trnsd = kwds_one
+    if len(kwd_trnsd) == 1:
+        kwd_trnsd = kwd_trnsd[0].replace('nan,', '')
+    else:
+        kwd_trnsd = [k.replace('nan,', '') for k in kwd_trnsd]
+    return kwd_trnsd
     
 def is_not_num(str) -> bool:
     """
