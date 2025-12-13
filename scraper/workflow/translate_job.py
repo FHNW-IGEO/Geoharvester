@@ -43,8 +43,6 @@ def translate_new_data(db, translate_column, languages, one_shot=True):
         Outputs a pickle file of the translation which is uploaded as artifact to github
     """
 
-    # TODO: process the one shot translation in additional language chunks (datasets can have different languages)
-
     db = db.fillna("nan")
     chunk_size = 200
     for lang in languages:
@@ -129,7 +127,7 @@ if __name__ == "__main__":
     # Read language from pipeline variable
     language = os.environ['LANG_FROM_PIPELINE']
 
-    preprd_data = pd.read_pickle(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl'))
+    preprd_data = pd.read_pickle(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'preprd_data.pkl'))
 
     for trns_col in config.WORKFLOW_TRANSLATE_COLUMNS:
         logger.info(f"Start translating {trns_col} {round(time()-tstart)}s after process start")
