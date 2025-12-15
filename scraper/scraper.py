@@ -783,8 +783,8 @@ if __name__ == "__main__":
 
 
     preprd_data.to_csv(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.csv'))
+    preprd_data.to_pickle(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl'))
     # Save to data for last pipeline stage
-    preprd_data.to_pickle(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'preprd_data.pkl'))
     data_to_keep.to_pickle(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'data_to_keep.pkl'))
     data_to_keep.to_csv(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'data_to_keep.csv'))
 
