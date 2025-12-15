@@ -131,7 +131,7 @@ if __name__ == "__main__":
 
     for trns_col in config.WORKFLOW_TRANSLATE_COLUMNS:
         logger.info(f"Start translating {trns_col} {round(time()-tstart)}s after process start")
-        preprd_data = preprd_data.sort_values(by='lang_3', inplace=True)
+        preprd_data.sort_values(by='lang_3', inplace=True)
         preprd_data = translate_new_data(preprd_data, translate_column=trns_col, languages=[language], one_shot=False)
     preprd_data.to_pickle(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER, '{}_translated.pkl'.format(language)))
     preprd_data.to_csv(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER, '{}_translated.csv'.format(language)))
