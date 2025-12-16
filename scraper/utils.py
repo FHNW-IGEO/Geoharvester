@@ -145,7 +145,6 @@ def translate_keywords(text, to_lang, from_lang, one_shot=False):
 
     if language_dict[from_lang] != to_lang:
         try:
-            t1 = t
             if one_shot:
                 if from_lang != 'NAN':
                     lang_in = language_dict[from_lang]
