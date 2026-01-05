@@ -29,9 +29,9 @@ jobs:
 
       - name: Run preflight
         env:
-          REDIS_HOST: ${REDIS_HOST}
-          REDIS_PORT: ${REDIS_PORT}
-          REDIS_PASSWORD: ${REDIS_HOST_PASSWORD}
+          REDIS_HOST: redis
+          REDIS_PORT: 6379
+          REDIS_PASSWORD: ${{secrets.REDIS_HOST_PASSWORD}}
         run: |
           python workflow/preflight_job.py \
             --input sources.csv \
