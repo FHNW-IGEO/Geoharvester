@@ -39,10 +39,10 @@ jobs:
           python workflow/preflight_job.py \
             --input sources.csv \
             --timeout 10 \
-            --out ./artifacts/preflight-results.jsonl
+            --out ./scraper/data/preflight-results.jsonl
 
       - name: Upload preflight results
         uses: actions/upload-artifact@v4
         with:
           name: preflight-results
-          path: ./artifacts/preflight-results.jsonl
+          path: ./scraper/data/preflight-results.jsonl
