@@ -1,0 +1,45 @@
+name: Preflight – availability & priority hash
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * *" # optional daily run
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    defaults:
+      run:
+        working-directory: ./scraper
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests lxml redis
+
+      - name: Run preflight
+        env:
+          REDIS_HOST: ${REDIS_HOST}
+          REDIS_PORT: ${REDIS_PORT}
+          REDIS_PASSWORD: ${REDIS_HOST_PASSWORD}
+        run: |
+          python workflow/preflight_job.py \
+            --input sources.csv \
+            --timeout 10 \
+            --out preflight-results.jsonl
+
+      - name: Upload preflight results
+        uses: actions/upload-artifact@v4
+        with:
+          name: preflight-results
+          path: preflight-results.jsonl
