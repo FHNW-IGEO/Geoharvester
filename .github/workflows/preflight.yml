@@ -28,27 +28,34 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests lxml redis
-
-      - name: Debugging
-        run: |
-          pwd
-          ls -la
-          cd ../ && ls -la
+          pip install requests lxml OWSLib
 
       - name: Run preflight
-        env:
-          REDIS_HOST: redis
-          REDIS_PORT: 6379
-          REDIS_PASSWORD: ${{secrets.REDIS_HOST_PASSWORD}}
         run: |
           python workflow/preflight_job.py \
             --input sources.csv \
-            --timeout 10 \
-            --out preflight-results.jsonl
+            --out-results preflight-results.jsonl \
+            --out-hashes preflight-hashes.json \
+            --baseline-hashes preflight-hashes.json || true
 
       - name: Upload preflight results
         uses: actions/upload-artifact@v4
         with:
           name: preflight-results
           path: "**/preflight-results.jsonl"
+
+      - name: Upload preflight results
+        uses: actions/upload-artifact@v4
+        with:
+          name: preflight-hashes
+          path: "**/preflight-hashes.jsonl"
+
+    #   - name: Commit and Push Updated Hashes
+    #     if: ${{ github.event.inputs.commit_hashes == 'true' }}
+    #     run: |
+    #       git config user.name "github-actions[bot]"
+    #       git config user.email "github-actions[bot]@users.noreply.github.com"
+    #       cp preflight_output/hashes.json hashes.json
+    #       git add hashes.json
+    #       git commit -m "Update preflight hashes [skip ci]" || echo "No changes to commit"
+    #       git push

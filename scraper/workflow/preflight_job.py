@@ -1,254 +1,165 @@
 #!/usr/bin/env python3
-
 import csv
 import json
-import time
-import argparse
 import hashlib
-import os
+import argparse
 from datetime import datetime
-from urllib.parse import urlparse, urlunparse
+from owslib.wms import WebMapService
+from owslib.wfs import WebFeatureService
+from owslib.wmts import WebMapTileService
 
-import requests
-import redis
-from lxml import etree
+def normalize_keywords(raw_keywords):
+    """Deduplicate, strip, join by comma"""
+    if not raw_keywords:
+        return ""
+    if isinstance(raw_keywords, str):
+        kw_list = [k.strip() for k in raw_keywords.split(",") if k.strip()]
+    elif isinstance(raw_keywords, list):
+        kw_list = [str(k).strip() for k in raw_keywords if str(k).strip()]
+    else:
+        return ""
+    # remove duplicates while preserving order
+    return ",".join(list(dict.fromkeys(kw_list)))
 
+def normalize_contact(raw_contact):
+    if not raw_contact or raw_contact.lower() == "n.a.":
+        return ""
+    return raw_contact.strip()
 
-# ----------------------------
-# Configuration
-# ----------------------------
+def compute_priority_hash(dataset):
+    """Compute SHA256 hash of the 5 key fields"""
+    key_fields = [
+        dataset.get('title', ''),
+        dataset.get('name', ''),
+        dataset.get('abstract', ''),
+        dataset.get('contact', ''),
+        dataset.get('keywords', '')
+    ]
+    combined = "||".join([str(f).strip() for f in key_fields])
+    return hashlib.sha256(combined.encode("utf-8")).hexdigest()
 
-DEFAULT_TIMEOUT = 10
-USER_AGENT = "geoservice-preflight/1.0"
+def ping_and_parse_service(url):
+    """Ping service and return reachable flag, error, and layer metadata list"""
+    layers_data = []
+    try:
+        if "SERVICE=WMS" in url.upper():
+            wms = WebMapService(url, version="1.3.0")
+            for layer_name, layer in wms.contents.items():
+                layers_data.append({
+                    "title": getattr(layer, "title", ""),
+                    "name": getattr(layer, "name", ""),
+                    "abstract": getattr(layer, "abstract", ""),
+                    "contact": getattr(layer, "contact", ""),
+                    "keywords": getattr(layer, "keywords", "")
+                })
+        elif "SERVICE=WFS" in url.upper():
+            wfs = WebFeatureService(url, version="2.0.0")
+            for layer_name in wfs.contents:
+                layer = wfs[layer_name]
+                layers_data.append({
+                    "title": getattr(layer, "title", ""),
+                    "name": getattr(layer, "name", ""),
+                    "abstract": getattr(layer, "abstract", ""),
+                    "contact": getattr(layer, "contact", ""),
+                    "keywords": getattr(layer, "keywords", "")
+                })
+        elif "SERVICE=WMTS" in url.upper():
+            wmts = WebMapTileService(url)
+            for layer_name, layer in wmts.contents.items():
+                layers_data.append({
+                    "title": getattr(layer, "title", ""),
+                    "name": getattr(layer, "id", ""),  # WMTS uses 'id'
+                    "abstract": getattr(layer, "abstract", ""),
+                    "contact": "",  # WMTS usually has no contact
+                    "keywords": ""
+                })
+        else:
+            return False, "Unsupported service type", []
 
+        return True, None, layers_data
 
-# ----------------------------
-# Helpers
-# ----------------------------
-
-def normalize_service_url(url: str) -> str:
-    """
-    Strip query params and normalize scheme/host.
-    """
-    p = urlparse(url)
-    return urlunparse((
-        p.scheme.lower(),
-        p.netloc.lower(),
-        p.path,
-        "", "", ""
-    ))
-
-
-def normalize_keywords(keyword_str: str):
-    """
-    From comma-separated string → sorted, deduplicated, lowercase list.
-    """
-    if not keyword_str:
-        return []
-
-    parts = [k.strip().lower() for k in keyword_str.split(",") if k.strip()]
-    return sorted(set(parts))
-
-
-def normalize_contact(contact: str | None):
-    if not contact or contact.strip().lower() in ("n.a.", ""):
-        return None
-    return " ".join(contact.split())
-
-
-def canonical_priority_json(
-    provider: str,
-    service_url: str,
-    layer_name: str,
-    title: str,
-    abstract: str,
-    contact: str | None,
-    keywords: list[str],
-):
-    """
-    Build canonical JSON object used for hashing.
-    """
-    return {
-        "provider": provider.strip(),
-        "service_url": normalize_service_url(service_url),
-        "layer_name": layer_name.strip(),
-        "title": (title or "").strip(),
-        "abstract": (abstract or "").strip(),
-        "contact": normalize_contact(contact),
-        "keywords": keywords,
-    }
-
-
-def hash_priority_payload(payload: dict) -> str:
-    raw = json.dumps(payload, sort_keys=True, ensure_ascii=False)
-    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
-
-
-def now_utc():
-    return datetime.utcnow().isoformat(timespec="seconds") + "Z"
-
-
-# ----------------------------
-# XML parsing (WMS/WFS/WMTS)
-# ----------------------------
-
-def detect_service_type(root):
-    tag = etree.QName(root.tag).localname.lower()
-    if "wms" in tag:
-        return "WMS"
-    if "wfs" in tag:
-        return "WFS"
-    if "wmts" in tag:
-        return "WMTS"
-    return "UNKNOWN"
-
-
-def find_layers_wms(root):
-    ns = root.nsmap
-    layers = root.findall(".//{*}Layer[{*}Name]")
-    for layer in layers:
-        yield {
-            "name": layer.findtext("{*}Name"),
-            "title": layer.findtext("{*}Title"),
-            "abstract": layer.findtext("{*}Abstract"),
-            "keywords": ",".join(
-                [k.text for k in layer.findall(".//{*}Keyword") if k.text]
-            ),
-            "contact": None,  # WMS usually service-level; handled outside
-        }
-
-
-def find_layers_wfs(root):
-    for ft in root.findall(".//{*}FeatureType"):
-        yield {
-            "name": ft.findtext("{*}Name"),
-            "title": ft.findtext("{*}Title"),
-            "abstract": ft.findtext("{*}Abstract"),
-            "keywords": ",".join(
-                [k.text for k in ft.findall(".//{*}Keyword") if k.text]
-            ),
-            "contact": None,
-        }
-
-
-def find_layers_wmts(root):
-    for layer in root.findall(".//{*}Layer"):
-        yield {
-            "name": layer.findtext("{*}Identifier"),
-            "title": layer.findtext("{*}Title"),
-            "abstract": layer.findtext("{*}Abstract"),
-            "keywords": ",".join(
-                [k.text for k in layer.findall(".//{*}Keyword") if k.text]
-            ),
-            "contact": None,
-        }
-
-
-# ----------------------------
-# Main logic
-# ----------------------------
+    except Exception as e:
+        return False, str(e), []
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--input", required=True)
-    parser.add_argument("--timeout", type=int, default=DEFAULT_TIMEOUT)
-    parser.add_argument("--out", required=True)
+    parser = argparse.ArgumentParser(description="Preflight check for geoservices")
+    parser.add_argument("--input", required=True, help="Path to sources.csv")
+    parser.add_argument("--out-results", default="preflight-results.jsonl",
+                        help="Output JSONL file with results")
+    parser.add_argument("--out-hashes", default="hashes.json",
+                        help="Output JSON file with priority hashes")
+    parser.add_argument("--baseline-hashes", default=None,
+                        help="Optional previous hash file to compare against")
     args = parser.parse_args()
 
-    redis_client = redis.Redis(
-        host=os.environ["REDIS_HOST"],
-        port=int(os.environ.get("REDIS_PORT", 6379)),
-        password=os.environ["REDIS_PASSWORD"],
-        decode_responses=True,
-    )
+    # Load baseline hashes if provided
+    baseline_hashes = {}
+    if args.baseline_hashes:
+        try:
+            with open(args.baseline_hashes) as f:
+                baseline_hashes = json.load(f)
+        except FileNotFoundError:
+            print(f"Baseline file {args.baseline_hashes} not found, assuming empty baseline")
 
-    session = requests.Session()
-    session.headers.update({"User-Agent": USER_AGENT})
+    results = []
+    updated_hashes = {}
 
-    with open(args.input, newline="", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        rows = list(reader)
+    with open(args.input) as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            provider = row.get("Description")
+            url = row.get("URL")
 
-    with open(args.out, "w", encoding="utf-8") as out:
-        for row in rows:
-            provider = row["Description"].strip()
-            url = row["URL"].strip()
+            reachable, error, layers = ping_and_parse_service(url)
 
-            base_result = {
-                "provider": provider,
-                "service_url": normalize_service_url(url),
-                "checked_at": now_utc(),
-            }
+            if not layers:
+                # fallback: create a single placeholder layer with empty fields
+                layers = [{
+                    "title": "",
+                    "name": "",
+                    "abstract": "",
+                    "contact": "",
+                    "keywords": ""
+                }]
 
-            try:
-                t0 = time.time()
-                resp = session.get(url, timeout=args.timeout)
-                elapsed_ms = int((time.time() - t0) * 1000)
+            for layer in layers:
+                # Normalize
+                layer["keywords"] = normalize_keywords(layer.get("keywords"))
+                layer["contact"] = normalize_contact(layer.get("contact"))
+                layer["title"] = layer.get("title", "").strip()
+                layer["name"] = layer.get("name", "").strip()
+                layer["abstract"] = layer.get("abstract", "").strip()
 
-                if resp.status_code >= 400:
-                    raise RuntimeError(f"HTTP {resp.status_code}")
+                # Compute priority hash
+                hash_new = compute_priority_hash(layer)
+                key = f"{provider}:{layer.get('name','')}"  # unique per layer
+                updated_hashes[key] = hash_new
 
-                root = etree.fromstring(resp.content)
-                service_type = detect_service_type(root)
+                # Compare to baseline
+                priority_changed = baseline_hashes.get(key) != hash_new
 
-                if service_type == "WMS":
-                    layers = list(find_layers_wms(root))
-                elif service_type == "WFS":
-                    layers = list(find_layers_wfs(root))
-                elif service_type == "WMTS":
-                    layers = list(find_layers_wmts(root))
-                else:
-                    raise RuntimeError("Unsupported service type")
+                # Append result for this layer
+                results.append({
+                    "provider": provider,
+                    "layer_name": layer.get("name", ""),
+                    "service_url": url,
+                    "checked_at": datetime.utcnow().isoformat() + "Z",
+                    "reachable": reachable,
+                    "error": error,
+                    "priority_changed": priority_changed
+                })
 
-                for layer in layers:
-                    if not layer["name"]:
-                        continue
+    # Write JSONL results
+    with open(args.out_results, "w", encoding="utf-8") as outf:
+        for r in results:
+            outf.write(json.dumps(r) + "\n")
 
-                    keywords = normalize_keywords(layer.get("keywords"))
-                    payload = canonical_priority_json(
-                        provider=provider,
-                        service_url=url,
-                        layer_name=layer["name"],
-                        title=layer.get("title"),
-                        abstract=layer.get("abstract"),
-                        contact=layer.get("contact"),
-                        keywords=keywords,
-                    )
+    # Write hashes.json
+    with open(args.out_hashes, "w", encoding="utf-8") as outf:
+        json.dump(updated_hashes, outf, indent=2)
 
-                    priority_hash = hash_priority_payload(payload)
-
-                    redis_key = (
-                        f"preflight:priority_hash:"
-                        f"{provider}:"
-                        f"{hashlib.sha1(payload['service_url'].encode()).hexdigest()}:"
-                        f"{layer['name']}"
-                    )
-
-                    previous_hash = redis_client.get(redis_key)
-                    changed = previous_hash != priority_hash
-
-                    if changed:
-                        redis_client.set(redis_key, priority_hash)
-
-                    result = {
-                        **base_result,
-                        "layer_name": layer["name"],
-                        "service_type": service_type,
-                        "reachable": True,
-                        "response_time_ms": elapsed_ms,
-                        "priority_changed": changed,
-                    }
-
-                    out.write(json.dumps(result, ensure_ascii=False) + "\n")
-
-            except Exception as e:
-                error_result = {
-                    **base_result,
-                    "reachable": False,
-                    "error": str(e),
-                }
-                out.write(json.dumps(error_result, ensure_ascii=False) + "\n")
-
+    print(f"Preflight finished: {len(results)} layers checked")
+    print(f"Results: {args.out_results}, Hashes: {args.out_hashes}")
 
 if __name__ == "__main__":
     main()
