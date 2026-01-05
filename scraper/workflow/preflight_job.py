@@ -131,9 +131,9 @@ def main():
                 # Normalize
                 layer["keywords"] = normalize_keywords(layer.get("keywords"))
                 layer["contact"] = normalize_contact(layer.get("contact"))
-                layer["title"] = layer.get("title", "").safe_strip()
-                layer["name"] = layer.get("name", "").safe_strip()
-                layer["abstract"] = layer.get("abstract", "").safe_strip()
+                layer["title"] = safe_strip(layer.get("title"))
+                layer["name"] = safe_strip(layer.get("name"))
+                layer["abstract"] = safe_strip(layer.get("abstract"))
 
                 # Compute priority hash
                 hash_new = compute_priority_hash(layer)
