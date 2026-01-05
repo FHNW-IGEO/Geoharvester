@@ -8,6 +8,11 @@ from owslib.wms import WebMapService
 from owslib.wfs import WebFeatureService
 from owslib.wmts import WebMapTileService
 
+def safe_strip(value):
+    if value is None:
+        return ""
+    return str(value).strip()
+
 def normalize_keywords(raw_keywords):
     """Deduplicate, strip, join by comma"""
     if not raw_keywords:
@@ -126,9 +131,9 @@ def main():
                 # Normalize
                 layer["keywords"] = normalize_keywords(layer.get("keywords"))
                 layer["contact"] = normalize_contact(layer.get("contact"))
-                layer["title"] = layer.get("title", "").strip()
-                layer["name"] = layer.get("name", "").strip()
-                layer["abstract"] = layer.get("abstract", "").strip()
+                layer["title"] = layer.get("title", "").safe_strip()
+                layer["name"] = layer.get("name", "").safe_strip()
+                layer["abstract"] = layer.get("abstract", "").safe_strip()
 
                 # Compute priority hash
                 hash_new = compute_priority_hash(layer)

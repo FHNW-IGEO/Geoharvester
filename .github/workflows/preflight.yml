@@ -28,7 +28,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests lxml OWSLib
+          pip install requests lxml pyproj OWSLib
 
       - name: Run preflight
         run: |
