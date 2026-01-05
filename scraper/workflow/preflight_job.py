@@ -7,6 +7,7 @@ from datetime import datetime
 from owslib.wms import WebMapService
 from owslib.wfs import WebFeatureService
 from owslib.wmts import WebMapTileService
+from urllib.parse import urlparse, parse_qs
 
 def safe_strip(value):
     if value is None:
@@ -43,55 +44,89 @@ def compute_priority_hash(dataset):
     combined = "||".join([str(f).strip() for f in key_fields])
     return hashlib.sha256(combined.encode("utf-8")).hexdigest()
 
-def ping_and_parse_service(url):
-    """Ping service and return reachable flag, error, and layer metadata list"""
-    layers_data = []
-    try:
-        if "SERVICE=WMS" in url.upper():
-            wms = WebMapService(url, version="1.3.0")
-            for layer_name, layer in wms.contents.items():
-                layers_data.append({
-                    "title": getattr(layer, "title", ""),
-                    "name": getattr(layer, "name", ""),
-                    "abstract": getattr(layer, "abstract", ""),
-                    "contact": getattr(layer, "contact", ""),
-                    "keywords": getattr(layer, "keywords", "")
-                })
-        elif "SERVICE=WFS" in url.upper():
-            wfs = WebFeatureService(url, version="2.0.0")
-            for layer_name in wfs.contents:
-                layer = wfs[layer_name]
-                layers_data.append({
-                    "title": getattr(layer, "title", ""),
-                    "name": getattr(layer, "name", ""),
-                    "abstract": getattr(layer, "abstract", ""),
-                    "contact": getattr(layer, "contact", ""),
-                    "keywords": getattr(layer, "keywords", "")
-                })
-        elif "SERVICE=WMTS" in url.upper():
-            wmts = WebMapTileService(url)
-            for layer_name, layer in wmts.contents.items():
-                layers_data.append({
-                    "title": getattr(layer, "title", ""),
-                    "name": getattr(layer, "id", ""),  # WMTS uses 'id'
-                    "abstract": getattr(layer, "abstract", ""),
-                    "contact": "",  # WMTS usually has no contact
-                    "keywords": ""
-                })
-        else:
-            return False, "Unsupported service type", []
+def detect_service_type(url: str) -> str | None:
+    """Detect OGC service type from URL query parameters"""
+    qs = parse_qs(urlparse(url).query)
+    service = qs.get("service") or qs.get("SERVICE")
+    if not service:
+        return None
+    return service[0].upper()
 
-        return True, None, layers_data
+def ping_and_parse_service(url, timeout=10):
+    """
+    Ping OGC service using a real GetCapabilities request.
+    Reachable means: server responded to OWSLib handshake.
+    """
+    layers_data = []
+
+    service_type = detect_service_type(url)
+    if not service_type:
+        return False, "SERVICE parameter missing", []
+
+    try:
+        # --- Reachability check (semantic, not HTTP-only) ---
+        if service_type == "WMS":
+            svc = WebMapService(url, version="1.3.0", timeout=timeout)
+        elif service_type == "WFS":
+            svc = WebFeatureService(url, version="2.0.0", timeout=timeout)
+        elif service_type == "WMTS":
+            svc = WebMapTileService(url, timeout=timeout)
+        else:
+            return False, f"Unsupported service type: {service_type}", []
+
+        # If we got here, the service is reachable
+        reachable = True
+        error = None
 
     except Exception as e:
+        # Could not even complete GetCapabilities handshake
         return False, str(e), []
+
+    # --- Layer parsing (best effort, should not fail reachability) ---
+    try:
+        if service_type == "WMS":
+            for layer in svc.contents.values():
+                layers_data.append({
+                    "title": getattr(layer, "title", "") or "",
+                    "name": getattr(layer, "name", "") or "",
+                    "abstract": getattr(layer, "abstract", "") or "",
+                    "contact": getattr(layer, "contact", "") or "",
+                    "keywords": getattr(layer, "keywords", "") or ""
+                })
+
+        elif service_type == "WFS":
+            for name in svc.contents:
+                layer = svc[name]
+                layers_data.append({
+                    "title": getattr(layer, "title", "") or "",
+                    "name": getattr(layer, "name", "") or "",
+                    "abstract": getattr(layer, "abstract", "") or "",
+                    "contact": getattr(layer, "contact", "") or "",
+                    "keywords": getattr(layer, "keywords", "") or ""
+                })
+
+        elif service_type == "WMTS":
+            for layer in svc.contents.values():
+                layers_data.append({
+                    "title": getattr(layer, "title", "") or "",
+                    "name": getattr(layer, "id", "") or "",
+                    "abstract": getattr(layer, "abstract", "") or "",
+                    "contact": "",
+                    "keywords": ""
+                })
+
+    except Exception as e:
+        # Parsing failed, but service is reachable
+        error = f"Layer parsing warning: {e}"
+
+    return reachable, error, layers_data
 
 def main():
     parser = argparse.ArgumentParser(description="Preflight check for geoservices")
     parser.add_argument("--input", required=True, help="Path to sources.csv")
     parser.add_argument("--out-results", default="preflight-results.jsonl",
                         help="Output JSONL file with results")
-    parser.add_argument("--out-hashes", default="hashes.json",
+    parser.add_argument("--out-hashes", default="preflight-hashes.json",
                         help="Output JSON file with priority hashes")
     parser.add_argument("--baseline-hashes", default=None,
                         help="Optional previous hash file to compare against")

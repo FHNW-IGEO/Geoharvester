@@ -48,7 +48,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: preflight-hashes
-          path: "**/preflight-hashes.jsonl"
+          path: "**/preflight-hashes.json"
 
     #   - name: Commit and Push Updated Hashes
     #     if: ${{ github.event.inputs.commit_hashes == 'true' }}
