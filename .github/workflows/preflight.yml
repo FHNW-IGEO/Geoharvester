@@ -30,6 +30,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests lxml redis
 
+      - name: Debugging
+        run: |
+          pwd
+          ls -la
+          cd ../ && ls -la
+
       - name: Run preflight
         env:
           REDIS_HOST: redis
@@ -39,7 +45,7 @@ jobs:
           python workflow/preflight_job.py \
             --input sources.csv \
             --timeout 10 \
-            --out ../data/preflight-results.jsonl
+            --out preflight-results.jsonl
 
       - name: Upload preflight results
         uses: actions/upload-artifact@v4
