@@ -1,6 +1,6 @@
 # This job is meant to be run after manual processing, to generate hashes for the "as-is" state. Hashes from the scraper preflight will be compared against this file to determine which data changed and needs preprocessing.
 
-name: Generate processed hashes
+name: Hash exisiting
 
 on:
   workflow_dispatch:

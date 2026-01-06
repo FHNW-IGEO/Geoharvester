@@ -1,6 +1,6 @@
 # This is a test version using static local data but will be hooked up after the preflight and before the processing later
 
-name: Compare preflight hashes vs processed hashes
+name: Hash comparison
 
 on:
   workflow_dispatch:
