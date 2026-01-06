@@ -7,7 +7,7 @@ import pandas as pd
 # Use the same method as in preflight, to keep things in sync
 from hashing.hashing_method import normalize_then_hash
 
-PICKLE_PATH = Path("data/processed_layers.pkl")
+PICKLE_PATH = Path("data/merged_data.pkl")
 OUTPUT_PATH = Path("processed_hashes.json")
 
 
