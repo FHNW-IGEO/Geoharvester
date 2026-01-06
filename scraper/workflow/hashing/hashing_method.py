@@ -19,9 +19,13 @@ def normalize_keywords(raw_keywords):
     return ",".join(sorted(list(dict.fromkeys(kw_list))))
 
 def normalize_contact(raw_contact):
-    if not raw_contact or raw_contact.lower() == "n.a.":
+    """Normalize contact field, safely handle None, NaN, numeric values"""
+    if raw_contact is None:
         return ""
-    return raw_contact.strip()
+    raw_str = str(raw_contact).strip()
+    if raw_str.lower() == "n.a." or raw_str.lower() == "nan":
+        return ""
+    return raw_str
 
 
 def compute_priority_hash(dataset):
