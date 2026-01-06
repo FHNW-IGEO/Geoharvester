@@ -16,7 +16,7 @@ def normalize_keywords(raw_keywords):
     else:
         return ""
     # remove duplicates while preserving order
-    return ",".join(list(dict.fromkeys(kw_list)))
+    return ",".join(sorted(list(dict.fromkeys(kw_list))))
 
 def normalize_contact(raw_contact):
     if not raw_contact or raw_contact.lower() == "n.a.":
@@ -31,7 +31,7 @@ def compute_priority_hash(dataset):
         dataset.get('name', ''),
         dataset.get('abstract', ''),
         dataset.get('contact', ''),
-        dataset.get('keywords', '')
+        # dataset.get('keywords', '')
     ]
     combined = "||".join([str(f).strip() for f in key_fields])
     return hashlib.sha256(combined.encode("utf-8")).hexdigest()
