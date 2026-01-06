@@ -33,10 +33,11 @@ def compute_priority_hash(dataset):
     key_fields = [
         dataset.get('title', ''),
         dataset.get('name', ''),
-        # dataset.get('abstract', ''),
-        # dataset.get('contact', ''),
+        dataset.get('abstract', ''),
+        dataset.get('contact', ''),
         dataset.get('keywords', '')
     ]
+    print(f"Computing hash using key_fields: {key_fields}")
     combined = "||".join([str(f).strip() for f in key_fields])
     return hashlib.sha256(combined.encode("utf-8")).hexdigest()
 
