@@ -89,8 +89,8 @@ def ping_and_parse_service(url, timeout=10):
 def main():
     parser = argparse.ArgumentParser(description="Preflight check for geoservices")
     parser.add_argument("--input", required=True, help="Path to sources.csv")
-    parser.add_argument("--out-results", default="preflight-results.jsonl",
-                        help="Output JSONL file with results")
+    parser.add_argument("--out-diagnostics", default="preflight-diagnostics.jsonl",
+                        help="Output JSONL file with diagnostics")
     parser.add_argument("--out-hashes", default="preflight-hashes.json",
                         help="Output JSON file with priority hashes")
     parser.add_argument("--baseline-hashes", default=None,
@@ -146,7 +146,7 @@ def main():
                 })
 
     # Write JSONL results
-    with open(args.out_results, "w", encoding="utf-8") as outf:
+    with open(args.out_diagnostics, "w", encoding="utf-8") as outf:
         for r in results:
             outf.write(json.dumps(r) + "\n")
 
@@ -155,7 +155,7 @@ def main():
         json.dump(updated_hashes, outf, indent=2)
 
     print(f"Preflight finished: {len(results)} layers checked")
-    print(f"Results: {args.out_results}, Hashes: {args.out_hashes}")
+    print(f"Diagnostics: {args.out_diagnostics}, Hashes: {args.out_hashes}")
 
 if __name__ == "__main__":
     main()

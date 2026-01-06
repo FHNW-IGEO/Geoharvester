@@ -36,17 +36,17 @@ jobs:
         run: |
           python workflow/preflight_job.py \
             --input sources.csv \
-            --out-results preflight-results.jsonl \
+            --out-diagnostics preflight-diagnostics.jsonl \
             --out-hashes preflight-hashes.json \
             --baseline-hashes preflight-hashes.json || true
 
-      - name: Upload preflight results
+      - name: Upload preflight diagnostics
         uses: actions/upload-artifact@v4
         with:
-          name: preflight-results
-          path: "**/preflight-results.jsonl"
+          name: preflight-diagnostics
+          path: "**/preflight-diagnostics.jsonl"
 
-      - name: Upload preflight results
+      - name: Upload preflight hashes
         uses: actions/upload-artifact@v4
         with:
           name: preflight-hashes

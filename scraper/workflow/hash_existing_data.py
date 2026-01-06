@@ -69,7 +69,7 @@ def main():
             encoding="utf-8",
         )
 
-        print(f"✔ Wrote {len(hashes)} processed hashes to {OUTPUT_PATH}")
+    print(f"✔ Wrote {len(hashes)} processed hashes to {OUTPUT_PATH}")
 
 
 if __name__ == "__main__":
