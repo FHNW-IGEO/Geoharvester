@@ -46,6 +46,19 @@ def ping_and_parse_service(url, timeout=10):
     except Exception as e:
         # Could not even complete GetCapabilities handshake
         return False, str(e), []
+    
+    # Contact comes from service, not from layer
+    service_contact = getattr(svc, "provider", None)
+    if service_contact:
+        contact_info = getattr(service_contact, "contact", None)
+        if contact_info:
+            email = getattr(contact_info, "email", None)
+            name = getattr(contact_info, "name", None)
+            contact = email or name or ""
+        else:
+            contact = ""
+    else:
+        contact = ""
 
     # --- Layer parsing (best effort, should not fail reachability) ---
     try:
@@ -55,7 +68,7 @@ def ping_and_parse_service(url, timeout=10):
                     "title": getattr(layer, "title", "") or "",
                     "name": getattr(layer, "name", "") or "",
                     "abstract": getattr(layer, "abstract", "") or "",
-                    "contact": getattr(layer, "contact", "") or "",
+                    "contact": contact,
                     "keywords": getattr(layer, "keywords", "") or ""
                 })
 

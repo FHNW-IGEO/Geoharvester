@@ -43,7 +43,7 @@ def compute_priority_hash(dataset):
 
 
 def normalize_then_hash(layer): 
-        # Normalize
+    # Normalize
     layer["keywords"] = normalize_keywords(layer.get("keywords"))
     layer["contact"] = normalize_contact(layer.get("contact"))
     layer["title"] = safe_strip(layer.get("title"))
