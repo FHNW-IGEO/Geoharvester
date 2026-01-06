@@ -8,41 +8,42 @@ from owslib.wms import WebMapService
 from owslib.wfs import WebFeatureService
 from owslib.wmts import WebMapTileService
 from urllib.parse import urlparse, parse_qs
+from hashing.hashing_method import normalize_then_hash
 
-def safe_strip(value):
-    if value is None:
-        return ""
-    return str(value).strip()
+# def safe_strip(value):
+#     if value is None:
+#         return ""
+#     return str(value).strip()
 
-def normalize_keywords(raw_keywords):
-    """Deduplicate, strip, join by comma"""
-    if not raw_keywords:
-        return ""
-    if isinstance(raw_keywords, str):
-        kw_list = [k.strip() for k in raw_keywords.split(",") if k.strip()]
-    elif isinstance(raw_keywords, list):
-        kw_list = [str(k).strip() for k in raw_keywords if str(k).strip()]
-    else:
-        return ""
-    # remove duplicates while preserving order
-    return ",".join(list(dict.fromkeys(kw_list)))
+# def normalize_keywords(raw_keywords):
+#     """Deduplicate, strip, join by comma"""
+#     if not raw_keywords:
+#         return ""
+#     if isinstance(raw_keywords, str):
+#         kw_list = [k.strip() for k in raw_keywords.split(",") if k.strip()]
+#     elif isinstance(raw_keywords, list):
+#         kw_list = [str(k).strip() for k in raw_keywords if str(k).strip()]
+#     else:
+#         return ""
+#     # remove duplicates while preserving order
+#     return ",".join(list(dict.fromkeys(kw_list)))
 
-def normalize_contact(raw_contact):
-    if not raw_contact or raw_contact.lower() == "n.a.":
-        return ""
-    return raw_contact.strip()
+# def normalize_contact(raw_contact):
+#     if not raw_contact or raw_contact.lower() == "n.a.":
+#         return ""
+#     return raw_contact.strip()
 
-def compute_priority_hash(dataset):
-    """Compute SHA256 hash of the 5 key fields"""
-    key_fields = [
-        dataset.get('title', ''),
-        dataset.get('name', ''),
-        dataset.get('abstract', ''),
-        dataset.get('contact', ''),
-        dataset.get('keywords', '')
-    ]
-    combined = "||".join([str(f).strip() for f in key_fields])
-    return hashlib.sha256(combined.encode("utf-8")).hexdigest()
+# def compute_priority_hash(dataset):
+#     """Compute SHA256 hash of the 5 key fields"""
+#     key_fields = [
+#         dataset.get('title', ''),
+#         dataset.get('name', ''),
+#         dataset.get('abstract', ''),
+#         dataset.get('contact', ''),
+#         dataset.get('keywords', '')
+#     ]
+#     combined = "||".join([str(f).strip() for f in key_fields])
+#     return hashlib.sha256(combined.encode("utf-8")).hexdigest()
 
 def detect_service_type(url: str) -> str | None:
     """Detect OGC service type from URL query parameters"""
@@ -163,20 +164,25 @@ def main():
                 }]
 
             for layer in layers:
-                # Normalize
-                layer["keywords"] = normalize_keywords(layer.get("keywords"))
-                layer["contact"] = normalize_contact(layer.get("contact"))
-                layer["title"] = safe_strip(layer.get("title"))
-                layer["name"] = safe_strip(layer.get("name"))
-                layer["abstract"] = safe_strip(layer.get("abstract"))
 
-                # Compute priority hash
-                hash_new = compute_priority_hash(layer)
+                hash_new = normalize_then_hash(layer)
                 key = f"{provider}:{layer.get('name','')}"  # unique per layer
-                updated_hashes[key] = hash_new
+                updated_hashes[key]  = hash_new
+                priority_changed = baseline_hashes.get(key) != hash_new # check on hash equality
+                # # Normalize
+                # layer["keywords"] = normalize_keywords(layer.get("keywords"))
+                # layer["contact"] = normalize_contact(layer.get("contact"))
+                # layer["title"] = safe_strip(layer.get("title"))
+                # layer["name"] = safe_strip(layer.get("name"))
+                # layer["abstract"] = safe_strip(layer.get("abstract"))
 
-                # Compare to baseline
-                priority_changed = baseline_hashes.get(key) != hash_new
+                # # Compute priority hash
+                # hash_new = compute_priority_hash(layer)
+                # key = f"{provider}:{layer.get('name','')}"  # unique per layer
+                # updated_hashes[key] = hash_new
+
+                # # Compare to baseline
+                # priority_changed = baseline_hashes.get(key) != hash_new
 
                 # Append result for this layer
                 results.append({
