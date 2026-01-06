@@ -4,8 +4,8 @@ name: Hash comparison
 
 on:
   workflow_dispatch:
-  push:
-    branches: preflight_check
+  # push:
+  #   branches: preflight_check
 
 jobs:
   compare-hashes:

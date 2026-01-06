@@ -34,7 +34,7 @@ def compute_priority_hash(dataset):
         dataset.get('title', ''),
         dataset.get('name', ''),
         # dataset.get('abstract', ''),
-        dataset.get('contact', ''),
+        # dataset.get('contact', ''),
         dataset.get('keywords', '')
     ]
     combined = "||".join([str(f).strip() for f in key_fields])
