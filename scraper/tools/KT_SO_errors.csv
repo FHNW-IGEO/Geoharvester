@@ -1,4 +1,4 @@
 Timestamp,Operator,URL,Issue
-2025-12-15T14:16:29.353834+01:00,KT_SO,ch.so.afu.erdwaerme.sonde,"cannot convert float infinity to integer"
-2025-12-15T14:16:46.819789+01:00,KT_SO,ch.so.afu.erdwaerme.sonde,"cannot convert float infinity to integer"
-2025-12-15T14:16:51.517316+01:00,KT_SO,ch.so.afu.wasserbewirtschaftung,"cannot convert float infinity to integer"
+2026-01-06T17:49:15.244809+01:00,KT_SO,ch.so.afu.erdwaerme.sonde,"cannot convert float infinity to integer"
+2026-01-06T17:49:35.537487+01:00,KT_SO,ch.so.afu.erdwaerme.sonde,"cannot convert float infinity to integer"
+2026-01-06T17:49:41.712477+01:00,KT_SO,ch.so.afu.wasserbewirtschaftung,"cannot convert float infinity to integer"
