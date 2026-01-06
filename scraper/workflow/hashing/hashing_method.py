@@ -33,7 +33,7 @@ def compute_priority_hash(dataset):
     key_fields = [
         dataset.get('title', ''),
         dataset.get('name', ''),
-        dataset.get('abstract', ''),
+        # dataset.get('abstract', ''),
         dataset.get('contact', ''),
         dataset.get('keywords', '')
     ]
