@@ -4,9 +4,9 @@ import json
 from pathlib import Path
 
 # PREFLIGHT_HASHES = Path("preflight-hashes.jsonl") # From the preflight #TODO
-PREFLIGHT_HASHES = Path("temp_preflight-hashes.json") # From existing data
+PREFLIGHT_HASHES = Path("./data/temp_preflight-hashes.json") # From existing data
 # PROCESSED_HASHES = Path("processed-hashes.json") # From existing data #TODO - Read from repo!
-PROCESSED_HASHES = Path("data/temp_processed-hashes.json") # From existing data
+PROCESSED_HASHES = Path("./data/temp_processed-hashes.json") # From existing data
 OUTPUT = Path("datasets_to_process.json")
 
 
