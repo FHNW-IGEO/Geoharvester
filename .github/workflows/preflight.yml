@@ -4,9 +4,9 @@ name: Preflight check & hash
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - preflight_check
+  # push:
+  #   branches:
+  #     - preflight_check
   schedule:
     - cron: "0 3 * * *" # optional daily run
 
