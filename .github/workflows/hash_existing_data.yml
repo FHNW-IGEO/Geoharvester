@@ -37,3 +37,13 @@ jobs:
         with:
           name: processed-hashes
           path: "**/processed-hashes.json"
+
+      - name: Commit and Push hashes from merged_data.pkl
+        if: ${{ github.event.inputs.commit_hashes == 'true' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          cp processed-hashes.json processed-hashes.json
+          git add processed-hashes.json
+          git commit -m "Update processed hashes [skip ci]" || echo "No changes to commit"
+          git push

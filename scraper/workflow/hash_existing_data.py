@@ -8,7 +8,7 @@ import pandas as pd
 from hashing.hashing_method import normalize_then_hash
 
 PICKLE_PATH = Path("data/merged_data.pkl")
-OUTPUT_PATH = Path("processed_hashes.json")
+OUTPUT_PATH = Path("processed-hashes.json")
 
 
 def load_dataframe():
