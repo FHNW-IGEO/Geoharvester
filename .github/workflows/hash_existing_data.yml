@@ -1,0 +1,39 @@
+# This job is meant to be run after manual processing, to generate hashes for the "as-is" state. Hashes from the scraper preflight will be compared against this file to determine which data changed and needs preprocessing.
+
+name: Generate processed hashes
+
+on:
+  workflow_dispatch:
+  push:
+    branches: preflight_check
+
+jobs:
+  processed-hashes:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./scraper
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas
+
+      - name: Generate processed hashes from merged_data.pkl
+        run: |
+          python workflow/hash_existing_data.py
+
+      - name: Upload processed hashes artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: processed-hashes
+          path: "**/processed-hashes.json"

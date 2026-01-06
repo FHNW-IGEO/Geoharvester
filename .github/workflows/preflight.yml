@@ -1,10 +1,12 @@
+# The preflight job quickly checks the availability of services and generates hashes for each dataset (layer) based on the fields "name, title, abstract, contact, keywords". Be aware that this needs adjusting if changes of other fields need to be watched too.
+
 name: Preflight – availability & priority hash
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - preflight_check
+  #   push:
+  #     branches:
+  #       - preflight_check
   schedule:
     - cron: "0 3 * * *" # optional daily run
 
