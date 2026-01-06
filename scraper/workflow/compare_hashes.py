@@ -9,22 +9,15 @@ PREFLIGHT_HASHES = Path("./data/temp_preflight-hashes.json") # From existing dat
 PROCESSED_HASHES = Path("./data/temp_processed-hashes.json") # From existing data
 OUTPUT = Path("datasets_to_process.json")
 
-
-def load_preflight():
-    results = {}
-    with PREFLIGHT_HASHES.open("r", encoding="utf-8") as f:
-        for line in f:
-            row = json.loads(line)
-            if not row.get("reachable"):
-                continue
-
-            dataset_id = f"{row['provider']}:{row['layer_name']}"
-            results[dataset_id] = row.get("hash_new")
-    return results
-
-
 def main():
-    preflight = load_preflight()
+    if not PREFLIGHT_HASHES.exists():
+        raise FileNotFoundError("preflight-hashes.json not found")
+
+    if not PROCESSED_HASHES.exists():
+        raise FileNotFoundError("processed-hashes.json not found")
+
+    # Load full JSON objects (NOT jsonl)
+    preflight = json.loads(PREFLIGHT_HASHES.read_text(encoding="utf-8"))
     processed = json.loads(PROCESSED_HASHES.read_text(encoding="utf-8"))
 
     to_process = {}
@@ -38,8 +31,8 @@ def main():
             to_process[dataset_id] = "updated"
 
     OUTPUT.write_text(
-        json.dumps(to_process, indent=2),
-        encoding="utf-8"
+        json.dumps(to_process, indent=2, ensure_ascii=False),
+        encoding="utf-8",
     )
 
     print(f"Datasets to process: {len(to_process)}")
