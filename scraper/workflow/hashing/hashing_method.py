@@ -37,7 +37,7 @@ def compute_priority_hash(dataset):
     return hashlib.sha256(combined.encode("utf-8")).hexdigest()
 
 
-def normalize_then_hash(layer, provider): 
+def normalize_then_hash(layer): 
         # Normalize
     layer["keywords"] = normalize_keywords(layer.get("keywords"))
     layer["contact"] = normalize_contact(layer.get("contact"))
@@ -47,6 +47,5 @@ def normalize_then_hash(layer, provider):
 
     # Compute priority hash
     hash_new = compute_priority_hash(layer)
-    key = f"{provider}:{layer.get('name','')}"  # unique per layer
 
     return hash_new
