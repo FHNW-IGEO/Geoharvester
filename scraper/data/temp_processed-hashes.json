@@ -1,5 +1,8 @@
 {
-  "KT_AI:ch.geoportal.ktai": "b6e188cb3593d2d234303342a3d5e71c1b4ae8385a94548f0573928c807152c8",
+  "ASIT:": "47c2d626fa3179a3cea11612ed4a79bed4ed1a55c72f7b139625346714cb963b",
+  "SOSM:": "47c2d626fa3179a3cea11612ed4a79bed4ed1a55c72f7b139625346714cb963b",
+  "ST_BE:": "47c2d626fa3179a3cea11612ed4a79bed4ed1a55c72f7b139625346714cb963b",
+  "KT_AI:ch.geoportal.ktai": "b6e188cb3593d2d234303342a3d5e71c1b4ae8385a94548f0573928c80715000",
   "KT_AI:ch.geoportal.ver_entsorgung_kommunikation.643.0.abbaustellen_und_deponien_kt_sg": "1edca2d97517dba860b344c1148cafb32fff9d0793298a1ddbdcfd7130e9d2c1",
   "KT_AI:ch.geoportal.verkehr.3230.0.abgeltungsberechtigte_linien_oeffentlicher_verkehr_kt_sg": "0bd13860c3638368da7dec4c634d2b230c62af5cc6673ba471d7d2c421d0e602",
   "KT_AI:ch.geoportal.ver_entsorgung_kommunikation.157.0.abwasser_ara_standorte_kt_sg": "89cb29fe8540690f878b2681e115d916c9cc5b56425ff65bf0f12f7cef1346d4",
@@ -13167,8 +13170,5 @@
   "Bund:ch.swisstopo.rapidmapping.rgb/2025-001-PPDB": "156c2f8f83908a2eda9dbcf50375c8c3e1aa9f9912b3c35187363d20d04d20ff",
   "Bund:ch.swisstopo.rapidmapping.rgb/2025-002-BLATTEN": "e0328eb62a860e14f5a8726be8c8673bf6c663e7d31c7984ac6263e034221589",
   "Bund:ch.swisstopo.rapidmapping.rgb/2025-007-BLATTEN": "30ce9c42db25b942ff9eeea004a4e319aea26aeba092bc0c95b05881d3cb8bb8",
-  "Bund:ch.swisstopo.rapidmapping.rgb/2025-011-BLATTEN": "8dc2dd1731a01454718ac82b190a65d171be4a87c31d8d391ce6327db40fd189",
-  "ASIT:": "47c2d626fa3179a3cea11612ed4a79bed4ed1a55c72f7b139625346714cb963b",
-  "SOSM:": "47c2d626fa3179a3cea11612ed4a79bed4ed1a55c72f7b139625346714cb963b",
-  "ST_BE:": "47c2d626fa3179a3cea11612ed4a79bed4ed1a55c72f7b139625346714cb963b"
+  "Bund:ch.swisstopo.rapidmapping.rgb/2025-011-BLATTEN": "8dc2dd1731a01454718ac82b190a65d171be4a87c31d8d391ce6327db40fd189"
 }
