@@ -1466,3 +1466,5 @@
 "ASIT"," https://wmts.asit-asso.ch/wmts/1.0.0/WMTSCapabilities.xml"
 "SOSM","https://tile.osm.ch/1.0.0/WMTSCapabilities.xml"
 "ST_BE","https://map.bern.ch/arcgis/rest/services/Geoportal/STEK2016_Entwicklungspotenziale/MapServer/WMTS/1.0.0/WMTSCapabilities.xml"
+"KT_NW","https://www.gis-daten.ch/wms/nw/service?REQUEST=GetCapabilities&SERVICE=WMS"
+"KT_OW","https://www.gis-daten.ch/wms/ow/service?REQUEST=GetCapabilities&SERVICE=WMS"
