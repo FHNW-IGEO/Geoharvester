@@ -73,7 +73,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: preflight-diagnostics
-          path: scraper
+          path: artifacts
 
       - name: Debug – list files
         run: |
