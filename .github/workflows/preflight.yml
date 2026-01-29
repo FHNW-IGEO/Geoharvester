@@ -38,8 +38,7 @@ jobs:
           python workflow/preflight_job.py \
             --input tiny_sources.csv \
             --out-diagnostics preflight-diagnostics.jsonl \
-            --out-hashes preflight-hashes.json \
-            --baseline-hashes preflight-hashes.json || true
+            --baseline-hashes preflight-diagnostics.jsonl || true
 
       - name: Upload preflight diagnostics
         uses: actions/upload-artifact@v4
@@ -47,19 +46,13 @@ jobs:
           name: preflight-diagnostics
           path: "**/preflight-diagnostics.jsonl"
 
-      - name: Upload preflight hashes
-        uses: actions/upload-artifact@v4
-        with:
-          name: preflight-hashes
-          path: "**/preflight-hashes.json"
-
       # TODO: Enable repo pushing once stable!
       - name: Commit and Push Updated Hashes
         if: ${{ github.event.inputs.commit_hashes == 'true' }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          cp preflight-hashes.json preflight-hashes.json
-          git add preflight-hashes.json
+          cp preflight-diagnostics.jsonl preflight-diagnostics.jsonl
+          git add preflight-diagnostics.jsonl
           git commit -m "Update preflight hashes [skip ci]" || echo "No changes to commit"
           git push

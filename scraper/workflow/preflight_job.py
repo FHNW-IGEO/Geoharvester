@@ -78,7 +78,7 @@ def ping_and_parse_service(url, timeout=10):
                     "title": getattr(layer, "title", "") or "",
                     "name": getattr(layer, "name", "") or "",
                     "abstract": getattr(layer, "abstract", "") or "",
-                    "contact": getattr(layer, "contact", "") or "",
+                    "contact": contact,
                     "keywords": getattr(layer, "keywords", "") or ""
                 })
 
@@ -88,7 +88,7 @@ def ping_and_parse_service(url, timeout=10):
                     "title": getattr(layer, "title", "") or "",
                     "name": getattr(layer, "id", "") or "",
                     "abstract": getattr(layer, "abstract", "") or "",
-                    "contact": "",
+                    "contact": contact,
                     "keywords": ""
                 })
 
@@ -102,9 +102,7 @@ def main():
     parser = argparse.ArgumentParser(description="Preflight check for geoservices")
     parser.add_argument("--input", required=True, help="Path to sources.csv")
     parser.add_argument("--out-diagnostics", default="preflight-diagnostics.jsonl",
-                        help="Output JSONL file with diagnostics")
-    parser.add_argument("--out-hashes", default="preflight-hashes.json",
-                        help="Output JSON file with priority hashes")
+                        help="Output JSONL file with diagnostics and hash")
     parser.add_argument("--baseline-hashes", default=None,
                         help="Optional previous hash file to compare against")
     args = parser.parse_args()
@@ -114,12 +112,11 @@ def main():
     if args.baseline_hashes:
         try:
             with open(args.baseline_hashes) as f:
-                baseline_hashes = json.load(f)
+                baseline_hashes[key] = row["hash"]
         except FileNotFoundError:
             print(f"Baseline file {args.baseline_hashes} not found, assuming empty baseline")
 
     results = []
-    updated_hashes = {}
 
     with open(args.input) as csvfile:
         reader = csv.DictReader(csvfile)
@@ -130,20 +127,25 @@ def main():
             reachable, error, layers = ping_and_parse_service(url)
 
             if not layers:
-                # fallback: create a single placeholder layer with empty fields
-                layers = [{
-                    "title": "",
-                    "name": "",
-                    "abstract": "",
-                    "contact": "",
-                    "keywords": ""
-                }]
+                results.append({
+                    "provider": provider,
+                    "layer_name": None,
+                    "service_url": url,
+                    "checked_at": ...,
+                    "reachable": reachable,
+                    "error": error or "No layers found",
+                    "needs_preprocessing": False,
+                    "hash": None
+                })
+                continue
 
             for layer in layers:
 
                 hash_new = normalize_then_hash(layer)
-                key = f"{provider}:{layer.get('name','')}"  # unique per layer
-                updated_hashes[key]  = hash_new
+                layer_name = layer.get("name", "").strip()
+                if not layer_name:
+                    continue
+                key = f"{provider}:{layer_name}"
                 needs_preprocessing = baseline_hashes.get(key) != hash_new # check on hash equality
 
                 # Append result for this layer
@@ -154,20 +156,18 @@ def main():
                     "checked_at": datetime.utcnow().isoformat() + "Z",
                     "reachable": reachable,
                     "error": error,
-                    "needs_preprocessing": needs_preprocessing
+                    "needs_preprocessing": needs_preprocessing,
+                    "hash": hash_new
                 })
+    results.sort(key=lambda r: (r["provider"], r["layer_name"] or ""))
 
     # Write JSONL results
     with open(args.out_diagnostics, "w", encoding="utf-8") as outf:
         for r in results:
             outf.write(json.dumps(r) + "\n")
 
-    # Write hashes.json
-    with open(args.out_hashes, "w", encoding="utf-8") as outf:
-        json.dump(updated_hashes, outf, indent=2)
-
     print(f"Preflight finished: {len(results)} layers checked")
-    print(f"Diagnostics: {args.out_diagnostics}, Hashes: {args.out_hashes}")
+    print(f"Diagnostics written to {args.out_diagnostics}")
 
 if __name__ == "__main__":
     main()
