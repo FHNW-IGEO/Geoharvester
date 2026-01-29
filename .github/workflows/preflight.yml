@@ -46,13 +46,47 @@ jobs:
           name: preflight-diagnostics
           path: "**/preflight-diagnostics.jsonl"
 
-      # TODO: Enable repo pushing once stable!
+      # TODO: Enable repo pushing once stable! Preflight should compare this old preflight
       - name: Commit and Push Updated Hashes
         if: ${{ github.event.inputs.commit_hashes == 'true' }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          cp preflight-diagnostics.jsonl preflight-diagnostics.jsonl
           git add preflight-diagnostics.jsonl
           git commit -m "Update preflight hashes [skip ci]" || echo "No changes to commit"
           git push
+
+  compare-hashes:
+    needs: preflight
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Download preflight hashes artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: preflight-diagnostics
+          path: scraper
+
+      - name: Debug – list files
+        run: |
+          ls -lh
+          echo "----"
+          ls -lh scraper
+
+      - name: Run hash comparison
+        run: |
+          python workflow/compare_hashes.py
+
+      - name: Upload datasets-to-process artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: datasets-to-process
+          path: "**/datasets_to_process.json"

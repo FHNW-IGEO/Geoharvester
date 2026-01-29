@@ -1,7 +1,7 @@
 import pickle
 import pandas as pd
 
-with open("merged_data.pkl", "rb") as f:
+with open("enhanced_merged_data.pkl", "rb") as f:
     data = pickle.load(f)
 
 df = (
@@ -9,4 +9,4 @@ df = (
     else pd.DataFrame(data)
 )
 
-df.to_csv("output.csv", index=False)
+df.to_csv("pkl_to_csv_output.csv", index=False)
