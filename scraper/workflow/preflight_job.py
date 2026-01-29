@@ -29,7 +29,7 @@ def ping_and_parse_service(url, timeout=10):
         return False, "SERVICE parameter missing", []
 
     try:
-        # --- Reachability check (semantic, not HTTP-only) ---
+        # --- Reachability check
         if service_type == "WMS":
             svc = WebMapService(url, version="1.3.0", timeout=timeout)
         elif service_type == "WFS":
@@ -39,7 +39,6 @@ def ping_and_parse_service(url, timeout=10):
         else:
             return False, f"Unsupported service type: {service_type}", []
 
-        # If we got here, the service is reachable
         reachable = True
         error = None
 
@@ -145,7 +144,7 @@ def main():
                 hash_new = normalize_then_hash(layer)
                 key = f"{provider}:{layer.get('name','')}"  # unique per layer
                 updated_hashes[key]  = hash_new
-                priority_changed = baseline_hashes.get(key) != hash_new # check on hash equality
+                needs_preprocessing = baseline_hashes.get(key) != hash_new # check on hash equality
 
                 # Append result for this layer
                 results.append({
@@ -155,7 +154,7 @@ def main():
                     "checked_at": datetime.utcnow().isoformat() + "Z",
                     "reachable": reachable,
                     "error": error,
-                    "priority_changed": priority_changed
+                    "needs_preprocessing": needs_preprocessing
                 })
 
     # Write JSONL results

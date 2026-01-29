@@ -7,8 +7,8 @@ import pandas as pd
 # Use the same method as in preflight, to keep things in sync
 from hashing.hashing_method import normalize_then_hash
 
-PICKLE_PATH = Path("data/merged_data.pkl")
-OUTPUT_PATH = Path("processed-hashes.json")
+PICKLE_PATH = Path("../data/elia_merged_data.pkl")
+OUTPUT_PATH = Path("hashed-existing.json")
 DUPLICATES_PATH = Path("duplicates.json") 
 
 
@@ -26,6 +26,7 @@ def main():
     seen_hashes = {} # keeps track of processed hashes
 
     for _, row in df.iterrows():
+        print(row)
         provider = str(row.get("provider") or "").strip()
         name = str(row.get("name") or "").strip()
 
@@ -63,10 +64,10 @@ def main():
         else:
             seen_hashes[hash_value] = dataset_id
 
-        OUTPUT_PATH.write_text(
-            json.dumps(hashes, indent=2, ensure_ascii=False),
-            encoding="utf-8",
-        )
+    OUTPUT_PATH.write_text(
+        json.dumps(hashes, indent=2, ensure_ascii=False),
+        encoding="utf-8",
+    )
 
     print(f"✔ Wrote {len(hashes)} processed hashes to {OUTPUT_PATH}")
 
