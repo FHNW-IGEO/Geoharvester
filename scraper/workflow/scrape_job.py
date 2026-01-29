@@ -36,9 +36,7 @@ from collections import defaultdict
 import pytz
 
 sys.path.append('../')
-
 import scraper.configuration as config
-import scraper.utils as utils
 
 # globals
 warnings.filterwarnings('ignore')
