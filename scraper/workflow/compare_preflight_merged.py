@@ -3,14 +3,14 @@
 import json
 from pathlib import Path
 
-PREFLIGHT_HASHES = Path("../artifacts/preflight-hashes.json") # From preflight
+PREFLIGHT_HASHES = Path("artifacts/preflight-hashes.json") # From preflight
 MERGED_DATA_PKL = Path("../data/merged_data.pkl") # From Git
 OUTPUT = Path("datasets_to_process.json")
 
 def main():
 
     if not MERGED_DATA_PKL.exists():
-        raise FileNotFoundError("processed-hashes.json not found")
+        raise FileNotFoundError("merged_data.pkl not found")
     if not PREFLIGHT_HASHES.exists():
         raise FileNotFoundError("preflight-hashes.json not found")
 

@@ -88,7 +88,6 @@ jobs:
         run: |
           ls -lh
           echo "----"
-          ls -lh ./artifacts
           ls -lh ../artifacts
 
       - name: Run hash comparison
