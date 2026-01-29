@@ -4,8 +4,8 @@ name: Hash comparison
 
 on:
   workflow_dispatch:
-  push:
-    branches: preflight_check
+  # push:
+  #   branches: preflight_check
 
 jobs:
   compare-hashes:
@@ -24,17 +24,17 @@ jobs:
         with:
           python-version: "3.11"
 
-      #   - name: Download preflight hashes artifact
-      #     uses: actions/download-artifact@v4
-      #     with:
-      #       name: preflight-hashes
-      #       path: scraper
+      - name: Download preflight hashes artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: preflight-hashes
+          path: scraper
 
-      #   - name: Download preflight results artifact (optional, debug)
-      #     uses: actions/download-artifact@v4
-      #     with:
-      #       name: preflight-results
-      #       path: scraper
+      - name: Download preflight results artifact (optional, debug)
+        uses: actions/download-artifact@v4
+        with:
+          name: preflight-results
+          path: scraper
 
       - name: Debug – list files
         run: |
