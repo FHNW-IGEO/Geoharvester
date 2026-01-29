@@ -24,7 +24,6 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 import requests
 from requests.exceptions import ReadTimeout, ConnectTimeout
-import utils
 from owslib.wfs import WebFeatureService
 from owslib.wms import WebMapService
 from owslib.wmts import WebMapTileService
