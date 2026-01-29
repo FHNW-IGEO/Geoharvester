@@ -22,9 +22,6 @@ import sys
 import warnings
 import xml.etree.ElementTree as ET
 from pathlib import Path
-
-import configuration as config
-print("CONFIG IMPORTED FROM:", config.__file__)
 import requests
 from requests.exceptions import ReadTimeout, ConnectTimeout
 import utils
@@ -37,6 +34,11 @@ from datetime import datetime, timezone
 from time import time
 from collections import defaultdict
 import pytz
+
+sys.path.append('../')
+
+import scraper.configuration as config
+import scraper.utils as utils
 
 # globals
 warnings.filterwarnings('ignore')
