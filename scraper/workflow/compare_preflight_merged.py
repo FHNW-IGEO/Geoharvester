@@ -31,6 +31,9 @@ def main():
         provider = str(row.get("provider") or "").strip()
         name = str(row.get("name") or "").strip()
         service_url = str(row.get("service_url") or "").strip()
+        service_type = str(row.get("service_type") or "").strip()
+        if not service_type:
+            raise ValueError(f"Missing service_type in {dataset_id}")
         dataset_id = f"{provider}:{name}"
 
         # Read the existing hash from merged_data.pkl
@@ -40,9 +43,12 @@ def main():
             print(f"⚠️ Missing hash for {dataset_id}, flagging for processing")
             datasets_to_process.append({
                 "dataset_id": dataset_id,
+                "provider": provider,
+                "layer_name": name,
+                "service_url": service_url,
+                "service_type": service_type,
                 "preflight_hash": None,
-                "current_hash": None,
-                "service_url": service_url
+                "current_hash": None
             })
             continue
 
@@ -52,10 +58,13 @@ def main():
 
         if needs_processing:
             datasets_to_process.append({
-                "dataset_id": dataset_id,
+          "dataset_id": dataset_id,
+                "provider": provider,
+                "layer_name": name,
+                "service_url": service_url,
+                "service_type": service_type,
                 "preflight_hash": preflight_hash,
-                "current_hash": current_hash,
-                "service_url": service_url
+                "current_hash": current_hash
             })
 
     # Write output JSON for downstream pipeline

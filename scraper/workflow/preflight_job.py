@@ -26,7 +26,7 @@ def ping_and_parse_service(url, timeout=10):
 
     service_type = detect_service_type(url)
     if not service_type:
-        return False, "SERVICE parameter missing", []
+        return False, "SERVICE parameter missing", [], None
 
     try:
         # --- Reachability check
@@ -37,14 +37,14 @@ def ping_and_parse_service(url, timeout=10):
         elif service_type == "WMTS":
             svc = WebMapTileService(url, timeout=timeout)
         else:
-            return False, f"Unsupported service type: {service_type}", []
+            return False, f"Unsupported service type: {service_type}", [], None
 
         reachable = True
         error = None
 
     except Exception as e:
         # Could not even complete GetCapabilities handshake
-        return False, str(e), []
+        return False, str(e), [], service_type
     
     # Contact comes from service, not from layer
     service_contact = getattr(svc, "provider", None)
@@ -96,7 +96,7 @@ def ping_and_parse_service(url, timeout=10):
         # Parsing failed, but service is reachable
         error = f"Layer parsing warning: {e}"
 
-    return reachable, error, layers_data
+    return reachable, error, layers_data, service_type
 
 def main():
     parser = argparse.ArgumentParser(description="Preflight check for geoservices")
@@ -137,7 +137,7 @@ def main():
             provider = (row.get("Description") or "").strip()
             url = (row.get("URL") or "").strip()
 
-            reachable, error, layers = ping_and_parse_service(url)
+            reachable, error, layers, service_type = ping_and_parse_service(url)
 
             if not layers:
                 layers = [{
@@ -149,7 +149,11 @@ def main():
                 }]
 
             for layer in layers:
-                dataset_id = f"{provider}:{layer.get('name', '')}"
+                layer_name = (layer.get("name") or "").strip()
+                if not layer_name:
+                   layer_name = f"_service_{abs(hash(url))}"
+
+                dataset_id = f"{provider}:{layer_name}"
                 hash_new = normalize_then_hash(layer)
                 hashes[dataset_id] = hash_new
 
@@ -158,8 +162,9 @@ def main():
                 # Append result for this layer
                 diagnostics.append({
                     "provider": provider,
-                    "layer_name": layer.get("name", ""),
+                    "layer_name": layer_name,
                     "service_url": url,
+                    "service_type": service_type,
                     "checked_at": datetime.utcnow().isoformat() + "Z",
                     "reachable": reachable,
                     "error": error,
