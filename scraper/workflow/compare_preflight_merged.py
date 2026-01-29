@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 PREFLIGHT_HASHES = Path("artifacts/preflight-hashes.json") # From preflight
-MERGED_DATA_PKL = Path("../data/merged_data.pkl") # From Git
+MERGED_DATA_PKL = Path("data/merged_data.pkl") # From Git
 OUTPUT = Path("datasets_to_process.json")
 
 def main():
