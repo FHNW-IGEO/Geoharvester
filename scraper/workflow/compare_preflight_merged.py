@@ -3,13 +3,6 @@
 import json
 from pathlib import Path
 
-import os
-
-print("Current working directory:", os.getcwd())
-print("Contents of current dir:", os.listdir("."))
-print("Contents of artifacts folder:", os.listdir("../artifacts"))
-
-
 MERGED_DATA_PKL = Path("data/merged_data.pkl") # From Git
 PREFLIGHT_HASHES = Path("../artifacts/preflight-hashes.json") # From preflight
 OUTPUT = Path("datasets_to_process.json")
