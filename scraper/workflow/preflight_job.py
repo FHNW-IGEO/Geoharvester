@@ -68,7 +68,7 @@ def ping_and_parse_service(url, timeout=10):
                     "name": getattr(layer, "name", "") or "",
                     "abstract": getattr(layer, "abstract", "") or "",
                     "contact": contact,
-                    "keywords": getattr(layer, "keywords", "") or ""
+                    "keywords": getattr(layer, "keywords", "") or "",
                     "service_type": service_type
                 })
 
