@@ -49,8 +49,8 @@ import pandas as pd
 import pytz
 
 # From Github UI - to limit the source processing for debugging
-sourceProcessingLimit_raw = os.getenv("SOURCE_LIMIT")
-sourceProcessingLimit = int(sourceProcessingLimit_raw) if sourceProcessingLimit_raw else None
+# sourceProcessingLimit_raw = os.getenv("SOURCE_LIMIT")
+# sourceProcessingLimit = int(sourceProcessingLimit_raw) if sourceProcessingLimit_raw else None
 
 # globals
 warnings.filterwarnings('ignore')
@@ -186,8 +186,8 @@ def is_online(source):
         log_to_operator_csv(server_operator, server_url, error_details)
     return success
 
-# keep:
-def get_service_info(source):
+# keep: - main change
+def get_service_info(source, only_layers=None):
     """
     Extracts information from an OGC web service (WMS, WMTS, WFS) using the 
     OWSLib library. This function takes a dictionary called "source" as input 
@@ -273,6 +273,10 @@ def get_service_info(source):
             layers_done = []
             for i in layers:
                 this_layer = service.contents[i].id
+
+                # Only process layers that changed, not all
+                if only_layers is not None and this_layer not in only_layers:
+                    continue
                 # Check that we have not yet processed this layer as a child of
                 # another layer before
                 if this_layer not in layers_done:
@@ -346,6 +350,8 @@ def get_service_info(source):
                     if children_possible and number_children > 0:
                         for j in range(number_children):
                             this_child_layer = service.contents[i]._children[j].id
+                            if only_layers is not None and this_child_layer not in only_layers:
+                                continue
                             if this_child_layer not in layers_done:
                                 if service_title is not None:
                                     layertree = "%s/%s/%s" % (server_operator,
@@ -565,59 +571,60 @@ def write_dataset_info(csv_filename, output_file):
             geo_data_done.append(checklayer)
     return
 
-def check_new_data(actual_db_path, new_data_path, match_columns,
-                   output_path, keep_old=False):
-    """
-    It compares the old and new databases to extract and preprocess
-    only the new datasets.
+# OBSOLETE:
+# def check_new_data(actual_db_path, new_data_path, match_columns,
+#                    output_path, keep_old=False):
+#     """
+#     It compares the old and new databases to extract and preprocess
+#     only the new datasets.
     
-    Parameters
-    ----------
-    actual_db_path : str
-        path to actual pkl dataframe
-    new_data_path : str
-        path to new scraped csv file
-    match_columns : List
-        Columns to be used for the comparision between databases
-    Returns:
-    data_to_preprocessing_path : str
-        Path to data to be preprocessed with NLP
-    data_to_keep_path : str
-        Path to data already preprocessed from the old database with no
-        modifications.
-    keep_old : bool
-        if the data presents only in the old database should be kept
-    """
-    old_db = pd.read_pickle(actual_db_path)
-    old_db = old_db.fillna("nan")
-    old_db = old_db.replace(to_replace='None', value="nan", regex=True)
-    old_db = old_db.replace(to_replace='n.a.', value='nan', regex=True)
-    new_db = pd.read_csv(new_data_path, low_memory=False)
-    new_db = new_db.drop_duplicates(keep='first') # check duplicates
-    new_db = new_db.fillna("nan")
-    new_db = new_db.replace(to_replace='None', value="nan", regex=True)
-    new_db = new_db.replace(to_replace="n.a.", value="nan", regex=True)
+#     Parameters
+#     ----------
+#     actual_db_path : str
+#         path to actual pkl dataframe
+#     new_data_path : str
+#         path to new scraped csv file
+#     match_columns : List
+#         Columns to be used for the comparision between databases
+#     Returns:
+#     data_to_preprocessing_path : str
+#         Path to data to be preprocessed with NLP
+#     data_to_keep_path : str
+#         Path to data already preprocessed from the old database with no
+#         modifications.
+#     keep_old : bool
+#         if the data presents only in the old database should be kept
+#     """
+#     old_db = pd.read_pickle(actual_db_path)
+#     old_db = old_db.fillna("nan")
+#     old_db = old_db.replace(to_replace='None', value="nan", regex=True)
+#     old_db = old_db.replace(to_replace='n.a.', value='nan', regex=True)
+#     new_db = pd.read_csv(new_data_path, low_memory=False)
+#     new_db = new_db.drop_duplicates(keep='first') # check duplicates
+#     new_db = new_db.fillna("nan")
+#     new_db = new_db.replace(to_replace='None', value="nan", regex=True)
+#     new_db = new_db.replace(to_replace="n.a.", value="nan", regex=True)
     
-    to_preprocessing = new_db.merge(old_db, on=match_columns, how='left',
-                                    indicator='_lmerge', suffixes=(None, "_drop"))
-    to_preprocessing = to_preprocessing.loc[to_preprocessing['_lmerge']=='left_only']
-    to_keep = old_db.merge(new_db, on=match_columns, how='inner', indicator='_innermerge',
-                           suffixes=(None,"_drop"))
-    to_keep = to_keep[old_db.columns.to_list()]
-    to_keep = to_keep.drop_duplicates(keep='first')
+#     to_preprocessing = new_db.merge(old_db, on=match_columns, how='left',
+#                                     indicator='_lmerge', suffixes=(None, "_drop"))
+#     to_preprocessing = to_preprocessing.loc[to_preprocessing['_lmerge']=='left_only']
+#     to_keep = old_db.merge(new_db, on=match_columns, how='inner', indicator='_innermerge',
+#                            suffixes=(None,"_drop"))
+#     to_keep = to_keep[old_db.columns.to_list()]
+#     to_keep = to_keep.drop_duplicates(keep='first')
 
-    old_db_lmerge = old_db.merge(new_db, on=match_columns, how='left',indicator='_lmerge',
-                                 suffixes=(None,"_drop"))
-    old_db_lmerge = old_db_lmerge.loc[old_db_lmerge['_lmerge']=='left_only']
+#     old_db_lmerge = old_db.merge(new_db, on=match_columns, how='left',indicator='_lmerge',
+#                                  suffixes=(None,"_drop"))
+#     old_db_lmerge = old_db_lmerge.loc[old_db_lmerge['_lmerge']=='left_only']
 
-    to_preprocessing = to_preprocessing[new_db.columns.to_list()]
-    to_preprocessing = to_preprocessing.drop_duplicates(keep='first')
+#     to_preprocessing = to_preprocessing[new_db.columns.to_list()]
+#     to_preprocessing = to_preprocessing.drop_duplicates(keep='first')
 
-    to_preprocessing.to_pickle(os.path.join(output_path, 'to_preprocess.pkl'))
-    if not keep_old:
-        return to_keep
-    else:
-        return to_keep, old_db_lmerge
+#     to_preprocessing.to_pickle(os.path.join(output_path, 'to_preprocess.pkl'))
+#     if not keep_old:
+#         return to_keep
+#     else:
+#         return to_keep, old_db_lmerge
 
 def preprocessing_NLP(raw_data_path, output_folder=None, column='abstract'):
     """
@@ -704,22 +711,6 @@ if __name__ == "__main__":
     6 Logs and prints a message indicating that the scraper has completed.
     """
     process_startT=time()
-    logger.info(f"Running scraper with a limit of {sourceProcessingLimit_raw}")
-    # Get the credentials for the Google Index API. The approach depends on
-    # whether this script is running on GitHub (via GitHub Actions) or
-    # locally. In the latter case you need a valid config.JSON_KEY_FILE in
-    # this repo.
-    #if os.path.exists(config.JSON_KEY_FILE):
-        # This script is running locally
-    #    google_credentials = ServiceAccountCredentials.from_json_keyfile_name(
-    #        config.JSON_KEY_FILE, scopes=config.SCOPES)
-    #else:
-    #    # This script is running on GitHub
-    #    client_secret = os.environ.get('CLIENT_SECRET')
-    #    client_secret = json.loads(client_secret)
-    #    client_secret_str = json.dumps(client_secret)
-    #    google_credentials = ServiceAccountCredentials.from_json_keyfile_dict(
-    #    json.loads(client_secret_str), scopes=config.SCOPES)
 
     error_log_files = glob.glob(os.path.join(
         config.DEAD_SERVICES_PATH, "*_errors.csv"))
@@ -736,7 +727,7 @@ if __name__ == "__main__":
 
     scraping_startT = time()
     logger.info(f"Startup time until scraping: {int((process_startT-scraping_startT) / 60)} mins")
-    for source in sources[:sourceProcessingLimit] if sourceProcessingLimit is not None else sources:
+    for source in sources:
         scrape_source_startT = time()
         server_operator = source['Description']
         server_url = source['URL']
@@ -770,10 +761,11 @@ if __name__ == "__main__":
     # Copy to artifact folder
     shutil.copyfile(config.GEOSERVICES_CH_CSV, os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'geoservices_CH.csv'))
 
-    data_to_keep = check_new_data(os.path.join(config.PROCESSED_DATA_PKL),
-                   config.GEOSERVICES_CH_CSV,
-                   match_columns=['name','title','provider','keywords','abstract','endpoint', 'contact'],
-                   output_path=os.path.split(config.GEOSERVICES_CH_CSV)[0])
+    # TODO: Needs replacing
+    # data_to_keep = check_new_data(os.path.join(config.PROCESSED_DATA_PKL),
+    #                config.GEOSERVICES_CH_CSV,
+    #                match_columns=['name','title','provider','keywords','abstract','endpoint', 'contact'],
+    #                output_path=os.path.split(config.GEOSERVICES_CH_CSV)[0])
     
     logger.info(f"Keeping {len(data_to_keep)} datasets from old database without processing")
 

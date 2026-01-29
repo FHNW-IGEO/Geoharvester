@@ -104,3 +104,47 @@ jobs:
         with:
           name: datasets-to-process
           path: scraper/datasets_to_process.json
+
+  scrape-datasets:
+    needs: compare-hashes
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./scraper
+
+    steps:
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade --force-reinstall -r requirements.txt
+      - name: Download spacy models
+        run: |
+          python -m spacy download en_core_web_sm
+          python -m spacy download fr_core_news_sm
+          python -m spacy download de_core_news_sm
+          python -m spacy download it_core_news_sm
+
+      - name: Download nltk stopwords
+        run: |
+          python -m nltk.downloader all
+
+      - name: Run Python script
+        run: |
+          python scrape_job.py
+        env:
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: preprd_data
+          path: ./scraper/artifacts/preprd_data.pkl # From artifacts for 2nd stage
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: preprd_data_csv
+          path: ./scraper/artifacts/preprd_data.csv

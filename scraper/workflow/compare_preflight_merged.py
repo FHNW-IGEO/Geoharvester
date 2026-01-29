@@ -19,15 +19,12 @@ def main():
     if not PREFLIGHT_DIAGNOSTICS.exists():
         raise FileNotFoundError("preflight-diagnostics.jsonl not found")
 
-
     df = pd.read_pickle(MERGED_DATA_PKL)
     print(f"Loaded {len(df)} rows from merged_data.pkl")
 
     with open(PREFLIGHT_HASHES, encoding="utf-8") as f:
         preflight_hashes = json.load(f)
     print(f"Loaded {len(preflight_hashes)} preflight hashes")
-
-
 
     diagnostics_by_id = {}
     with open(PREFLIGHT_DIAGNOSTICS, encoding="utf-8") as f:
@@ -37,7 +34,6 @@ def main():
             diagnostics_by_id[dataset_id] = row
 
     print(f"Loaded {len(diagnostics_by_id)} preflight diagnostics records")
-
 
     merged_hashes = {
         f"{str(r.get('provider')).strip()}:{str(r.get('name')).strip()}": r.get("hash")
@@ -72,38 +68,6 @@ def main():
             "preflight_hash": preflight_hash,
             "current_hash": current_hash
         })
-
-        # for _, row in df.iterrows():
-        #     provider = str(row.get("provider") or "").strip()
-        #     name = str(row.get("name") or "").strip()
-        #     dataset_id = f"{provider}:{name}"
-
-        #     # Read the existing hash from merged_data.pkl
-        #     current_hash = row.get("hash")
-        #     if current_hash is None:
-        #         needs_processing = True
-            
-        #     else:
-        #         # Compare to preflight hash
-        #         preflight_hash = preflight_hashes.get(dataset_id)
-        #         needs_processing = preflight_hash != current_hash
-
-        #     if not needs_processing:
-        #         continue
-
-        #     diag = diagnostics_by_id.get(dataset_id)
-        #     if not diag:
-        #         raise KeyError(f"No diagnostics entry for {dataset_id}")
-
-        #     datasets_to_process.append({
-        #         "dataset_id": dataset_id,
-        #         "provider": provider,
-        #         "layer_name": name,
-        #         "service_url": diag["service_url"],
-        #         "service_type": diag["service_type"],
-        #         "preflight_hash": preflight_hashes.get(dataset_id),
-        #         "current_hash": current_hash
-        #   })
 
         # Write output JSON for downstream pipeline
         with open(OUTPUT, "w", encoding="utf-8") as f:
