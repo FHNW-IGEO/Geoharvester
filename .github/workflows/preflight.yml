@@ -89,6 +89,12 @@ jobs:
           name: preflight-hashes
           path: artifacts
 
+      - name: Download preflight diagnostics artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: preflight-diagnostics
+          path: artifacts
+
       - name: Run hash comparison
         run: |
           python workflow/compare_preflight_merged.py
