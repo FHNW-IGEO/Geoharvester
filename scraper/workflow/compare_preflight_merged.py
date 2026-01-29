@@ -30,6 +30,7 @@ def main():
     for _, row in df.iterrows():
         provider = str(row.get("provider") or "").strip()
         name = str(row.get("name") or "").strip()
+        service_url = str(row.get("service_url") or "").strip()
         dataset_id = f"{provider}:{name}"
 
         # Read the existing hash from merged_data.pkl
@@ -40,7 +41,8 @@ def main():
             datasets_to_process.append({
                 "dataset_id": dataset_id,
                 "preflight_hash": None,
-                "current_hash": None
+                "current_hash": None,
+                "service_url": service_url
             })
             continue
 
@@ -52,7 +54,8 @@ def main():
             datasets_to_process.append({
                 "dataset_id": dataset_id,
                 "preflight_hash": preflight_hash,
-                "current_hash": current_hash
+                "current_hash": current_hash,
+                "service_url": service_url
             })
 
     # Write output JSON for downstream pipeline
