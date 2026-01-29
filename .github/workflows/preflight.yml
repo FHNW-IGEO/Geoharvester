@@ -110,13 +110,17 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./scraper
+        working-directory: scraper
 
     steps:
       - name: Set up Python 3.9
         uses: actions/setup-python@v4
         with:
           python-version: 3.9
+      - name: check path
+        run: |
+          pwd
+          ls -la
 
       - name: Install dependencies
         run: |
@@ -142,5 +146,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: scrape output
-          path: ./scraper/data/geoservices_CH.csv # From artifacts for 2nd stage
+          path: scraper/data/geoservices_CH.csv # From artifacts for 2nd stage
 
