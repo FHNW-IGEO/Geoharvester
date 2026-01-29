@@ -140,6 +140,12 @@ jobs:
         run: |
           python -m nltk.downloader all
 
+      - name: Download datasets-to-process artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: datasets-to-process
+          path: artifacts
+
       - name: Run Python script
         run: |
           python workflow/scrape_job.py
