@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repository # Important to get the merged_data.pkl for comparison
         uses: actions/checkout@v4
 
       - name: Set up Python
