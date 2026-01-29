@@ -65,6 +65,9 @@ jobs:
   compare-hashes:
     needs: preflight
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./scraper
 
     steps:
       - name: Checkout repository # Important to get the merged_data.pkl for comparison
