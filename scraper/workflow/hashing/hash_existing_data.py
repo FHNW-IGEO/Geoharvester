@@ -1,3 +1,9 @@
+
+#
+# Run tis script on a manually preprocessed merged_data.pkl to hash the data
+# Using the same method as in the preflight check. 
+#
+
 import json
 from pathlib import Path
 from datetime import datetime
