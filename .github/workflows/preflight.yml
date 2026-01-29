@@ -78,17 +78,16 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas
+
       - name: Download preflight hashes artifact
         uses: actions/download-artifact@v4
         with:
           name: preflight-hashes
           path: artifacts
-
-      - name: Debug – list files
-        run: |
-          ls -lh
-          echo "----"
-          ls -lh ../artifacts
 
       - name: Run hash comparison
         run: |
@@ -98,4 +97,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: datasets-to-process
-          path: "scraper/datasets_to_process.json"
+          path: scraper/datasets_to_process.json

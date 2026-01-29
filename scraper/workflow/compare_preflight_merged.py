@@ -3,7 +3,6 @@
 import json
 from pathlib import Path
 import pandas as pd
-from hashing.hashing_method import normalize_then_hash
 
 
 MERGED_DATA_PKL = Path("data/merged_data.pkl") # From Git
