@@ -113,6 +113,9 @@ jobs:
         working-directory: scraper
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Set up Python 3.9
         uses: actions/setup-python@v4
         with:
