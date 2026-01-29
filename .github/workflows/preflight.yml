@@ -110,7 +110,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./scraper
+        working-directory: scraper
 
     steps:
       - name: Set up Python 3.9
