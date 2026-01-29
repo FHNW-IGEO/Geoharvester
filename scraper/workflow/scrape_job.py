@@ -21,8 +21,6 @@ import re
 import sys
 import warnings
 import xml.etree.ElementTree as ET
-from collections import defaultdict
-from statistics import mean
 from pathlib import Path
 
 import configuration as config
@@ -33,24 +31,12 @@ import utils
 from owslib.wfs import WebFeatureService
 from owslib.wms import WebMapService
 from owslib.wmts import WebMapTileService
-from io import BytesIO
-import random
-
-""" from oauth2client.service_account import ServiceAccountCredentials
-from googleapiclient.discovery import build
-from googleapiclient.http import BatchHttpRequest """
 import json
 import shutil
 from datetime import datetime, timezone
 from time import time
-
-import httplib2
-import pandas as pd
+from collections import defaultdict
 import pytz
-
-# From Github UI - to limit the source processing for debugging
-# sourceProcessingLimit_raw = os.getenv("SOURCE_LIMIT")
-# sourceProcessingLimit = int(sourceProcessingLimit_raw) if sourceProcessingLimit_raw else None
 
 # globals
 warnings.filterwarnings('ignore')
@@ -62,6 +48,44 @@ service_keys = (("WMSGetCap", "n.a."),
 # Initialize and configure the logger
 logging.config.dictConfig(config.LOGGING_CONFIG)
 logger = logging.getLogger("Scraping log")
+
+# Only these will be processed, no longer full scrape of everything
+DATASETS_TO_PROCESS = Path("../artifacts/datasets_to_process.json")
+
+from urllib.parse import urlparse, urlunparse
+
+def normalize_url(url: str) -> str:
+    parsed = urlparse(url)
+    # Keep only scheme + netloc + path, ignore query params
+    normalized = urlunparse((parsed.scheme, parsed.netloc, parsed.path, '', '', ''))
+    return normalized.lower()  
+
+def load_layers_by_service(path: Path):
+    """
+    Returns:
+        dict[str, set[str]]
+        {
+            service_url: {layer_name, layer_name, ...}
+        }
+    """
+    if not path.exists():
+        raise FileNotFoundError(f"{path} not found")
+
+    with open(path, encoding="utf-8") as f:
+        records = json.load(f)
+
+    layers_by_service = defaultdict(set)
+
+    for r in records:
+        service_url = normalize_url(r.get("service_url", ""))
+        layer_name = r.get("layer_name")
+
+        if not service_url or not layer_name:
+            continue
+
+        layers_by_service[service_url].add(layer_name)
+
+    return layers_by_service
 
 
 def service_result_empty():
@@ -89,7 +113,7 @@ def service_result_empty():
                       "metadata": "n.a.", "update": "n.a.", "legend": "n.a.",
                       "service": "n.a.", "max_zoom": "n.a.",
                       "center_lat": "n.a.", "center_lon": "n.a.",
-                      "preview": "n.a.", "bbox": "n.a."}
+                      "bbox": "n.a."}
     return SERVICE_RESULT
 
 
@@ -186,7 +210,6 @@ def is_online(source):
         log_to_operator_csv(server_operator, server_url, error_details)
     return success
 
-# keep: - main change
 def get_service_info(source, only_layers=None):
     """
     Extracts information from an OGC web service (WMS, WMTS, WFS) using the 
@@ -220,8 +243,8 @@ def get_service_info(source, only_layers=None):
         # Check if this service has a valid service version number. If not,
         # set version to None (i.e., use default)
         source_version = get_version(source['URL'])
-        match = re.match(r"^\d+\.\d+\.\d+$", source_version)
-        if not match:
+        if source_version is None or not re.match(r"^\d+\.\d+(\.\d+)?$", source_version):
+
             error_details = "Invalid service version number. Scraper will try the default."
             log_to_operator_csv(server_operator, server_url, error_details)
             logger.warning("%s, %s: %s" % (server_operator, server_url,
@@ -238,7 +261,7 @@ def get_service_info(source, only_layers=None):
             service_type = "WMS"
             # We assume WMSs can have child/parent relations
             children_possible = True
-        except:
+        except Exception:
             pass
 
         if service_type is None:
@@ -247,7 +270,7 @@ def get_service_info(source, only_layers=None):
                 service_type = "WMTS"
                 # We assume WMTSs can't have child/parent relations
                 children_possible = False
-            except:
+            except Exception:
                 pass
 
         if service_type is None:
@@ -260,7 +283,7 @@ def get_service_info(source, only_layers=None):
                 service_type = "WFS"
                 # We assume WFSs can't have child/parent relations
                 children_possible = False
-            except:
+            except Exception:
                 pass
 
         if service_type is not None:
@@ -284,7 +307,7 @@ def get_service_info(source, only_layers=None):
                     # Some root WMS layers are blocked so no get map is
                     # possible, so we check if we can load them as TOPIC
                     # (aka al children layer active)
-                    if "wms" in server_url.lower():
+                    if service_type == "WMS":
                         # Even some Root layers do not have titles therfore
                         # skipping as well
                         if service.contents[i].title is None:
@@ -452,239 +475,66 @@ def write_service_info(source, service, i, layertree, group):
         logger.error("%s, %s: %s" % (server_operator, i, error_details))
         return False
 
-
-def write_dataset_info(csv_filename, output_file):
-    """
-    Writes the processed data in First Normal Form (NF1) to two output files:
-    one with detailed information and one with simple information (title and 
-    map geo link). This function reads data from a CSV file and processes it to 
-    bring the data into first normal form (NF1) with one entry per dataset. The 
-    processed data is then written to two output files.
-
-    Inputs
-    csv_filename: the name of the input CSV file
-    output_file: the name of the output file for the full dataset information
-    output_simple_file: the name of the output file for the simplified dataset 
-        information
-
-    Functionality
-    1. Store processed dataset IDs in geo_data_done to avoid processing the 
-       same dataset multiple times.
-    2. Loop over all rows in the CSV file and filter for unique datasets by 
-       comparing the title, name, and provider fields.
-    3. For each unique dataset, create a new empty layer using the 
-       service_result_empty function and update it with the dataset information.
-    4. If there are multiple datasets with the same title, name, and provider, 
-       combine the information from all datasets into a single layer.
-    5. Perform post-processing on the dataset information, such as removing 
-       duplicates from the keywords field and updating the service links 
-       (WMSGetCap, WMTSGetCap, WFSGetCap) based on the service and 
-       endpoint fields in the CSV file. Write the processed dataset 
-       information to the output files using the write_file function, with 
-       different keys for each file.
-    6. The full dataset information is written to output_file, while a 
-       simplified version containing only the provider, title, and preview fields 
-       is written to output_simple_file.
-
-    Parameters:
-    csv_filename: str
-        Path to the source CSV file
-    output_file: str
-        Path to the output file with detailed information
-    output_simple_file: str
-        Path to the output file with simple information
-
-    Returns:
-    None
-    """
-    # create an empty list to store already processed  datasetUID
-    geo_data_done = []
-
-    # read CSV in dict
-    lst = [*csv.DictReader(open(csv_filename, encoding="utf-8"),
-                           delimiter=",", quotechar='"', lineterminator="\n")]
-
-    for i in lst:
-        # filter for unique ID consisting of title name and provider
-        lst_layers = list(filter(lambda lst: (lst['title'] == i['title']) and (
-            lst['name'] == i['name']) and (lst['provider'] == i['provider']), lst))
-
-        checklayer = i['provider']+"_"+i['title'] + \
-            "_"+i['name']  # create a datasetUID
-
-        if checklayer not in geo_data_done:
-            # get new empty layer
-            dataset = service_result_empty()
-            dataset.update(service_keys)
-            dataset['provider'] = i['provider']
-            dataset['title'] = i['title']
-            dataset['name'] = i['name']
-            # check if multiple datasets are found, ege there must be WMS  WFS
-            # or WMTS if lst_layers is bigger
-
-            for j in range(len(lst_layers)):
-                layer = lst_layers[j]
-
-                # Ensure all string fields are not None
-                service_value = (layer.get('service') or "").casefold()
-                preview_value = layer.get('preview') or ""
-                abstract_value = layer.get('abstract') if layer.get('abstract') not in (None, "n.a.") else dataset['abstract']
-                metadata_value = layer.get('metadata') if layer.get('metadata') not in (None, "n.a.") else dataset['metadata']
-                contact_value = layer.get('contact') if layer.get('contact') not in (None, "n.a.") else dataset['contact']
-                keywords_value = layer.get('keywords') or ""
-
-                # Determine preview
-                if "layers=WMS" in dataset['preview']:
-                    dataset['preview'] = dataset['preview']
-                elif "layers=WMS" in preview_value:
-                    dataset['preview'] = preview_value
-                elif "layers=WMTS" in preview_value:
-                    dataset['preview'] = preview_value
-
-                # Update dataset fields
-                dataset['abstract'] = abstract_value
-                dataset['metadata'] = metadata_value
-                dataset['contact'] = contact_value
-                dataset['keywords'] = keywords_value
-
-                # Update service endpoints safely
-                if "wms" in service_value:
-                    dataset['WMSGetCap'] = layer.get('endpoint') or dataset['WMSGetCap']
-                if "wmts" in service_value:
-                    dataset['WMTSGetCap'] = layer.get('endpoint') or dataset['WMTSGetCap']
-                if "wfs" in service_value:
-                    dataset['WFSGetCap'] = layer.get('endpoint') or dataset['WFSGetCap']
-                    
-            # remove duplicates from keywords
-            keywordlist = dataset['keywords']
-            li = list(keywordlist.split(","))
-            keywords = list(dict.fromkeys(li))
-            dataset['keywords'] = ','.join(keywords)
-
-            # writing the datasetfile
-            datasetfile_keys = ['provider', 'title', 'name', 'preview', 'abstract',
-                                'keywords', 'contact', 'WMSGetCap', 'WMTSGetCap', 'WFSGetCap']
-            datasetfile = dict((k, dataset[k])
-                               for k in datasetfile_keys if k in dataset)
-            write_file(datasetfile, output_file)
-            # add datasetID to lyer done
-            geo_data_done.append(checklayer)
-    return
-
-# OBSOLETE:
-# def check_new_data(actual_db_path, new_data_path, match_columns,
-#                    output_path, keep_old=False):
+# Later job
+# def preprocessing_NLP(raw_data_path, output_folder=None, column='abstract'):
 #     """
-#     It compares the old and new databases to extract and preprocess
-#     only the new datasets.
-    
+#     Preprocesses the data collected by the scraper using different NLP
+#     functions, which are stored in preprocessing/utils.py
+
 #     Parameters
 #     ----------
-#     actual_db_path : str
-#         path to actual pkl dataframe
-#     new_data_path : str
-#         path to new scraped csv file
-#     match_columns : List
-#         Columns to be used for the comparision between databases
-#     Returns:
-#     data_to_preprocessing_path : str
-#         Path to data to be preprocessed with NLP
-#     data_to_keep_path : str
-#         Path to data already preprocessed from the old database with no
-#         modifications.
-#     keep_old : bool
-#         if the data presents only in the old database should be kept
+#     raw_data_path : str
+#         path of pickle file containing the new raw data output of the scraper
+#     output_folder : str
+#         path-to-folder where the elaborated data will be saved as pkl
+#     column : str
+#         column of the dataframe to be used for the NLP preprocessing
 #     """
-#     old_db = pd.read_pickle(actual_db_path)
-#     old_db = old_db.fillna("nan")
-#     old_db = old_db.replace(to_replace='None', value="nan", regex=True)
-#     old_db = old_db.replace(to_replace='n.a.', value='nan', regex=True)
-#     new_db = pd.read_csv(new_data_path, low_memory=False)
-#     new_db = new_db.drop_duplicates(keep='first') # check duplicates
-#     new_db = new_db.fillna("nan")
-#     new_db = new_db.replace(to_replace='None', value="nan", regex=True)
-#     new_db = new_db.replace(to_replace="n.a.", value="nan", regex=True)
+#     t0 = time()
+#     # Read the data
+#     raw_data = pd.read_pickle(raw_data_path)
+#     raw_data = raw_data.fillna("nan") # needed for the preprocessing
+#     # Extract the keywords and add them to the data
+#     NLP = utils.NLP_spacy()
+#     keywords_dataset = NLP.extract_refined_keywords(raw_data, use_rake=True, column=column, keyword_length=3, num_keywords=15)
+#     def join_keywords(keywords_list):
+#         keywords = ', '.join(kw for kw in keywords_list)
+#         return keywords
+#     raw_data['keywords_nlp'] = list(map(join_keywords, keywords_dataset))
+#     t1 = time()
+#     print(f"Keywords extracted succesfully in {t1-t0} seconds")
+#     # Summarize the abstracts and add them to the data
+#     # summaries = NLP.summarize_texts(raw_data, column=column)
+#     raw_data['summary'] = ['summary']*len(raw_data)#summaries
+#     t2 = time()
+#     # print(f"Abstracts summarized succesfully in {t2-t1} seconds")
+#     # Add the detected dataset language (applied on title)
+#     language_dict = {'english':('EN', 'ENG'), 'french':('FR','FRA'), 'german':('DE','DEU'), 'italian':('IT','ITA'), 'not_found':('NA','NAN')}
+#     raw_data['lang_3'] = raw_data.apply(lambda row: language_dict[utils.detect_language(row['abstract'], not_found=True)][1], axis=1)
+#     raw_data['lang_2'] = raw_data.apply(lambda row: language_dict[utils.detect_language(row['abstract'], not_found=True)][0], axis=1)
+#     raw_data['lang_3'] = raw_data.apply(lambda row: language_dict[utils.detect_language(row['title'], not_found=True)][1] if row['lang_3']=='NAN' else row['lang_3'], axis=1)
+#     raw_data['lang_2'] = raw_data.apply(lambda row: language_dict[utils.detect_language(row['title'], not_found=True)][0] if row['lang_2']=='NAN' else row['lang_2'], axis=1)
+#     t3 = time()
+#     print(f"Languages detected succesfully in {t3-t2} seconds")
+
+#     # Check and add metadata quality
+#     print(f"Adding metadata scores...")
+#     raw_data = utils.check_metadata_quality(raw_data, search_word='nan',
+#                                             search_columns=['abstract', 'keywords', 'metadata','contact'],
+#                                             case_sensitive=False)
     
-#     to_preprocessing = new_db.merge(old_db, on=match_columns, how='left',
-#                                     indicator='_lmerge', suffixes=(None, "_drop"))
-#     to_preprocessing = to_preprocessing.loc[to_preprocessing['_lmerge']=='left_only']
-#     to_keep = old_db.merge(new_db, on=match_columns, how='inner', indicator='_innermerge',
-#                            suffixes=(None,"_drop"))
-#     to_keep = to_keep[old_db.columns.to_list()]
-#     to_keep = to_keep.drop_duplicates(keep='first')
-
-#     old_db_lmerge = old_db.merge(new_db, on=match_columns, how='left',indicator='_lmerge',
-#                                  suffixes=(None,"_drop"))
-#     old_db_lmerge = old_db_lmerge.loc[old_db_lmerge['_lmerge']=='left_only']
-
-#     to_preprocessing = to_preprocessing[new_db.columns.to_list()]
-#     to_preprocessing = to_preprocessing.drop_duplicates(keep='first')
-
-#     to_preprocessing.to_pickle(os.path.join(output_path, 'to_preprocess.pkl'))
-#     if not keep_old:
-#         return to_keep
-#     else:
-#         return to_keep, old_db_lmerge
-
-def preprocessing_NLP(raw_data_path, output_folder=None, column='abstract'):
-    """
-    Preprocesses the data collected by the scraper using different NLP
-    functions, which are stored in preprocessing/utils.py
-
-    Parameters
-    ----------
-    raw_data_path : str
-        path of pickle file containing the new raw data output of the scraper
-    output_folder : str
-        path-to-folder where the elaborated data will be saved as pkl
-    column : str
-        column of the dataframe to be used for the NLP preprocessing
-    """
-    t0 = time()
-    # Read the data
-    raw_data = pd.read_pickle(raw_data_path)
-    raw_data = raw_data.fillna("nan") # needed for the preprocessing
-    # Extract the keywords and add them to the data
-    NLP = utils.NLP_spacy()
-    keywords_dataset = NLP.extract_refined_keywords(raw_data, use_rake=True, column=column, keyword_length=3, num_keywords=15)
-    def join_keywords(keywords_list):
-        keywords = ', '.join(kw for kw in keywords_list)
-        return keywords
-    raw_data['keywords_nlp'] = list(map(join_keywords, keywords_dataset))
-    t1 = time()
-    print(f"Keywords extracted succesfully in {t1-t0} seconds")
-    # Summarize the abstracts and add them to the data
-    # summaries = NLP.summarize_texts(raw_data, column=column)
-    raw_data['summary'] = ['summary']*len(raw_data)#summaries
-    t2 = time()
-    # print(f"Abstracts summarized succesfully in {t2-t1} seconds")
-    # Add the detected dataset language (applied on title)
-    language_dict = {'english':('EN', 'ENG'), 'french':('FR','FRA'), 'german':('DE','DEU'), 'italian':('IT','ITA'), 'not_found':('NA','NAN')}
-    raw_data['lang_3'] = raw_data.apply(lambda row: language_dict[utils.detect_language(row['abstract'], not_found=True)][1], axis=1)
-    raw_data['lang_2'] = raw_data.apply(lambda row: language_dict[utils.detect_language(row['abstract'], not_found=True)][0], axis=1)
-    raw_data['lang_3'] = raw_data.apply(lambda row: language_dict[utils.detect_language(row['title'], not_found=True)][1] if row['lang_3']=='NAN' else row['lang_3'], axis=1)
-    raw_data['lang_2'] = raw_data.apply(lambda row: language_dict[utils.detect_language(row['title'], not_found=True)][0] if row['lang_2']=='NAN' else row['lang_2'], axis=1)
-    t3 = time()
-    print(f"Languages detected succesfully in {t3-t2} seconds")
-
-    # Check and add metadata quality
-    print(f"Adding metadata scores...")
-    raw_data = utils.check_metadata_quality(raw_data, search_word='nan',
-                                            search_columns=['abstract', 'keywords', 'metadata','contact'],
-                                            case_sensitive=False)
+#     # Characters cleaning for compatibility with redis -> Already done by checking the new data
+#     print(f"Cleaning up metadata...")
+#     raw_data = raw_data.replace(to_replace="\'", value=" ", regex=True)
+#     raw_data = raw_data.replace(to_replace='\"', value="-", regex=True)
+#     # raw_data = raw_data.replace(to_replace="  ", value = " ", regex=True)
+#     # raw_data = raw_data.replace(to_replace="    ", value = " ", regex=True)
     
-    # Characters cleaning for compatibility with redis -> Already done by checking the new data
-    print(f"Cleaning up metadata...")
-    raw_data = raw_data.replace(to_replace="\'", value=" ", regex=True)
-    raw_data = raw_data.replace(to_replace='\"', value="-", regex=True)
-    # raw_data = raw_data.replace(to_replace="  ", value = " ", regex=True)
-    # raw_data = raw_data.replace(to_replace="    ", value = " ", regex=True)
-    
-    # Save data as pickle for a faster reading/writing
-    if output_folder:
-        raw_data.to_pickle(output_folder+'/preprocessed_data.pkl')
-        print(f"Preprocessed data saved in {output_folder+'/preprocessed_data.pkl'}")
-    return raw_data
+#     # Save data as pickle for a faster reading/writing
+#     if output_folder:
+#         raw_data.to_pickle(output_folder+'/preprocessed_data.pkl')
+#         print(f"Preprocessed data saved in {output_folder+'/preprocessed_data.pkl'}")
+#     return raw_data
 
 if __name__ == "__main__":
     """
@@ -720,46 +570,38 @@ if __name__ == "__main__":
         except OSError as e:
             logger.error("Could not delete %s: %s" % (error_log_file, e))
 
+    layers_by_service = load_layers_by_service(DATASETS_TO_PROCESS)
+
+    logger.info(
+        f"Loaded {sum(len(v) for v in layers_by_service.values())} layers "
+        f"across {len(layers_by_service)} services to process"
+    )
+
+    scraping_startT = time()
     # Load sources
     sources = load_source_collection()
     num_sources = len(sources)
-    n = 1
 
-    scraping_startT = time()
-    logger.info(f"Startup time until scraping: {int((process_startT-scraping_startT) / 60)} mins")
+    logger.info(f"Startup time until scraping: {int((scraping_startT-process_startT) / 60)} mins")
     for source in sources:
-        scrape_source_startT = time()
-        server_operator = source['Description']
-        server_url = source['URL']
-        # Check if a custom scraper exists for this source
-        if os.path.isfile(os.path.join(config.SOURCE_SCRAPER_DIR,
-                                       "%s.py" % server_operator)):
-            scraper_type = "custom"
-        else:
-            scraper_type = "default"
+        service_url = normalize_url(source.get("URL"))
+        only_layers = layers_by_service.get(service_url)
 
-        status_msg = "Running %s scraper on %s > %s (source %s/%s)" % (
-            scraper_type, server_operator, server_url, n, num_sources)
-        logger.info(status_msg)
+        # Skip services with no changed layers
+        if not only_layers:
+            continue
 
-        # Check if this server is online. If yes, proceed to gather
-        # information
-        if is_online(source):
-            get_service_info(source)
+        get_service_info(source, only_layers=only_layers)
            
-        else:
-            logger.warning("Scraping %s > %s aborted" % (
-                server_operator, server_url))
-        n += 1
-        scrape_source_endT = time()
-        logger.debug(f"Dataset {source['URL']} processed in {int(scrape_source_endT-scrape_source_startT)} seconds")
-
     scraping_endT = time()
     logger.info(f"Scraping took: {int((scraping_endT-scraping_startT) / 60)} mins")
 
-    write_dataset_info(config.GEOSERVICES_CH_CSV,config.GEOSERVICES_CH_CSV)
+    # write_dataset_info(config.GEOSERVICES_CH_CSV,config.GEOSERVICES_CH_CSV)
     # Copy to artifact folder
-    shutil.copyfile(config.GEOSERVICES_CH_CSV, os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'geoservices_CH.csv'))
+
+    artifact_csv_path = os.path.join(config.WORKFLOW_ARTIFACT_FOLDER, 'geoservices_CH.csv')
+    shutil.copyfile(config.GEOSERVICES_CH_CSV, artifact_csv_path)
+    logger.info(f"Scraping finished. CSV stored as artifact: {artifact_csv_path}")
 
     # TODO: Needs replacing
     # data_to_keep = check_new_data(os.path.join(config.PROCESSED_DATA_PKL),
@@ -767,16 +609,15 @@ if __name__ == "__main__":
     #                match_columns=['name','title','provider','keywords','abstract','endpoint', 'contact'],
     #                output_path=os.path.split(config.GEOSERVICES_CH_CSV)[0])
     
-    logger.info(f"Keeping {len(data_to_keep)} datasets from old database without processing")
 
-    preprd_data = preprocessing_NLP(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],
-                                                 'to_preprocess.pkl'))
-    pathpart = os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl')
-    logger.info(f"Found {len(preprd_data)} datasets for processing")
+    # preprd_data = preprocessing_NLP(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],
+    #                                              'to_preprocess.pkl'))
+    # pathpart = os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl')
+    # logger.info(f"Found {len(preprd_data)} datasets for processing")
 
 
-    preprd_data.to_csv(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.csv'))
-    preprd_data.to_pickle(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl'))
+    # preprd_data.to_csv(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.csv'))
+    # preprd_data.to_pickle(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl'))
     # TODO REMOVE: Save to data for last pipeline stage
     # data_to_keep.to_pickle(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'data_to_keep.pkl'))
     # data_to_keep.to_csv(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'data_to_keep.csv'))

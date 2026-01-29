@@ -141,10 +141,6 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: preprd_data
-          path: ./scraper/artifacts/preprd_data.pkl # From artifacts for 2nd stage
+          name: scrape output
+          path: ./scraper/data/geoservices_CH.csv # From artifacts for 2nd stage
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: preprd_data_csv
-          path: ./scraper/artifacts/preprd_data.csv
