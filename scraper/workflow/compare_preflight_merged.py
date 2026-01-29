@@ -31,10 +31,10 @@ def main():
         provider = str(row.get("provider") or "").strip()
         name = str(row.get("name") or "").strip()
         service_url = str(row.get("service_url") or "").strip()
+        dataset_id = f"{provider}:{name}"
         service_type = str(row.get("service_type") or "").strip()
         if not service_type:
             raise ValueError(f"Missing service_type in {dataset_id}")
-        dataset_id = f"{provider}:{name}"
 
         # Read the existing hash from merged_data.pkl
         current_hash = row.get("hash")
