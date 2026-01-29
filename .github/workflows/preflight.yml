@@ -46,6 +46,12 @@ jobs:
           name: preflight-diagnostics
           path: "**/preflight-diagnostics.jsonl"
 
+      - name: Upload preflight diagnostics
+        uses: actions/upload-artifact@v4
+        with:
+          name: preflight-hashes
+          path: "**/artifacts/preflight-hashes.json"
+
       # TODO: Enable repo pushing once stable! Preflight should compare this old preflight
       - name: Commit and Push Updated Hashes
         if: ${{ github.event.inputs.commit_hashes == 'true' }}
@@ -72,7 +78,7 @@ jobs:
       - name: Download preflight hashes artifact
         uses: actions/download-artifact@v4
         with:
-          name: preflight-diagnostics
+          name: preflight-hashes
           path: artifacts
 
       - name: Debug – list files
@@ -83,7 +89,7 @@ jobs:
 
       - name: Run hash comparison
         run: |
-          python workflow/compare_hashes.py
+          python workflow/compare_preflight_merged.py
 
       - name: Upload datasets-to-process artifact
         uses: actions/upload-artifact@v4

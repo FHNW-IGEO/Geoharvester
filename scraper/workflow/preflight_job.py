@@ -101,55 +101,62 @@ def ping_and_parse_service(url, timeout=10):
 def main():
     parser = argparse.ArgumentParser(description="Preflight check for geoservices")
     parser.add_argument("--input", required=True, help="Path to sources.csv")
-    parser.add_argument("--out-diagnostics", default="preflight-diagnostics.jsonl",
-                        help="Output JSONL file with diagnostics and hash")
-    parser.add_argument("--baseline-hashes", default=None,
-                        help="Optional previous hash file to compare against")
+    parser.add_argument(
+        "--out-diagnostics",
+        default="preflight-diagnostics.jsonl",
+        help="Output JSONL diagnostics file"
+    )
+    parser.add_argument(
+        "--out-hashes",
+        default="preflight-hashes.json",
+        help="Output JSON file with priority hashes"
+    )
+
+    parser.add_argument(
+        "--baseline-hashes",
+        default=None,
+        help="Optional previous preflight-hashes.json"
+    )
     args = parser.parse_args()
 
     # Load baseline hashes if provided
     baseline_hashes = {}
     if args.baseline_hashes:
         try:
-            with open(args.baseline_hashes) as f:
-                baseline_hashes[key] = row["hash"]
+            with open(args.baseline_hashes, encoding="utf-8") as f:
+                baseline_hashes = json.load(f)
         except FileNotFoundError:
             print(f"Baseline file {args.baseline_hashes} not found, assuming empty baseline")
 
-    results = []
+    diagnostics = []
+    hashes = {}
 
-    with open(args.input) as csvfile:
+    with open(args.input, newline="", encoding="utf-8") as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            provider = row.get("Description")
-            url = row.get("URL")
+            provider = (row.get("Description") or "").strip()
+            url = (row.get("URL") or "").strip()
 
             reachable, error, layers = ping_and_parse_service(url)
 
             if not layers:
-                results.append({
-                    "provider": provider,
-                    "layer_name": None,
-                    "service_url": url,
-                    "checked_at": ...,
-                    "reachable": reachable,
-                    "error": error or "No layers found",
-                    "needs_preprocessing": False,
-                    "hash": None
-                })
-                continue
+                layers = [{
+                    "title": "",
+                    "name": "",
+                    "abstract": "",
+                    "contact": "",
+                    "keywords": ""
+                }]
 
             for layer in layers:
-
+                dataset_id = f"{provider}:{layer.get('name', '')}"
                 hash_new = normalize_then_hash(layer)
-                layer_name = layer.get("name", "").strip()
-                if not layer_name:
-                    continue
-                key = f"{provider}:{layer_name}"
-                needs_preprocessing = baseline_hashes.get(key) != hash_new # check on hash equality
+                hashes[dataset_id] = hash_new
+
+                needs_preprocessing = baseline_hashes.get(dataset_id) != hash_new
 
                 # Append result for this layer
-                results.append({
+                diagnostics.append({
                     "provider": provider,
                     "layer_name": layer.get("name", ""),
                     "service_url": url,
@@ -159,15 +166,18 @@ def main():
                     "needs_preprocessing": needs_preprocessing,
                     "hash": hash_new
                 })
-    results.sort(key=lambda r: (r["provider"], r["layer_name"] or ""))
 
-    # Write JSONL results
-    with open(args.out_diagnostics, "w", encoding="utf-8") as outf:
-        for r in results:
-            outf.write(json.dumps(r) + "\n")
 
-    print(f"Preflight finished: {len(results)} layers checked")
-    print(f"Diagnostics written to {args.out_diagnostics}")
+    with open(args.out_diagnostics, "w", encoding="utf-8") as f:
+        for row in diagnostics:
+            f.write(json.dumps(row, ensure_ascii=False) + "\n")
+
+    with open(args.out_hashes, "w", encoding="utf-8") as f:
+        json.dump(hashes, f, indent=2, ensure_ascii=False)
+
+    print(f"Preflight finished: {len(diagnostics)} layers checked")
+    print(f"Diagnostics: {args.out_diagnostics}")
+    print(f"Hashes: {args.out_hashes}")  # ← CHANGED
 
 if __name__ == "__main__":
     main()
