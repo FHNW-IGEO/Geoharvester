@@ -123,12 +123,12 @@ jobs:
       - name: check path
         run: |
           pwd
-          ls -la
+          ls -la workflow
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install --upgrade --force-reinstall -r worfklow/requirements.txt
+          pip install --upgrade --force-reinstall -r requirements.txt
       - name: Download spacy models
         run: |
           python -m spacy download en_core_web_sm
