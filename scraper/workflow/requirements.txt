@@ -1,0 +1,58 @@
+# Core ML/NLP stack
+torch==2.2.2
+sentence-transformers==2.2.2
+transformers==4.39.3
+huggingface-hub==0.20.3
+
+# Spacy + dependencies
+spacy==3.6.1
+pydantic<2
+thinc<9.1.0,>=8.1.0
+
+# ML + data science
+scikit-learn==1.2.0
+scipy==1.10.1
+numpy==1.24.3
+pandas==1.5.2
+matplotlib==3.7.1
+gensim==4.3.0
+nltk==3.7
+rake_nltk==1.0.6
+pyLDAvis==3.4.0
+langdetect==1.0.9
+bert-extractive-summarizer==0.10.1
+
+# Data & APIs
+duckdb==0.7.1
+polars==0.17.11
+pyarrow==12.0.0
+pyproj==3.4.1
+OWSLib>0.28 # Higher version needed for request timeouts
+requests==2.28.1
+urllib3==1.26.12
+charset-normalizer==2.1.1
+idna==3.4
+certifi==2022.9.24
+python-dateutil==2.8.2
+pytz==2022.4
+PyYAML==6.0
+python-dotenv==1.0.0
+
+# Google API stack
+google-api-core==2.11.0
+google-api-python-client==2.80.0
+google-auth==2.16.2
+google-auth-httplib2==0.1.0
+googleapis-common-protos==1.58.0
+httplib2==0.21.0
+oauth2client==4.1.3
+rsa==4.9
+uritemplate==4.1.1
+pyasn1==0.5.0
+pyasn1-modules==0.3.0
+
+# Other utilities
+typing-extensions==4.10.0
+translators==5.5.6
+deep-translator==1.11.4
+openai==0.27.0
