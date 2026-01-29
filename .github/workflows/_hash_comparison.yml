@@ -38,7 +38,7 @@ jobs:
 
       - name: Run hash comparison
         run: |
-          python workflow/compare_hashes.py
+          python workflow/compare_preflight_merged.py
 
       - name: Upload datasets-to-process artifact
         uses: actions/upload-artifact@v4
