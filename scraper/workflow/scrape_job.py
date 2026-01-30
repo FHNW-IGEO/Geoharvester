@@ -50,8 +50,8 @@ logger = logging.getLogger("Scraping log")
 
 # Only these will be processed, no longer full scrape of everything
 DATASETS_TO_PROCESS = Path("../artifacts/datasets_to_process.json")
-OUTPUT_CSV = Path("../artifacts/scrape_job_output.csv")
-OUTPUT_PKL = Path("../artifacts/scrape_job_output.pkl")
+OUTPUT_CSV = Path("scrape_job_output.csv")
+OUTPUT_PKL = Path("scrape_job_output.pkl")
 
 from urllib.parse import urlparse, urlunparse
 

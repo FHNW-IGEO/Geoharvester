@@ -33,8 +33,8 @@ logger = logging.getLogger("Scraping log")
 
 # Only these will be processed, no longer full scrape of everything
 DATASETS_TO_PROCESS = Path("../artifacts/scrape_job_output.pkl")
-OUTPUT_CSV = Path("../artifacts/preprocessed_data.csv")
-OUTPUT_PKL = Path("../artifacts/preprocessed_data.pkl")
+OUTPUT_CSV = Path("preprocessed_data.csv")
+OUTPUT_PKL = Path("preprocessed_data.pkl")
 
 def preprocessing_NLP(raw_data_path, output_folder=None, column='abstract'):
     """

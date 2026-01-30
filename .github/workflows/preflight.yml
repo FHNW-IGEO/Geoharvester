@@ -141,11 +141,11 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: scrape_output_csv
-          path: scraper/artifacts/scrape_job_output.csv # From artifacts for 2nd stage
+          path: scraper/scrape_job_output.csv # From artifacts for 2nd stage
       - uses: actions/upload-artifact@v4
         with:
           name: scrape_output_pkl
-          path: scraper/artifacts/scrape_job_output.pkl # From artifacts for 2nd stage
+          path: scraper/scrape_job_output.pkl # From artifacts for 2nd stage
 
   preprocess-datasets:
     needs: scrape-datasets
@@ -197,9 +197,9 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: preprocessed_output_csv
-          path: scraper/artifacts/preprocessed_data.csv # From artifacts for 2nd stage
+          path: scraper/preprocessed_data.csv # From artifacts for 2nd stage
       - uses: actions/upload-artifact@v4
         with:
           name: preprocessed_output_pkl
-          path: scraper/artifacts/preprocessed_data.pkl # From artifacts for 2nd stage
+          path: scraper/preprocessed_data.pkl # From artifacts for 2nd stage
 
