@@ -120,6 +120,48 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: 3.9
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade --force-reinstall -r requirements.txt
+
+      - name: Download datasets-to-process artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: datasets-to-process
+          path: artifacts
+
+      - name: Run Python script
+        run: |
+          python workflow/scrape_job.py
+        env:
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: scrape output
+          path: scraper/artifacts/scrape_job_output.csv # From artifacts for 2nd stage
+      - uses: actions/upload-artifact@v4
+        with:
+          name: scrape output
+          path: scraper/artifacts/scrape_job_output.pkl # From artifacts for 2nd stage
+
+  preprocess-datasets:
+    needs: scrape-datasets
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: scraper
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
       - name: check path
         run: |
           pwd
@@ -143,21 +185,21 @@ jobs:
       - name: Download datasets-to-process artifact
         uses: actions/download-artifact@v4
         with:
-          name: datasets-to-process
+          name: scrape_job_output
           path: artifacts
 
       - name: Run Python script
         run: |
-          python workflow/scrape_job.py
+          python workflow/preprocess_job.py
         env:
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
 
       - uses: actions/upload-artifact@v4
         with:
           name: scrape output
-          path: scraper/artifacts/scrape_job_output.csv # From artifacts for 2nd stage
+          path: scraper/artifacts/preprocessed_data.csv # From artifacts for 2nd stage
       - uses: actions/upload-artifact@v4
         with:
           name: scrape output
-          path: scraper/artifacts/scrape_job_output # From artifacts for 2nd stage
+          path: scraper/artifacts/preprocessed_data.pkl # From artifacts for 2nd stage
 
