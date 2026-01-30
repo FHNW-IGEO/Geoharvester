@@ -28,11 +28,11 @@ from owslib.wfs import WebFeatureService
 from owslib.wms import WebMapService
 from owslib.wmts import WebMapTileService
 import json
-import shutil
 from datetime import datetime, timezone
 from time import time
 from collections import defaultdict
 import pytz
+import pandas as pd
 
 sys.path.append('../')
 import scraper.configuration as config
@@ -50,6 +50,8 @@ logger = logging.getLogger("Scraping log")
 
 # Only these will be processed, no longer full scrape of everything
 DATASETS_TO_PROCESS = Path("../artifacts/datasets_to_process.json")
+OUTPUT_CSV = Path("../artifacts/scrape_job_output.csv")
+OUTPUT_PKL = Path("../artifacts/scrape_job_output.pkl")
 
 from urllib.parse import urlparse, urlunparse
 
@@ -140,8 +142,8 @@ def get_version(input_url):
 
 def write_file(input_dict, output_file):
     """
-    Write a dictionary to a CSV file. If the file exists, the data is appended
-    to it. If the file does not exist, a new file is created with a header.
+    Write a dictionary to a CSV file.
+    Overwrites the file on first write in this job.
 
     Parameters:
     input_dict (dict): Dictionary to be written to file.
@@ -150,15 +152,21 @@ def write_file(input_dict, output_file):
     Returns:
     None
     """
-    append_or_write = "a" if os.path.isfile(output_file) else "w"
-    with open(output_file, append_or_write, encoding="utf-8") as f:
-        dict_writer = csv.DictWriter(f, fieldnames=list(input_dict.keys()),
-                                     delimiter=",", quotechar='"',
-                                     lineterminator="\n")
-        if append_or_write == "w":
-            dict_writer.writeheader()
-        dict_writer.writerow(input_dict)
-    return
+    file_exists = os.path.isfile(output_file)
+
+    with open(output_file, "a", encoding="utf-8") as f:
+        writer = csv.DictWriter(
+            f,
+            fieldnames=list(input_dict.keys()),
+            delimiter=",",
+            quotechar='"',
+            lineterminator="\n"
+        )
+
+        if not file_exists:
+            writer.writeheader()
+
+        writer.writerow(input_dict)
 
 
 def load_source_collection():
@@ -250,40 +258,64 @@ def get_service_info(source, only_layers=None):
                                            error_details))
             source_version = None
 
+        if service_type is None:
+            candidates = [
+                ("WMS", True, lambda: WebMapService(
+                    server_url, version=source_version or None, timeout=config.SCRAPER_REQUEST_TIMEOUT
+                )),  
+                ("WMTS", False, lambda: WebMapTileService(
+                    server_url, timeout=config.SCRAPER_REQUEST_TIMEOUT
+                )),
+                ("WFS", False, lambda: WebFeatureService(
+                    server_url,
+                    version=source_version or "2.0.0",
+                    timeout=config.SCRAPER_REQUEST_TIMEOUT
+                )),
+            ]
+
+            for candidate_type, children_possible, ctor in candidates:
+                try:
+                    service = ctor()
+                    service_type = candidate_type
+                    children_possible = children_possible
+                    break
+                except Exception:
+                        logger.debug(f"Service probe failed: {candidate_type} @ {server_url}: {e}")
+
         # Check if this service is a WMS, a WMTS or a WFS
-        service_type = None
-        try:
-            if source_version is not None:
-                service = WebMapService(server_url, version=source_version, timeout=config.SCRAPER_REQUEST_TIMEOUT)
-            else:
-                service = WebMapService(server_url, timeout=config.SCRAPER_REQUEST_TIMEOUT)
-            service_type = "WMS"
-            # We assume WMSs can have child/parent relations
-            children_possible = True
-        except Exception:
-            pass
+        # service_type = None
+        # try:
+        #     if source_version is not None:
+        #         service = WebMapService(server_url, version=source_version, timeout=config.SCRAPER_REQUEST_TIMEOUT)
+        #     else:
+        #         service = WebMapService(server_url, timeout=config.SCRAPER_REQUEST_TIMEOUT)
+        #     service_type = "WMS"
+        #     # We assume WMSs can have child/parent relations
+        #     children_possible = True
+        # except Exception:
+        #     pass
 
-        if service_type is None:
-            try:
-                service = WebMapTileService(server_url, timeout=config.SCRAPER_REQUEST_TIMEOUT)
-                service_type = "WMTS"
-                # We assume WMTSs can't have child/parent relations
-                children_possible = False
-            except Exception:
-                pass
+        # if service_type is None:
+        #     try:
+        #         service = WebMapTileService(server_url, timeout=config.SCRAPER_REQUEST_TIMEOUT)
+        #         service_type = "WMTS"
+        #         # We assume WMTSs can't have child/parent relations
+        #         children_possible = False
+        #     except Exception:
+        #         pass
 
-        if service_type is None:
-            try:
-                if source_version is None:
-                    service = WebFeatureService(server_url, version='2.0.0', timeout=config.SCRAPER_REQUEST_TIMEOUT)
-                else:
-                    service = WebFeatureService(server_url,
-                                                version=source_version, timeout=config.SCRAPER_REQUEST_TIMEOUT)
-                service_type = "WFS"
-                # We assume WFSs can't have child/parent relations
-                children_possible = False
-            except Exception:
-                pass
+        # if service_type is None:
+        #     try:
+        #         if source_version is None:
+        #             service = WebFeatureService(server_url, version='2.0.0', timeout=config.SCRAPER_REQUEST_TIMEOUT)
+        #         else:
+        #             service = WebFeatureService(server_url,
+        #                                         version=source_version, timeout=config.SCRAPER_REQUEST_TIMEOUT)
+        #         service_type = "WFS"
+        #         # We assume WFSs can't have child/parent relations
+        #         children_possible = False
+        #     except Exception:
+        #         pass
 
         if service_type is not None:
             # I.e., we have found a valid service endpoint of type WMS, WTMS or
@@ -464,7 +496,7 @@ def write_service_info(source, service, i, layertree, group):
                                         layer_data, config.preview_PREFIX)
 
         # Writing the Result file
-        write_file(layer_data, config.GEOSERVICES_CH_CSV)
+        write_file(layer_data, OUTPUT_CSV)
 
         return True
 
@@ -569,6 +601,9 @@ if __name__ == "__main__":
         except OSError as e:
             logger.error("Could not delete %s: %s" % (error_log_file, e))
 
+    if OUTPUT_CSV.exists():
+        OUTPUT_CSV.unlink()
+
     layers_by_service = load_layers_by_service(DATASETS_TO_PROCESS)
 
     logger.info(
@@ -595,12 +630,25 @@ if __name__ == "__main__":
     scraping_endT = time()
     logger.info(f"Scraping took: {int((scraping_endT-scraping_startT) / 60)} mins")
 
+    if OUTPUT_CSV.exists():
+        logger.info("Converting scraped CSV to pickle")
+
+        df = pd.read_csv(OUTPUT_CSV)
+        df.to_pickle(OUTPUT_PKL)
+
+        logger.info(
+            f"Wrote {len(df)} records to "
+            f"{OUTPUT_CSV.name} and {OUTPUT_PKL.name}"
+        )
+    else:
+        logger.warning("No CSV output found – skipping pickle generation")
+
     # write_dataset_info(config.GEOSERVICES_CH_CSV,config.GEOSERVICES_CH_CSV)
     # Copy to artifact folder
 
-    artifact_csv_path = os.path.join(config.WORKFLOW_ARTIFACT_FOLDER, 'geoservices_CH.csv')
-    shutil.copyfile(config.GEOSERVICES_CH_CSV, artifact_csv_path)
-    logger.info(f"Scraping finished. CSV stored as artifact: {artifact_csv_path}")
+    # artifact_csv_path = os.path.join(config.WORKFLOW_ARTIFACT_FOLDER, 'geoservices_CH.csv')
+    # shutil.copyfile(config.GEOSERVICES_CH_CSV, artifact_csv_path)
+    # logger.info(f"Scraping finished. CSV stored as artifact: {artifact_csv_path}")
 
     # TODO: Needs replacing
     # data_to_keep = check_new_data(os.path.join(config.PROCESSED_DATA_PKL),
