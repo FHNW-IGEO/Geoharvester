@@ -245,6 +245,8 @@ def get_service_info(source, only_layers=None):
     """
     server_operator = source['Description']
     server_url = source['URL']
+    service_type = None
+    children_possible = False
 
     try:
         # Check if this service has a valid service version number. If not,
@@ -279,43 +281,8 @@ def get_service_info(source, only_layers=None):
                     service_type = candidate_type
                     children_possible = children_possible
                     break
-                except Exception:
+                except Exception as e:
                         logger.debug(f"Service probe failed: {candidate_type} @ {server_url}: {e}")
-
-        # Check if this service is a WMS, a WMTS or a WFS
-        # service_type = None
-        # try:
-        #     if source_version is not None:
-        #         service = WebMapService(server_url, version=source_version, timeout=config.SCRAPER_REQUEST_TIMEOUT)
-        #     else:
-        #         service = WebMapService(server_url, timeout=config.SCRAPER_REQUEST_TIMEOUT)
-        #     service_type = "WMS"
-        #     # We assume WMSs can have child/parent relations
-        #     children_possible = True
-        # except Exception:
-        #     pass
-
-        # if service_type is None:
-        #     try:
-        #         service = WebMapTileService(server_url, timeout=config.SCRAPER_REQUEST_TIMEOUT)
-        #         service_type = "WMTS"
-        #         # We assume WMTSs can't have child/parent relations
-        #         children_possible = False
-        #     except Exception:
-        #         pass
-
-        # if service_type is None:
-        #     try:
-        #         if source_version is None:
-        #             service = WebFeatureService(server_url, version='2.0.0', timeout=config.SCRAPER_REQUEST_TIMEOUT)
-        #         else:
-        #             service = WebFeatureService(server_url,
-        #                                         version=source_version, timeout=config.SCRAPER_REQUEST_TIMEOUT)
-        #         service_type = "WFS"
-        #         # We assume WFSs can't have child/parent relations
-        #         children_possible = False
-        #     except Exception:
-        #         pass
 
         if service_type is not None:
             # I.e., we have found a valid service endpoint of type WMS, WTMS or
