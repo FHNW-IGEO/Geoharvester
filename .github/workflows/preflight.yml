@@ -155,5 +155,9 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: scrape output
-          path: scraper/data/geoservices_CH.csv # From artifacts for 2nd stage
+          path: scraper/artifacts/scrape_job_output.csv # From artifacts for 2nd stage
+      - uses: actions/upload-artifact@v4
+        with:
+          name: scrape output
+          path: scraper/artifacts/scrape_job_output # From artifacts for 2nd stage
 
