@@ -78,7 +78,7 @@ def load_layers_by_service(path: Path):
     with open(path, encoding="utf-8") as f:
         records = json.load(f)
 
-    layers_by_service = defaultdict(set)
+    layers_by_service = defaultdict(dict)
 
     for r in records:
         service_url = normalize_url(r.get("service_url", ""))
