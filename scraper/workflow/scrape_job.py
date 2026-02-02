@@ -33,6 +33,7 @@ from time import time
 from collections import defaultdict
 import pytz
 import pandas as pd
+from typing import Optional
 
 sys.path.append('../')
 import scraper.configuration as config
@@ -220,7 +221,7 @@ def is_online(source):
         log_to_operator_csv(server_operator, server_url, error_details)
     return success
 
-def get_service_info(source, only_layers: dict[str, str] | None = None):
+def get_service_info(source, only_layers: Optional[dict[str, str]] = None):
     """
     Extracts information from an OGC web service (WMS, WMTS, WFS) using the 
     OWSLib library. This function takes a dictionary called "source" as input 
@@ -486,66 +487,6 @@ def write_service_info(source, service, hash, i, layertree, group):
         logger.error("%s, %s: %s" % (server_operator, i, error_details))
         return False
 
-# Later job
-# def preprocessing_NLP(raw_data_path, output_folder=None, column='abstract'):
-#     """
-#     Preprocesses the data collected by the scraper using different NLP
-#     functions, which are stored in preprocessing/utils.py
-
-#     Parameters
-#     ----------
-#     raw_data_path : str
-#         path of pickle file containing the new raw data output of the scraper
-#     output_folder : str
-#         path-to-folder where the elaborated data will be saved as pkl
-#     column : str
-#         column of the dataframe to be used for the NLP preprocessing
-#     """
-#     t0 = time()
-#     # Read the data
-#     raw_data = pd.read_pickle(raw_data_path)
-#     raw_data = raw_data.fillna("nan") # needed for the preprocessing
-#     # Extract the keywords and add them to the data
-#     NLP = utils.NLP_spacy()
-#     keywords_dataset = NLP.extract_refined_keywords(raw_data, use_rake=True, column=column, keyword_length=3, num_keywords=15)
-#     def join_keywords(keywords_list):
-#         keywords = ', '.join(kw for kw in keywords_list)
-#         return keywords
-#     raw_data['keywords_nlp'] = list(map(join_keywords, keywords_dataset))
-#     t1 = time()
-#     print(f"Keywords extracted succesfully in {t1-t0} seconds")
-#     # Summarize the abstracts and add them to the data
-#     # summaries = NLP.summarize_texts(raw_data, column=column)
-#     raw_data['summary'] = ['summary']*len(raw_data)#summaries
-#     t2 = time()
-#     # print(f"Abstracts summarized succesfully in {t2-t1} seconds")
-#     # Add the detected dataset language (applied on title)
-#     language_dict = {'english':('EN', 'ENG'), 'french':('FR','FRA'), 'german':('DE','DEU'), 'italian':('IT','ITA'), 'not_found':('NA','NAN')}
-#     raw_data['lang_3'] = raw_data.apply(lambda row: language_dict[utils.detect_language(row['abstract'], not_found=True)][1], axis=1)
-#     raw_data['lang_2'] = raw_data.apply(lambda row: language_dict[utils.detect_language(row['abstract'], not_found=True)][0], axis=1)
-#     raw_data['lang_3'] = raw_data.apply(lambda row: language_dict[utils.detect_language(row['title'], not_found=True)][1] if row['lang_3']=='NAN' else row['lang_3'], axis=1)
-#     raw_data['lang_2'] = raw_data.apply(lambda row: language_dict[utils.detect_language(row['title'], not_found=True)][0] if row['lang_2']=='NAN' else row['lang_2'], axis=1)
-#     t3 = time()
-#     print(f"Languages detected succesfully in {t3-t2} seconds")
-
-#     # Check and add metadata quality
-#     print(f"Adding metadata scores...")
-#     raw_data = utils.check_metadata_quality(raw_data, search_word='nan',
-#                                             search_columns=['abstract', 'keywords', 'metadata','contact'],
-#                                             case_sensitive=False)
-    
-#     # Characters cleaning for compatibility with redis -> Already done by checking the new data
-#     print(f"Cleaning up metadata...")
-#     raw_data = raw_data.replace(to_replace="\'", value=" ", regex=True)
-#     raw_data = raw_data.replace(to_replace='\"', value="-", regex=True)
-#     # raw_data = raw_data.replace(to_replace="  ", value = " ", regex=True)
-#     # raw_data = raw_data.replace(to_replace="    ", value = " ", regex=True)
-    
-#     # Save data as pickle for a faster reading/writing
-#     if output_folder:
-#         raw_data.to_pickle(output_folder+'/preprocessed_data.pkl')
-#         print(f"Preprocessed data saved in {output_folder+'/preprocessed_data.pkl'}")
-#     return raw_data
 
 if __name__ == "__main__":
     """
@@ -622,32 +563,6 @@ if __name__ == "__main__":
         )
     else:
         logger.warning("No CSV output found – skipping pickle generation")
-
-    # write_dataset_info(config.GEOSERVICES_CH_CSV,config.GEOSERVICES_CH_CSV)
-    # Copy to artifact folder
-
-    # artifact_csv_path = os.path.join(config.WORKFLOW_ARTIFACT_FOLDER, 'geoservices_CH.csv')
-    # shutil.copyfile(config.GEOSERVICES_CH_CSV, artifact_csv_path)
-    # logger.info(f"Scraping finished. CSV stored as artifact: {artifact_csv_path}")
-
-    # TODO: Needs replacing
-    # data_to_keep = check_new_data(os.path.join(config.PROCESSED_DATA_PKL),
-    #                config.GEOSERVICES_CH_CSV,
-    #                match_columns=['name','title','provider','keywords','abstract','endpoint', 'contact'],
-    #                output_path=os.path.split(config.GEOSERVICES_CH_CSV)[0])
-    
-
-    # preprd_data = preprocessing_NLP(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],
-    #                                              'to_preprocess.pkl'))
-    # pathpart = os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl')
-    # logger.info(f"Found {len(preprd_data)} datasets for processing")
-
-
-    # preprd_data.to_csv(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.csv'))
-    # preprd_data.to_pickle(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl'))
-    # TODO REMOVE: Save to data for last pipeline stage
-    # data_to_keep.to_pickle(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'data_to_keep.pkl'))
-    # data_to_keep.to_csv(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'data_to_keep.csv'))
 
     process_endT = time()
     logger.info(f"Job took: {int((process_endT-process_startT) / 60)} mins")
