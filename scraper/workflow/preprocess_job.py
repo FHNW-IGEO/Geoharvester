@@ -31,7 +31,7 @@ logging.config.dictConfig(config.LOGGING_CONFIG)
 logger = logging.getLogger("Scraping log")
 
 # Only these will be processed, no longer full scrape of everything
-DATASETS_TO_PROCESS = Path("../artifacts/scrape_job_output.pkl")
+SCRAPED_DATA = Path("../artifacts/scrape_job_output.pkl")
 OUTPUT_CSV = Path("preprocessed_data.csv")
 OUTPUT_PKL = Path("preprocessed_data.pkl")
 
@@ -89,10 +89,7 @@ def preprocessing_NLP(raw_data_path, output_folder=None, column='abstract'):
     # raw_data = raw_data.replace(to_replace="  ", value = " ", regex=True)
     # raw_data = raw_data.replace(to_replace="    ", value = " ", regex=True)
     
-    # Save data as pickle for a faster reading/writing
-    if output_folder:
-        raw_data.to_pickle(OUTPUT_PKL)
-        print(f"Preprocessed data saved in {OUTPUT_PKL}")
+
     return raw_data
 
 if __name__ == "__main__":
@@ -102,8 +99,10 @@ if __name__ == "__main__":
     """
     process_startT=time()
 
-    preprd_data = preprocessing_NLP(DATASETS_TO_PROCESS)
-    preprd_data.to_csv(OUTPUT_CSV)
+    preprd_data = preprocessing_NLP(SCRAPED_DATA)
+    preprd_data.to_pickle(OUTPUT_PKL)
+    preprd_data.to_csv(OUTPUT_CSV, index=False)
 
     process_endT = time()
+    logger.info(f"Wrote outputs: {OUTPUT_CSV}, {OUTPUT_PKL}")
     logger.info(f"Job took: {int((process_endT-process_startT) / 60)} mins")
