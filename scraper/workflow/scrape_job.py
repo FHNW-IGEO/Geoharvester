@@ -88,7 +88,7 @@ def load_layers_by_service(path: Path):
         if not service_url or not layer_name:
             continue
 
-    layers_by_service[service_url][layer_name] = layer_hash
+        layers_by_service[service_url][layer_name] = layer_hash
 
     return layers_by_service
 
