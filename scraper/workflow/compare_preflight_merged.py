@@ -52,6 +52,7 @@ def main():
 
         current_hash = merged_hashes.get(dataset_id)
 
+        # Compare latest preflight against what is in merged_data.pkl:
         needs_processing = (
             current_hash is None or preflight_hash != current_hash
         )

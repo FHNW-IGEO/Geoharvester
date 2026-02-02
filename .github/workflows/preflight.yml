@@ -52,7 +52,6 @@ jobs:
           name: preflight-hashes
           path: "scraper/preflight-hashes.json"
 
-      # TODO: Enable repo pushing once stable! Preflight should compare this old preflight
       - name: Commit and Push Updated Hashes
         if: ${{ github.event.inputs.commit_hashes == 'true' }}
         run: |
@@ -203,3 +202,259 @@ jobs:
           name: preprocessed_output_pkl
           path: scraper/preprocessed_data.pkl # From artifacts for 2nd stage
 
+  translate_de:
+    needs: preprocess-datasets
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./scraper
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4 # May need additional pull directive
+
+      - name: Increase git buffer size
+        run: |
+          git config --global http.postBuffer 1048576000
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Download datasets-to-process artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: preprocessed_output_pkl
+          path: artifacts
+
+      - name: Translate DE
+        run: |
+          LANG_FROM_PIPELINE=${{'de'}} python ./workflow/translate_job.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: de_translated
+          path: ./scraper/artifacts/de_translated.pkl
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: de_translated_csv
+          path: ./scraper/artifacts/de_translated.csv
+
+  translate_en:
+    needs: preprocess-datasets
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./scraper
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Increase git buffer size
+        run: |
+          git config --global http.postBuffer 1048576000
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Download datasets-to-process artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: preprocessed_output_pkl
+          path: artifacts
+
+      - name: Translate EN
+        run: |
+          LANG_FROM_PIPELINE=${{'en'}} python ./workflow/translate_job.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: en_translated.pkl
+          path: ./scraper/artifacts/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: en_translated_csv
+          path: ./scraper/artifacts/en_translated.csv
+
+  translate_fr:
+    needs: preprocess-datasets
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./scraper
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Increase git buffer size
+        run: |
+          git config --global http.postBuffer 1048576000
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Download datasets-to-process artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: preprocessed_output_pkl
+          path: artifacts
+
+      - name: Translate FR
+        run: |
+          LANG_FROM_PIPELINE=${{'fr'}} python ./workflow/translate_job.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fr_translated
+          path: ./scraper/artifacts/fr_translated.pkl
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fr_translated_csv
+          path: ./scraper/artifacts/fr_translated.csv
+
+  translate_it:
+    needs: preprocess-datasets
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./scraper
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Increase git buffer size
+        run: |
+          git config --global http.postBuffer 1048576000
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Download datasets-to-process artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: preprocessed_output_pkl
+          path: artifacts
+
+      - name: Translate IT
+        run: |
+          LANG_FROM_PIPELINE=${{'it'}} python ./workflow/translate_job.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: it_translated
+          path: ./scraper/artifacts/it_translated.pkl
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: it_translated_csv
+          path: ./scraper/artifacts/it_translated.csv
+
+  merge:
+    needs: # Disable any languages/translate-jobs you don't need
+      - translate_de
+      - translate_en
+      - translate_it
+      - translate_fr
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./scraper
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # fetch full history so pushes work
+
+      - name: Increase git buffer size
+        run: |
+          git config --global http.postBuffer 1048576000
+
+      - name: Pull latest changes # required if main has changed due to development
+        run: |
+          git config pull.rebase true
+          git pull origin main
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: ./scraper/artifacts/
+          merge-multiple: true
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: ./scraper/data/
+          merge-multiple: true
+
+      - name: Merge Databases
+        run: |
+          python ./workflow/merge_job.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: merged database
+          path: ./scraper/data/merged_data.pkl
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: merged database_csv
+          path: ./scraper/data/merged_data.csv
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: geoservices file
+          path: ./scraper/data/geoservices_CH.csv
+
+      - name: Push contents of data folder to repo
+        uses: github-actions-x/commit@v2.9
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          push-branch: "main"
+          commit-message: "Scraper done"
+          force-add: "true"
+          files: ./scraper/data/
+          name: autoupdate

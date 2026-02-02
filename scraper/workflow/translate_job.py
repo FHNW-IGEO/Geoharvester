@@ -9,6 +9,8 @@ import logging.config
 import os
 import sys
 from time import time
+from pathlib import Path
+
 
 import pandas as pd
 
@@ -21,6 +23,8 @@ import scraper.utils as utils
 logging.config.dictConfig(config.LOGGING_CONFIG)
 logger = logging.getLogger("Scraping log")
 
+
+DATASETS_TO_TRANSLATE = Path("../artifacts/preprocessed_data.pkl")
 
 def translate_new_data(db, translate_column, languages, one_shot=True):
     """
@@ -127,7 +131,7 @@ if __name__ == "__main__":
     # Read language from pipeline variable
     language = os.environ['LANG_FROM_PIPELINE']
 
-    preprd_data = pd.read_pickle(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl'))
+    preprd_data = pd.read_pickle(DATASETS_TO_TRANSLATE)
 
     for trns_col in config.WORKFLOW_TRANSLATE_COLUMNS:
         logger.info(f"Start translating {trns_col} {round(time()-tstart)}s after process start")

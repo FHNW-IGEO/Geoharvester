@@ -17,7 +17,6 @@ import sys
 import warnings
 from pathlib import Path
 from time import time
-from collections import defaultdict
 import pandas as pd
 
 sys.path.append('../')
