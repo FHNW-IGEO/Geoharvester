@@ -423,8 +423,19 @@ jobs:
         run: |
           python ./workflow/merge_job.py
 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: merged_data_csv
+          path: scraper/merged_data.csv
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: merged_data_pkl
+          path: scraper/merged_data.pkl
+
+        # TODO: CHANGE BRANCH to main
       - name: Commit merged data to repository
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/preflight_check'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -435,7 +446,7 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "Update merged dataset (pipeline)"
-            git push origin main
+            git push origin preflight_check
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
