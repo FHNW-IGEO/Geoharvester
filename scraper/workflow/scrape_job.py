@@ -64,9 +64,11 @@ def normalize_url(url: str) -> str:
 def load_layers_by_service(path: Path):
     """
     Returns:
-        dict[str, set[str]]
+        dict[str, dict[str, str]]
         {
-            service_url: {layer_name, layer_name, ...}
+            service_url: {
+                layer_name: layer_hash
+            }
         }
     """
     if not path.exists():
@@ -80,11 +82,12 @@ def load_layers_by_service(path: Path):
     for r in records:
         service_url = normalize_url(r.get("service_url", ""))
         layer_name = r.get("layer_name")
+        layer_hash = r.get("preflight_hash")
 
         if not service_url or not layer_name:
             continue
 
-        layers_by_service[service_url].add(layer_name)
+    layers_by_service[service_url][layer_name] = layer_hash
 
     return layers_by_service
 
@@ -217,7 +220,7 @@ def is_online(source):
         log_to_operator_csv(server_operator, server_url, error_details)
     return success
 
-def get_service_info(source, only_layers=None):
+def get_service_info(source, only_layers: dict[str, str] | None = None):
     """
     Extracts information from an OGC web service (WMS, WMTS, WFS) using the 
     OWSLib library. This function takes a dictionary called "source" as input 
@@ -298,6 +301,8 @@ def get_service_info(source, only_layers=None):
                 # Only process layers that changed, not all
                 if only_layers is not None and this_layer not in only_layers:
                     continue
+
+                layer_hash = only_layers.get(this_layer) if only_layers is not None else None
                 # Check that we have not yet processed this layer as a child of
                 # another layer before
                 if this_layer not in layers_done:
@@ -331,7 +336,7 @@ def get_service_info(source, only_layers=None):
                                     layertree = "%s/%s" % (server_operator,
                                                            i.replace('"', ''))
 
-                                write_service_info(source, service,
+                                write_service_info(source, service, layer_hash,
                                                    this_layer,
                                                    layertree, group=i)
                                 layers_done.append(this_layer)
@@ -373,6 +378,13 @@ def get_service_info(source, only_layers=None):
                             this_child_layer = service.contents[i]._children[j].id
                             if only_layers is not None and this_child_layer not in only_layers:
                                 continue
+                            
+                            child_layer_hash = (
+                                only_layers.get(this_child_layer)
+                                if only_layers is not None
+                                else None
+                            )
+
                             if this_child_layer not in layers_done:
                                 if service_title is not None:
                                     layertree = "%s/%s/%s" % (server_operator,
@@ -384,7 +396,7 @@ def get_service_info(source, only_layers=None):
                                 logger.debug("Analysing %s > %s > %s >> %s" % (
                                     server_operator, server_url, this_layer,
                                     this_child_layer))
-                                write_service_info(source, service,
+                                write_service_info(source, service, child_layer_hash, 
                                                    this_child_layer, layertree,
                                                    group=i)
                                 layers_done.append(this_child_layer)
@@ -425,7 +437,7 @@ def log_to_operator_csv(server_operator, server_url, error_details):
     return
 
 # keep:
-def write_service_info(source, service, i, layertree, group):
+def write_service_info(source, service, hash, i, layertree, group):
     """
     Write OGC GetCap results for a service, using a custom or default scraper 
     based on availability.
@@ -433,6 +445,7 @@ def write_service_info(source, service, i, layertree, group):
     Parameters:
     source (dict): Source information.
     service (var): GetCap results.
+    hash: The hash carried over from preflight, to be matched against db later
     i (str): Layer name.
     layertree (str): Tree structure.
     group (str): Group name.
@@ -451,7 +464,7 @@ def write_service_info(source, service, i, layertree, group):
         # run custom scraper
         if scraper_spec is not None:
             scraper = importlib.import_module(server_operator, package=None)
-            layer_data = scraper.scrape(source, service, i, layertree, group,
+            layer_data = scraper.scrape(source, service, hash, i, layertree, group,
                                         layer_data, config.preview_PREFIX)
 
         # run default scraper
@@ -459,7 +472,7 @@ def write_service_info(source, service, i, layertree, group):
             BASE_DIR = Path(__file__).resolve().parent / "scraper"
             sys.path.insert(0, str(BASE_DIR))
             scraper = importlib.import_module('default') 
-            layer_data = scraper.scrape(source, service, i, layertree, group,
+            layer_data = scraper.scrape(source, service, hash, i, layertree, group,
                                         layer_data, config.preview_PREFIX)
 
         # Writing the Result file

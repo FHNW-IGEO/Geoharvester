@@ -78,7 +78,7 @@ def remove_newline(toclean):
     return(test)
 
 #SERVICE WMS
-def scrape(source,service,i,layertree, group,layer_data,prefix):
+def scrape(source,service, hash, i,layertree, group,layer_data,prefix):
     """
     Extract metadata information from WMS service and stores it in the `layer_data` dictionary.
     
@@ -122,6 +122,9 @@ def scrape(source,service,i,layertree, group,layer_data,prefix):
         layer_data["name"] = service.contents[i].id
     else:
         layer_data["name"] = ""
+
+    #hash from preflight, carried over
+    layer_data["hash"]= hash
 
     
     #tree    
