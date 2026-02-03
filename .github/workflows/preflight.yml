@@ -433,6 +433,11 @@ jobs:
           name: merged_data_pkl
           path: ../data/merged_data.pkl
 
+      - name: check dir
+        run: |
+          pwd
+          ls -la
+
         # TODO: CHANGE BRANCH to main
       - name: Commit merged data to repository
         if: github.ref == 'refs/heads/preflight_check'
