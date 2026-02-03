@@ -30,6 +30,16 @@ def merge_with_unchanged_data(new_data: pd.DataFrame):
     - new hash → append
     """
 
+    if "hash" not in new_data.columns:
+        raise ValueError("new_data has no 'hash' column")
+
+    if new_data["hash"].isna().any():
+        raise ValueError("new_data contains rows with missing hash")
+
+    if new_data.empty:
+        logger.warning("merge called with empty new_data")
+        return
+
     # Case 1: first run ever
     if not os.path.exists(MERGED_DATA_PKL):
         logger.info("No previous merged_data.pkl found – creating new one")
@@ -38,35 +48,29 @@ def merge_with_unchanged_data(new_data: pd.DataFrame):
     else:
         logger.info("Loading previous merged_data.pkl")
         old_data = pd.read_pickle(MERGED_DATA_PKL)
+        new_hashes = set(new_data["hash"].unique())
+        old_data_filtered = old_data[~old_data["hash"].isin(new_hashes)]
 
-        for df_name, df in [("old_data", old_data), ("new_data", new_data)]:
-            if "hash" not in df.columns:
-                raise ValueError(f"'hash' column missing in {df_name}")
-
-        # Use hash as dataset identity
-        old_data = old_data.set_index("hash")
-        new_data = new_data.set_index("hash")
-
-        # Replace rows where hash already exists
-        old_data.update(new_data)
-
-        # Add rows with new hashes
-        new_hashes = new_data.index.difference(old_data.index)
+        # Append new data
         merged_database = pd.concat(
-            [old_data, new_data.loc[new_hashes]],
-            axis=0
+            [old_data_filtered, new_data],
+            ignore_index=True
         )
 
-        merged_database = merged_database.reset_index()
+    # Append new data
+    merged_database = pd.concat(
+        [old_data_filtered, new_data],
+        ignore_index=True
+    )
 
-    # Final cleanup
-    merged_database = merged_database.fillna("")
-
-    # Persist
     merged_database.to_pickle(PIPELINE_OUTPUT_PKL)
     merged_database.to_csv(PIPELINE_OUTPUT_CSV, index=False)
 
-    logger.info(f"Merged database now has {len(merged_database)} rows")
+    logger.info(
+        f"Merged database now has {len(merged_database)} rows "
+        f"({merged_database['hash'].nunique()} datasets)"
+    )
+
 
 
 if __name__ == "__main__":
