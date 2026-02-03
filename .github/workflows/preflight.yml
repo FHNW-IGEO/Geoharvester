@@ -414,10 +414,10 @@ jobs:
           path: ./scraper/artifacts/
           merge-multiple: true
 
-      - uses: actions/download-artifact@v4
-        with:
-          path: ./scraper/data/
-          merge-multiple: true
+      # - uses: actions/download-artifact@v4
+      #   with:
+      #     path: ./scraper/data/
+      #     merge-multiple: true
 
       - name: Merge Databases
         run: |
@@ -431,7 +431,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: merged_data_pkl
-          path: scraper/merged_data.pkl
+          path: ../data/merged_data.pkl
 
         # TODO: CHANGE BRANCH to main
       - name: Commit merged data to repository
@@ -440,7 +440,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add scraper/data/merged_data.pkl scraper/data/merged_data.csv
+          git add ../data/merged_data.pkl
 
           if git diff --cached --quiet; then
             echo "No changes to commit"

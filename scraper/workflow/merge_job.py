@@ -16,7 +16,7 @@ logging.config.dictConfig(config.LOGGING_CONFIG)
 logger = logging.getLogger("Scraping log")
 
 MERGED_DATA_PKL = Path("data/merged_data.pkl") # From Git
-PIPELINE_OUTPUT_CSV = Path("scrape_job_output.csv")
+PIPELINE_OUTPUT_CSV = Path("merged_data.csv")
 PIPELINE_OUTPUT_PKL = MERGED_DATA_PKL # Should overwrite previous run
 
 
