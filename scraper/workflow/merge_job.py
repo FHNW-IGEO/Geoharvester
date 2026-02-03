@@ -3,8 +3,6 @@ import logging
 import logging.config
 import os
 import sys
-from time import time
-
 import pandas as pd
 
 sys.path.append('../')
