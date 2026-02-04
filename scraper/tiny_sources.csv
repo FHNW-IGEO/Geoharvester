@@ -9,7 +9,3 @@
 "KT_BS","https://wms.geo.bs.ch/?SERVICE=WMS&REQUEST=GetCapabilities"
 "KT_BE","https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_climatologymeteorologyatmosphere01_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS"
 "KT_BE","https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_climatologymeteorologyatmosphere01_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS"
-"KT_BE","https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_climatologymeteorologyatmosphere02_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS"
-"KT_BE","https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_climatologymeteorologyatmosphere02_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS"
-"KT_BE","https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_imagerybasemapsearthcover01_de_ms_wms/MapServer/WMSServer?&request=GetCapabilities&service=WMS"
-"KT_BE","https://www.geoservice.apps.be.ch/geoservice3/services/a42geo/of_imagerybasemapsearthcover01_de_ms_wfs/MapServer/WFSServer?&request=GetCapabilities&service=WFS"
