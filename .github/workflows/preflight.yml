@@ -10,6 +10,10 @@ on:
   schedule:
     - cron: "0 3 * * *" # optional daily run
 
+permissions:
+  contents: write # Needed for push to repo
+  actions: read
+
 jobs:
   preflight:
     runs-on: ubuntu-latest
