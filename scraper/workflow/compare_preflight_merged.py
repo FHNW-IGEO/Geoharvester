@@ -74,8 +74,8 @@ def main():
         with open(OUTPUT, "w", encoding="utf-8") as f:
             json.dump(datasets_to_process, f, indent=2, ensure_ascii=False)
 
-        print(f"✅ Datasets flagged for processing: {len(datasets_to_process)}")
-        print(f"Output written to {OUTPUT}")
+    print(f"✅ Datasets flagged for processing: {len(datasets_to_process)}")
+    print(f"Output written to {OUTPUT}")
 
 
 if __name__ == "__main__":
