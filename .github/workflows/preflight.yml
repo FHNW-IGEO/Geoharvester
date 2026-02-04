@@ -152,17 +152,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Download datasets-to-process artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: scrape_output_pkl
+          path: artifacts
+
+      - name: Check scraper output
+        run: |
+          if [ ! -f "scrape_job_output.pkl" ]; then
+            echo "Scraper output missing. Skipping preprocessing."
+            exit 1
+          fi
+
       - name: Set up Python 3.9
         uses: actions/setup-python@v4
         with:
           python-version: 3.9
-
-      - name: Check scraper output
-        run: |
-          if [ ! -f "./scraper/scrape_job_output.pkl" ]; then
-            echo "Scraper output missing. Skipping preprocessing."
-            exit 1
-          fi
 
       - name: Install dependencies
         run: |
@@ -178,12 +184,6 @@ jobs:
       - name: Download nltk stopwords
         run: |
           python -m nltk.downloader all
-
-      - name: Download datasets-to-process artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: scrape_output_pkl
-          path: artifacts
 
       - name: Run Python script
         run: |
