@@ -10,7 +10,6 @@ Notes:
 - Processes the service information to extract the layer names and other details
 - Writes the extracted information to  files for future use
 """
-
 import csv
 import glob
 import importlib
