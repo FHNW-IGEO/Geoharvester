@@ -127,7 +127,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install --upgrade --force-reinstall -r requirements.txt
+          pip install requests OWSLib pandas pytz lxml
 
       - name: Download datasets-to-process artifact
         uses: actions/download-artifact@v4
@@ -165,10 +165,13 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: 3.9
-      - name: check path
+
+      - name: Check scraper output
         run: |
-          pwd
-          ls -la workflow
+          if [ ! -f "./scraper/scrape_job_output.pkl" ]; then
+            echo "Scraper output missing. Skipping preprocessing."
+            exit 1
+          fi
 
       - name: Install dependencies
         run: |
@@ -229,7 +232,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r workflow/requirements/requirements_preprocessing.txt
 
       - name: Download datasets-to-process artifact
         uses: actions/download-artifact@v4
@@ -411,17 +414,12 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install pandas
 
       - uses: actions/download-artifact@v4
         with:
           path: ./scraper/artifacts/
           merge-multiple: true
-
-      # - uses: actions/download-artifact@v4
-      #   with:
-      #     path: ./scraper/data/
-      #     merge-multiple: true
 
       - name: Merge Databases
         run: |

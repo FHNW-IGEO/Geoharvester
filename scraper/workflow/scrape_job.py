@@ -561,7 +561,8 @@ if __name__ == "__main__":
             f"{OUTPUT_CSV.name} and {OUTPUT_PKL.name}"
         )
     else:
-        logger.warning("No CSV output found – skipping pickle generation")
+        logger.error("No CSV output found – scraper did not produce any data. Aborting pipeline.")
+        raise RuntimeError("No CSV output produced by scraper")
 
     process_endT = time()
     logger.info(f"Job took: {int((process_endT-process_startT) / 60)} mins")

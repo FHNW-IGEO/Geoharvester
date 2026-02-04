@@ -1,16 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-title: Scraper a.k.a Geoharvester
-Author: David Oesch
-Date: 2022-11-05
-Purpose: Retrieve information about a web map service and save it to a file
-Notes:
-- Uses Python 3.9
-- Uses the OWSLib library to access the geo services
-- Processes the service information to extract the layer names and other details
-- Writes the extracted information to  files for future use
-"""
-
 import logging
 import logging.config
 import sys
@@ -35,7 +23,7 @@ SCRAPED_DATA = Path("../artifacts/scrape_job_output.pkl")
 OUTPUT_CSV = Path("preprocessed_data.csv")
 OUTPUT_PKL = Path("preprocessed_data.pkl")
 
-def preprocessing_NLP(raw_data_path, output_folder=None, column='abstract'):
+def preprocessing_NLP(raw_data_path, column='abstract'):
     """
     Preprocesses the data collected by the scraper using different NLP
     functions, which are stored in preprocessing/utils.py
@@ -44,8 +32,6 @@ def preprocessing_NLP(raw_data_path, output_folder=None, column='abstract'):
     ----------
     raw_data_path : str
         path of pickle file containing the new raw data output of the scraper
-    output_folder : str
-        path-to-folder where the elaborated data will be saved as pkl
     column : str
         column of the dataframe to be used for the NLP preprocessing
     """
@@ -89,7 +75,6 @@ def preprocessing_NLP(raw_data_path, output_folder=None, column='abstract'):
     # raw_data = raw_data.replace(to_replace="  ", value = " ", regex=True)
     # raw_data = raw_data.replace(to_replace="    ", value = " ", regex=True)
     
-
     return raw_data
 
 if __name__ == "__main__":
