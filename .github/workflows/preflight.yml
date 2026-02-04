@@ -176,7 +176,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install --upgrade --force-reinstall -r requirements.txt
+          pip install --upgrade --force-reinstall -r workflow/requirements/requirements_preprocessing.txt
       - name: Download spacy models
         run: |
           python -m spacy download en_core_web_sm
@@ -232,7 +232,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r workflow/requirements/requirements_preprocessing.txt
+          pip install -r workflow/requirements/requirements_translation.txt
 
       - name: Download datasets-to-process artifact
         uses: actions/download-artifact@v4
@@ -277,7 +277,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r workflow/requirements/requirements_translation.txt
 
       - name: Download datasets-to-process artifact
         uses: actions/download-artifact@v4
@@ -322,7 +322,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r workflow/requirements/requirements_translation.txt
 
       - name: Download datasets-to-process artifact
         uses: actions/download-artifact@v4
@@ -367,7 +367,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r workflow/requirements/requirements_translation.txt
 
       - name: Download datasets-to-process artifact
         uses: actions/download-artifact@v4

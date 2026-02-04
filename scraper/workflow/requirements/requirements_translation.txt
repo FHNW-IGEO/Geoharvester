@@ -1,0 +1,9 @@
+# ML + data science
+# Core
+pandas==1.5.2
+python-dotenv==1.0.0
+
+# Language processing
+langdetect==1.0.9
+deep-translator==1.11.4
+openai==0.27.0
