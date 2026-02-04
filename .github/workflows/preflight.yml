@@ -158,12 +158,18 @@ jobs:
           name: scrape_output_pkl
           path: artifacts
 
-      - name: Check scraper output
+      - name: check dir
         run: |
-          if [ ! -f "scrape_job_output.pkl" ]; then
-            echo "Scraper output missing. Skipping preprocessing."
-            exit 1
-          fi
+          pwd
+          ls -la
+          ls artifacts
+
+      # - name: Check scraper output
+      #   run: |
+      #     if [ ! -f "artifacts/scrape_job_output.pkl" ]; then
+      #       echo "Scraper output missing. Skipping preprocessing."
+      #       exit 1
+      #     fi
 
       - name: Set up Python 3.9
         uses: actions/setup-python@v4
@@ -425,11 +431,6 @@ jobs:
         with:
           name: merged_data_pkl
           path: scraper/data/merged_data.pkl
-
-      - name: check dir
-        run: |
-          pwd
-          ls -la
 
         # TODO: CHANGE BRANCH to main
       - name: Commit merged data to repository
