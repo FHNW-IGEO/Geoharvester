@@ -75,7 +75,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pandas
+          pip install pandas==1.5.2 numpy==1.24.3
 
       - name: Download preflight hashes artifact
         uses: actions/download-artifact@v4
@@ -118,7 +118,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests OWSLib pandas pytz lxml pyproj
+          pip install requests OWSLib pandas==1.5.2 numpy==1.24.3 pytz lxml pyproj
 
       - name: Download datasets-to-process artifact
         uses: actions/download-artifact@v4
@@ -411,7 +411,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pandas
+          pip install pandas==1.5.2 numpy==1.24.3
 
       - uses: actions/download-artifact@v4
         with:
