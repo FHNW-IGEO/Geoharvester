@@ -56,15 +56,6 @@ jobs:
           name: preflight-hashes
           path: "scraper/preflight-hashes.json"
 
-      - name: Commit and Push Updated Hashes
-        if: ${{ github.event.inputs.commit_hashes == 'true' }}
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add preflight-diagnostics.jsonl
-          git commit -m "Update preflight hashes [skip ci]" || echo "No changes to commit"
-          git push
-
   compare-hashes:
     needs: preflight
     runs-on: ubuntu-latest
