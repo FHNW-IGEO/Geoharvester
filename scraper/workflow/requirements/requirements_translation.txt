@@ -2,6 +2,8 @@
 # Core
 pandas==1.5.2
 python-dotenv==1.0.0
+numpy==1.24.3
+
 
 # Language processing
 langdetect==1.0.9
