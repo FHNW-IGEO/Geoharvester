@@ -9,3 +9,4 @@ numpy==1.24.3
 langdetect==1.0.9
 deep-translator==1.11.4
 openai==0.27.0
+matplotlib==3.7.1
