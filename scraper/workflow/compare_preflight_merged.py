@@ -4,7 +4,6 @@ import json
 from pathlib import Path
 import pandas as pd
 
-
 MERGED_DATA_PKL = Path("data/merged_data.pkl") # From Git
 PREFLIGHT_HASHES = Path("../artifacts/preflight-hashes.json") # From preflight - only hash
 PREFLIGHT_DIAGNOSTICS = Path("../artifacts/preflight-diagnostics.jsonl") # From preflight - data
@@ -46,7 +45,6 @@ def main():
 
         diag = diagnostics_by_id.get(dataset_id)
         if not diag:
-            # Should never happen, but be defensive
             print(f"⚠️ Missing diagnostics for {dataset_id}, skipping")
             continue
 
