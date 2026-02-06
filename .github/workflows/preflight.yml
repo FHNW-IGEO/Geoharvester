@@ -36,11 +36,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests lxml pyproj OWSLib
 
-      # TODO: Replace tiny_sources with sources.csv once stable!
       - name: Run preflight
         run: |
           python workflow/preflight_job.py \
-            --input tiny_sources.csv \
+            --input sources.csv \
             --out-diagnostics preflight-diagnostics.jsonl \
             --baseline-hashes preflight-diagnostics.jsonl || true
 
