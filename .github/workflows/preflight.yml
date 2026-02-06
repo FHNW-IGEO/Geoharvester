@@ -7,8 +7,8 @@ on:
   push:
     branches:
       - preflight_check
-  schedule:
-    - cron: "0 3 * * *" # optional daily run
+  # schedule:
+  #   - cron: "0 3 * * *" # optional daily run
 
 permissions:
   contents: write # Needed for push to repo
