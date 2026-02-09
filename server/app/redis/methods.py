@@ -12,6 +12,7 @@ from langdetect import detect
 from nltk.stem import SnowballStemmer
 from redis.commands.search.indexDefinition import IndexDefinition, IndexType
 from redis.commands.search.query import Query, SortbyField
+import json
 
 from server.app.redis.redis_manager import r
 
@@ -238,44 +239,31 @@ def search_redis(redis_query, lang: EnumLangType, offset, limit):
             .return_field(f'keywords_nlp_{lang}')
             ), parsed_language
 
-def json_to_pandas(redis_output):
-    """
-    Transforms the json-like output from redis into a pandas df.
 
-    Parameters
-    ----------
-    redis_output : list[str]
-        Output from the redis search
-    Returns
-    -------
-    _ : pandas.DataFrame
+def redis_documents_to_pandas(docs):
     """
-    query_results = pd.DataFrame()
+    Convert RediSearch Document objects to a pandas DataFrame.
+    """
+    rows = []
 
-    skipped = 0
-    for output in redis_output:
-        # Cleaning the string
-        doc = str(output).replace("'", '"')
-        doc = doc.replace('0"0','0')
-        doc = doc.replace("None", '"None"')
-        doc = doc.replace("NaN", "'NaN'")
-        doc = doc.replace("’","")
-        doc = doc.replace('’’', "")
-        doc = doc.replace("\\", "")
-        doc = doc.replace("ß", "ss")
-        doc = doc.replace("xa0","")
-        # Append results to a pandas df
-        try:
-            df = pd.read_json(doc.replace("Document ", ""), orient='index',
-                            encoding='utf-16', encoding_errors='replace').T
-            query_results = pd.concat([query_results, df], axis=0)
-        except ValueError:
-            skipped += 1
-            # print(doc.replace("Document ", ""))
-        # print(len(redis_output)-i)
-    # BUG: check the transformation json-pandas maybe with a binary format instead of json
-    print(f"skipped {skipped} of {skipped + len(query_results)} datasets due to json-binary conversion!")
-    return query_results
+    for doc in docs:
+        row = {}
+
+        for key, value in doc.__dict__.items():
+            # Skip internal attributes
+            if key.startswith("_"):
+                continue
+
+            # Decode Redis bytes safely
+            if isinstance(value, bytes):
+                value = value.decode("utf-8", errors="replace")
+
+            row[key] = value
+
+        rows.append(row)
+
+    return pd.DataFrame(rows)
+
 
 def pandas_to_dict(ranked_results_df):
     """
@@ -387,14 +375,31 @@ def results_ranking(redis_output, query_words_list, known_terms, parsed_lang):
         ranked data frame (descending)
     """
     t0 = time()
-    query_results_df = json_to_pandas(redis_output)
+    query_results_df = redis_documents_to_pandas(redis_output)
+
+    if query_results_df.empty:
+        return None
+    
+    query_results_df['title'] = query_results_df.get('title', '').fillna('').astype(str)
+    query_results_df['metaquality'] = (
+        pd.to_numeric(query_results_df.get('metaquality', 0), errors='coerce')
+        .fillna(0)
+        .astype(int)
+    )
+
     # initialize ranking score and the length counter
     lang = lang_dict[parsed_lang]
+    for col in [
+        'keywords_nlp',
+        f'title_{lang}', f'keywords_{lang}', f'keywords_nlp_{lang}'
+    ]:
+        if col not in query_results_df:
+            query_results_df[col] = ""
+
     if len(query_results_df) > 0:
         query_results_df['score'] = 0
-        query_results_df['inv_title_length'] = query_results_df['title'].apply(lambda x: 200 - len(x))
-        query_results_df['metaquality'] = query_results_df['metaquality'].astype('int')
-    
+        query_results_df['inv_title_length'] = 200 - query_results_df['title'].str.len()
+
         # Calculate the scores
         if query_words_list:
             print(f"Sorting results with: {query_words_list} ...")
@@ -411,11 +416,15 @@ def results_ranking(redis_output, query_words_list, known_terms, parsed_lang):
             query_results_df['score'] = 1
         query_results_df = evaluate_metaquality(query_results_df, 25)
 
+
         query_results_df.sort_values(by=['score', 'inv_title_length', 'title'], axis=0, inplace=True, ascending=False)
         # Replace nans with empty str for a cleaner visualisation
         query_results_df = query_results_df.replace(to_replace='nan', value="", regex=True)
+
         ranked_results = pandas_to_dict(query_results_df)
         # print(f'ET ranking: {round(time()-t0, 2)}')
     else:
         ranked_results = None
+    json.dumps(ranked_results)
+
     return ranked_results
