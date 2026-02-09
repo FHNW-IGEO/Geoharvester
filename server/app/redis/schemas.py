@@ -62,23 +62,23 @@ class GeoserviceModel(BaseModel):
     provider: str
     title: str
     name: str
-    preview: str
-    tree: str
-    group: str
-    abstract: str
-    keywords: str
+    preview: Optional[str] = ""
+    tree: Optional[str] = ""
+    group: Optional[str] = ""
+    abstract: Optional[str] = ""
+    keywords: Optional[str] = ""
+    legend: Optional[str] = ""
+    metadata: Optional[str] = ""
     keywords_nlp:  Optional[str]
-    legend: str
-    contact: str
-    endpoint: str
-    metadata: str
-    service: str
-    max_zoom: int
-    center_lat: Optional[float] #NOTE: Change to float once nan vales are removed
-    center_lon: Optional[float] #NOTE: Change to float once nan vales are removed
-    bbox: str
+    contact: Optional[str] = ""
+    endpoint: Optional[str] = ""
+    service: Optional[str] = ""
+    max_zoom: Optional[int] = None
+    center_lat: Optional[float]
+    center_lon: Optional[float]
+    bbox: Optional[str] = ""
     lang_3:  Optional[str]
-    metaquality: Optional[int]
+    metaquality: Optional[int] = 0
 
 
     class Config:
