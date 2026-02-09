@@ -186,6 +186,7 @@ def is_online(source):
         log_to_operator_csv(server_operator, server_url, error_details)
     return success
 
+# keep:
 def get_service_info(source):
     """
     Extracts information from an OGC web service (WMS, WMTS, WFS) using the 
@@ -396,7 +397,7 @@ def log_to_operator_csv(server_operator, server_url, error_details):
         f.write(error_log + "\n")
     return
 
-
+# keep:
 def write_service_info(source, service, i, layertree, group):
     """
     Write OGC GetCap results for a service, using a custom or default scraper 
@@ -784,7 +785,7 @@ if __name__ == "__main__":
 
     preprd_data.to_csv(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.csv'))
     preprd_data.to_pickle(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl'))
-    # Save to data for last pipeline stage
+    # TODO REMOVE: Save to data for last pipeline stage
     data_to_keep.to_pickle(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'data_to_keep.pkl'))
     data_to_keep.to_csv(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'data_to_keep.csv'))
 

@@ -1,0 +1,25 @@
+# ML + data science
+# Core
+pandas==1.5.2
+python-dotenv==1.0.0
+numpy==1.24.3
+scipy==1.10.1
+gensim==4.3.0
+
+# Core ML/NLP stack
+torch==2.2.2
+sentence-transformers==2.2.2
+transformers==4.39.3
+huggingface-hub==0.20.3
+
+# Language processing
+langdetect==1.0.9
+deep-translator==1.11.4
+openai==0.27.0
+matplotlib==3.7.1
+nltk==3.7
+rake_nltk==1.0.6
+pyLDAvis==3.4.0
+langdetect==1.0.9
+bert-extractive-summarizer==0.10.1
+

@@ -1,0 +1,56 @@
+import hashlib
+
+def safe_strip(value):
+    if value is None:
+        return ""
+    return str(value).strip()
+
+def normalize_keywords(raw_keywords):
+    """Deduplicate, strip, join by comma"""
+    if not raw_keywords:
+        return ""
+    if isinstance(raw_keywords, str):
+        kw_list = [k.strip() for k in raw_keywords.split(",") if k.strip()]
+    elif isinstance(raw_keywords, list):
+        kw_list = [str(k).strip() for k in raw_keywords if str(k).strip()]
+    else:
+        return ""
+    # remove duplicates while preserving order
+    return ",".join(sorted(list(dict.fromkeys(kw_list))))
+
+def normalize_contact(raw_contact):
+    """Normalize contact field, safely handle None, NaN, numeric values"""
+    if raw_contact is None:
+        return ""
+    raw_str = str(raw_contact).strip()
+    if raw_str.lower() == "n.a." or raw_str.lower() == "nan":
+        return ""
+    return raw_str
+
+
+def compute_priority_hash(dataset):
+    """Compute SHA256 hash of the 5 key fields"""
+    key_fields = [
+        dataset.get('title', ''),
+        dataset.get('name', ''),
+        dataset.get('abstract', ''),
+        dataset.get('contact', ''),
+        dataset.get('keywords', '')
+    ]
+    print(f"Computing hash using key_fields: {key_fields}")
+    combined = "||".join([str(f).strip() for f in key_fields])
+    return hashlib.sha256(combined.encode("utf-8")).hexdigest()
+
+
+def normalize_then_hash(layer): 
+    # Normalize
+    layer["keywords"] = normalize_keywords(layer.get("keywords"))
+    layer["contact"] = normalize_contact(layer.get("contact"))
+    layer["title"] = safe_strip(layer.get("title"))
+    layer["name"] = safe_strip(layer.get("name"))
+    layer["abstract"] = safe_strip(layer.get("abstract"))
+
+    # Compute priority hash
+    hash_new = compute_priority_hash(layer)
+
+    return hash_new
