@@ -1,9 +1,10 @@
 
 from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from redis.commands.search.field import (GeoField, NumericField, TagField,
                                          TextField)
+from typing import Optional, List, Union
 
 ### Geoservices
 # Source data:  https://github.com/davidoesch/geoservice_harvester_poc/tree/main/data/geoservices_CH.csv
@@ -62,24 +63,35 @@ class GeoserviceModel(BaseModel):
     provider: str
     title: str
     name: str
+
     preview: Optional[str] = ""
     tree: Optional[str] = ""
     group: Optional[str] = ""
     abstract: Optional[str] = ""
-    keywords: Optional[str] = ""
     legend: Optional[str] = ""
     metadata: Optional[str] = ""
-    keywords_nlp:  Optional[str]
     contact: Optional[str] = ""
     endpoint: Optional[str] = ""
     service: Optional[str] = ""
     max_zoom: Optional[int] = None
-    center_lat: Optional[float]
-    center_lon: Optional[float]
     bbox: Optional[str] = ""
-    lang_3:  Optional[str]
+    center_lat: Optional[float] = None
+    center_lon: Optional[float] = None
     metaquality: Optional[int] = 0
 
+    keywords: Optional[Union[str, List[str]]] = None
+    keywords_nlp: Optional[Union[str, List[str]]] = None
+    lang_3: Optional[Union[str, List[str]]] = None
+
+    @field_validator("keywords", "keywords_nlp", "lang_3", mode="before")
+    @classmethod
+    def normalize_to_list(cls, v):
+        if v is None:
+            return []
+        if isinstance(v, str):
+            # split only if needed
+            return [s.strip() for s in v.split(",")] if "," in v else [v]
+        return v
 
     class Config:
         from_attributes = True

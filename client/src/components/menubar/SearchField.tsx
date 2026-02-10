@@ -110,7 +110,9 @@ export const SearchField = ({
           });
         }}
         sx={{
-          fontSize: 14,
+          fontSize: 12,
+          ml: 0.5,
+          minWidth: 120,
         }}
         type="submit"
         variant="contained"

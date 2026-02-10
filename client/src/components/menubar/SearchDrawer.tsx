@@ -17,7 +17,11 @@ export const SearchDrawer = ({
 }: SearchProps & { drawerOpen: boolean }) => {
   return (
     <div>
-      <Button variant="contained" onClick={() => setDrawerOpen(true)}>
+      <Button
+        variant="contained"
+        onClick={() => setDrawerOpen(true)}
+        sx={{ ml: 2 }}
+      >
         <FormattedMessage id="search.searchButton" defaultMessage="Suchen" />
       </Button>
       <SwipeableDrawer
