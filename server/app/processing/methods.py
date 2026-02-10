@@ -2,10 +2,12 @@ import re
 import shlex
 from typing import List
 from cog.torque import Graph
+from nltk.corpus import stopwords
 
 import pandas as pd
 
 from ..constants import fields_to_output
+from ..redis.methods import transform_wordlist_to_query
 
 
 def import_csv_into_dataframe(url, column_limit=None):
@@ -209,3 +211,18 @@ def find_translation(kg:Graph, text:str, verify_language:str=None)->list:
     translations = [k['id'] for k in kg.v(vertex=text).inc("means").all()['result']]
     translations.append(text)
     return translations
+
+def sanitize_and_kg_check(query_string, kg,language_dict, lang ):
+    # Traverse knowledge graph for search terms
+    known_terms = traverse_knowledge_graph(kg, language_dict[lang], query_string)
+    for known_term in known_terms:
+        if len(known_term.split()) == 1:
+            known_terms.remove(known_term)
+    print(f"Known terms and synonyms from KG: {known_terms}")
+    # create word list without known terms
+    word_list = split_search_string(query_string, known_terms)
+    # stop words removal just for redis
+    stop_words = stopwords.words(language_dict[lang])
+    word_list_clean = [re.escape(word) for word in word_list if word not in stop_words] # Escape all special chars except _, otherwise Redis throws error
+    text_query = transform_wordlist_to_query(word_list_clean, lang)
+    return known_terms, word_list_clean, text_query

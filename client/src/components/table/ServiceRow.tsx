@@ -34,7 +34,7 @@ export const ServiceRow = ({
 
   const CenteredTableCell = styled(TableCell)(() => ({
     "&": {
-      width: mobileMode ? 0 : 120,
+      width: mobileMode ? 0 : 100,
       padding: mobileMode ? 0 : 8,
       textAlign: "center",
     },
@@ -48,9 +48,7 @@ export const ServiceRow = ({
   }));
   const LeftAlignedTableCellMaxWidth = styled(TableCell)(() => ({
     "&": {
-      // padding: 8,
       padding: mobileMode ? 0 : 8,
-
       textAlign: "left",
       minWidth: mobileMode ? 60 : 180,
       wordBreak: "break-word",

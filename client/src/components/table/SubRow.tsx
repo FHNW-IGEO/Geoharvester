@@ -61,14 +61,14 @@ export const SubRow = ({
           qgis_handler: () => getQgisWFS(row),
         }
       : row.service.includes("WMS")
-      ? {
-          arcgis_handler: () => getArcgisproWMS(row),
-          qgis_handler: () => getQgisWMS(row),
-        }
-      : {
-          arcgis_handler: () => getArcgisproWMTS(row),
-          qgis_handler: () => getQgisWMTS(row),
-        };
+        ? {
+            arcgis_handler: () => getArcgisproWMS(row),
+            qgis_handler: () => getQgisWMS(row),
+          }
+        : {
+            arcgis_handler: () => getArcgisproWMTS(row),
+            qgis_handler: () => getQgisWMTS(row),
+          };
   };
 
   const StyledTableRow = styled(TableRow)(() => ({
@@ -88,7 +88,7 @@ export const SubRow = ({
     "&": {
       borderBottom: "none",
       padding: 0,
-      width: mobileMode ? 24 : 50,
+      width: mobileMode ? 0 : 100 + 24,
     },
   }));
 
