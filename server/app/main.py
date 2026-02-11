@@ -131,6 +131,7 @@ async def get_data(
     t0 = time()
     offset = page * limit
 
+    # Search step
     try:
         if not query_string:
             redis_query = "@service:(WMS | WMTS | WFS)"
@@ -163,18 +164,18 @@ async def get_data(
             detail="Search backend failed",
         ) from e
 
+    # Abort if no results found
     if not redis_data.docs:
-
         fastapi_logger.info("Redis returned 0 documents")
         return paginate([])
 
+    # Ranking step
     try:
         ranked_results = results_ranking(
             redis_data.docs,
             word_list_clean,
             known_terms,
-            parsed_language,
-            lang_string
+            parsed_language
         )
         fastapi_logger.info(
             f"Ranking ET: {round(time() - t1, 2)} (lang={parsed_language})"
@@ -241,8 +242,7 @@ async def get_data_by_keywords(
             redis_data.docs,
             word_list_clean,
             known_terms,
-            parsed_language,
-            lang_string
+            parsed_language
         )
         fastapi_logger.info(
             "Ranking ET: %.2fs (lang=%s)",

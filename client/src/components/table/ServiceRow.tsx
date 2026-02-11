@@ -86,7 +86,7 @@ export const ServiceRow = ({
           <LeftAlignedTableCell>
             {abstract}
             <br />
-            {row.keywords.split(",").map((keyword) => (
+            {mockKeywords.map((keyword) => (
               <Chip
                 label={keyword}
                 variant="outlined"
