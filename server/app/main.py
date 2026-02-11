@@ -143,6 +143,7 @@ async def get_data(
             return paginate([])
 
         known_terms, word_list_clean, text_query = sanitize_and_kg_check(query_string, kg, language_dict, lang)
+        print(text_query)
 
         if isinstance(text_query, list):
             text_query = " ".join(text_query)

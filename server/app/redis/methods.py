@@ -285,7 +285,7 @@ def search_redis_with_parameters(redis_query, lang: EnumLangType, offset, limit=
             .return_field(f'abstract_{lang_string}')
             .return_field(f'keywords_{lang_string}')
             .return_field(f'keywords_nlp_{lang_string}')
-            ), parsed_language, lang_string
+            ), parsed_language
 
 
 def search_redis_with_keywords(redis_query, lang: EnumLangType, offset, limit=50000):
@@ -325,7 +325,7 @@ def search_redis_with_keywords(redis_query, lang: EnumLangType, offset, limit=50
             .return_field(f'abstract_{lang_string}')
             .return_field(f'keywords_{lang_string}')
             .return_field(f'keywords_nlp_{lang_string}')
-            ), parsed_language, lang_string
+            ), parsed_language
 
 def redis_documents_to_pandas(docs):
     """
