@@ -143,13 +143,12 @@ async def get_data(
             return paginate([])
 
         known_terms, word_list_clean, text_query = sanitize_and_kg_check(query_string, kg, language_dict, lang)
-        print(known_terms, word_list_clean, text_query )
 
         if isinstance(text_query, list):
             text_query = " ".join(text_query)
 
         redis_query = redis_query_from_parameters(text_query, service, provider, lang.value)
-        redis_data, parsed_language, lang_string  = search_redis_with_parameters(redis_query, lang,  0, 40000)
+        redis_data, parsed_language  = search_redis_with_parameters(redis_query, lang,  0, 40000)
 
         t1 = time()
         print(
@@ -221,7 +220,7 @@ async def get_data_by_keywords(
         fastapi_logger.info("Redis queried using KEYWORD(S) with: %s", redis_query)
 
         offset = page * limit
-        redis_data, parsed_language, lang_string = search_redis_with_keywords(
+        redis_data, parsed_language = search_redis_with_keywords(
             redis_query, lang, offset, limit
         )
 
