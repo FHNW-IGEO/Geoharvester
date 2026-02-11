@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { AppBar } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { MenuComponent } from "./MenuComponent";
@@ -7,13 +8,12 @@ import {
   SERVICE,
   BREAKPOINT1000,
   RESPONSESTATE,
-} from "src/constants";
+} from "../../appConstants";
 import { SearchField } from "./SearchField";
 import { useTheme } from "@mui/material/styles";
-import { useViewport } from "src/custom/ViewportHook";
+import { useViewport } from "../../custom/ViewportHook";
 import { SearchDrawer } from "./SearchDrawer";
-import { useState } from "react";
-import { SearchParameters } from "src/types";
+import { SearchParameters } from "types";
 import "../../styles.css";
 
 export type SearchBarProps = {

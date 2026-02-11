@@ -19,7 +19,7 @@ import {
   getQgisWMTS,
 } from "../../requests";
 import { Geoservice } from "../../types";
-import { PROVIDER } from "src/constants";
+import { PROVIDER } from "../../appConstants";
 
 export const SubRow = ({
   row,

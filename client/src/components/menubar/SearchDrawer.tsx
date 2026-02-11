@@ -4,8 +4,6 @@ import Button from "@mui/material/Button";
 import { SearchField, SearchProps } from "./SearchField";
 import { FormattedMessage } from "react-intl";
 
-import "../../styles.css";
-
 export const SearchDrawer = ({
   localSearchString,
   setLocalSearchString,

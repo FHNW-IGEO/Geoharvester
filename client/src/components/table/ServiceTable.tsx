@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 import {
   TableContainer,
   Table,
@@ -18,10 +19,13 @@ import { visuallyHidden } from "@mui/utils";
 import { Geoservice, SearchParameters } from "../../types";
 import { ServiceRow } from "./ServiceRow";
 import { TablePaginationActions } from "./TablePaginationActions";
-import { DEFAULTCHUNKSIZE, RESPONSESTATE, BREAKPOINT600 } from "src/constants";
-import { useViewport } from "src/custom/ViewportHook";
+import {
+  DEFAULTCHUNKSIZE,
+  RESPONSESTATE,
+  BREAKPOINT600,
+} from "../../appConstants";
+import { useViewport } from "../../custom/ViewportHook";
 import { PlaceholderWidget } from "./PlaceholderUI";
-import { FormattedMessage, useIntl } from "react-intl";
 
 import "../../styles.css";
 
@@ -70,7 +74,7 @@ export const ServiceTable = ({
 
   const handleChangePageForward = (
     event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
+    newPage: number,
   ) => {
     const processedResults = rowsPerPage * newPage;
     if (processedResults >= DEFAULTCHUNKSIZE && processedResults <= total) {
@@ -83,7 +87,7 @@ export const ServiceTable = ({
   };
   const handleChangePageBackward = (
     event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
+    newPage: number,
   ) => {
     const processedResults = Math.abs(rowsPerPage * newPage);
     const pagesBeforeReload = DEFAULTCHUNKSIZE / rowsPerPage;
@@ -101,7 +105,7 @@ export const ServiceTable = ({
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setTablePage(0);
@@ -109,7 +113,7 @@ export const ServiceTable = ({
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: string
+    property: string,
   ) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -127,8 +131,8 @@ export const ServiceTable = ({
         ? 1
         : -1
       : a[orderBy as keyof Geoservice] < b[orderBy as keyof Geoservice]
-      ? 1
-      : -1
+        ? 1
+        : -1,
   );
 
   const CenteredTableCell = styled(TableCell)(() => ({
@@ -259,7 +263,7 @@ export const ServiceTable = ({
               {(rowsPerPage > 0
                 ? sortedData.slice(
                     tablePage * rowsPerPage,
-                    tablePage * rowsPerPage + rowsPerPage
+                    tablePage * rowsPerPage + rowsPerPage,
                   )
                 : sortedData
               ).map((row, index) => (
@@ -296,7 +300,7 @@ export const ServiceTable = ({
                     return width > BREAKPOINT600
                       ? `${displayedRecordsStart}–${Math.min(
                           total,
-                          displayedRecordsEnd
+                          displayedRecordsEnd,
                         )} of ${count !== -1 ? count : `more than ${to}`}`
                       : "";
                   }}

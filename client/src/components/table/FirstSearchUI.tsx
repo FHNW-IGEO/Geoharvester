@@ -1,6 +1,5 @@
 import { SearchField, SearchProps } from "../menubar/SearchField";
 import Box from "@mui/material/Box";
-import "../../styles.css";
 
 export const FirstSearchUI = ({
   localSearchString,

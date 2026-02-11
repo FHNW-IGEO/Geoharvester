@@ -1,16 +1,15 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { ServiceTable } from "./components/table/ServiceTable";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Header } from "./components/menubar/Header";
 import { Geoservice, SearchParameters } from "./types";
 import {
-  DEFAULTLANGUAGE,
   PROVIDER,
   RESPONSESTATE,
   SERVICE,
   DEFAULTROWSPERPAGE,
   DEFAULTCHUNKSIZE,
-} from "./constants";
+} from "./appConstants";
 import { getData } from "./requests";
 import { Footer } from "./components/Footer";
 import { Stack } from "@mui/material";
@@ -48,7 +47,7 @@ export type SearchResult = {
 function App() {
   const [searchResult, setSearchResult] = useState({} as SearchResult);
   const [responseState, setResponseState] = useState(
-    RESPONSESTATE.UNINITIALIZED
+    RESPONSESTATE.UNINITIALIZED,
   );
 
   const [tablePage, setTablePage] = useState<number>(0); // Needed for the table UI and to dertermine when to make an API call
@@ -67,7 +66,7 @@ function App() {
   };
 
   const [searchParameters, setSearchParameters] = useState<SearchParameters>(
-    defaultSearchParameter
+    defaultSearchParameter,
   );
   const { items, total } = searchResult;
 
@@ -87,7 +86,7 @@ function App() {
       provider,
       language,
       page,
-      DEFAULTCHUNKSIZE
+      DEFAULTCHUNKSIZE,
     )
       .then((res) => {
         updateSearchParameters(parameters);
