@@ -31,8 +31,8 @@ export function ImpressumDialog(props: any) {
           </Typography>
           <Typography variant="body1">
             Pia Bereuter (FHNW), Pasquale Di Donato (swisstopo), Elia Ferrari
-            (FHNW), Mina Karimi (FHNW), David Oesch (swisstopo), Friedrich
-            Striewski (FHNW), Fiona Tiefenbacher (FHNW)
+            (FHNW), David Oesch (swisstopo), Friedrich Striewski (FHNW), Fiona
+            Tiefenbacher (FHNW)
           </Typography>
           <Typography variant="h5" sx={{ mt: 4 }}>
             Realisierung

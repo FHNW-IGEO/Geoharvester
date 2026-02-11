@@ -1,5 +1,5 @@
 import { Components } from "@mui/material/styles";
-import { COLWIDTH } from "src/components/table/settings";
+import { COLWIDTH } from "components/table/settings";
 
 const sharedStyles = {
   overflow: "hidden",

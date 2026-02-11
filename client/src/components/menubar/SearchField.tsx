@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   IconButton,
   OutlinedInput,
@@ -9,9 +8,9 @@ import {
 } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 import SearchIcon from "@mui/icons-material/Search";
-import { BREAKPOINT1000 } from "src/constants";
-import { useViewport } from "src/custom/ViewportHook";
-import { SearchParameters } from "src/types";
+import { BREAKPOINT1000 } from "../../appConstants";
+import { useViewport } from "../../custom/ViewportHook";
+import { SearchParameters } from "../../types";
 import { FormattedMessage, useIntl } from "react-intl";
 
 export type SearchProps = {
