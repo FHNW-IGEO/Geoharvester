@@ -104,7 +104,6 @@ def detect_language(phrase, not_found=False):
         lang = excep
     return lang
 
-
 def is_not_num(str) -> bool:
     """
     Tests if a str element contains a number and return True or False.
@@ -286,7 +285,7 @@ def search_redis_with_parameters(redis_query, lang: EnumLangType, offset, limit=
             .return_field(f'abstract_{lang_string}')
             .return_field(f'keywords_{lang_string}')
             .return_field(f'keywords_nlp_{lang_string}')
-            ), parsed_language
+            ), parsed_language, lang_string
 
 
 def search_redis_with_keywords(redis_query, lang: EnumLangType, offset, limit=50000):
@@ -326,7 +325,7 @@ def search_redis_with_keywords(redis_query, lang: EnumLangType, offset, limit=50
             .return_field(f'abstract_{lang_string}')
             .return_field(f'keywords_{lang_string}')
             .return_field(f'keywords_nlp_{lang_string}')
-            ), parsed_language
+            ), parsed_language, lang_string
 
 def redis_documents_to_pandas(docs):
     """
@@ -455,6 +454,8 @@ def results_ranking(redis_output, query_words_list, known_terms, parsed_lang):
         elapsed time for the redis search
     query_words_list : list[str]
         query words splitted into a list
+    parsed_lang
+        A lang name, e.g. English
 
     Returns
     -------
@@ -507,6 +508,11 @@ def results_ranking(redis_output, query_words_list, known_terms, parsed_lang):
         query_results_df.sort_values(by=['score', 'inv_title_length', 'title'], axis=0, inplace=True, ascending=False)
         # Replace nans with empty str for a cleaner visualisation
         query_results_df = query_results_df.replace(to_replace='nan', value="", regex=True)
+
+        # For Frontend: Split keyword strings and turn into list
+        nlp_cols = [col for col in query_results_df.columns if col.startswith("keywords_nlp_")]
+        for col in nlp_cols:
+            query_results_df[col + "_list"] = query_results_df[col].fillna("").apply(lambda x: x.split(",") if x else [])
 
         ranked_results = pandas_to_dict(query_results_df)
         # print(f'ET ranking: {round(time()-t0, 2)}')

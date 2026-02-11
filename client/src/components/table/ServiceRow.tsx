@@ -5,7 +5,9 @@ import {
   TableCell,
   Icon,
   Tooltip,
+  Chip,
   styled,
+  useTheme,
 } from "@mui/material";
 import { Geoservice } from "../../types";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -14,6 +16,8 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { SubRow } from "./SubRow";
 import { getIcon } from "../../custom/getIcon";
 import "../../styles.css";
+
+const mockKeywords = ["mock1", "mock2", "mock3", "mock4"];
 
 export const ServiceRow = ({
   row,
@@ -29,8 +33,8 @@ export const ServiceRow = ({
   mobileMode: boolean;
 }) => {
   const [open, setOpen] = useState(false);
-
   useEffect(() => setOpen(false), [page, total]);
+  const theme = useTheme();
 
   const CenteredTableCell = styled(TableCell)(() => ({
     "&": {
@@ -64,7 +68,7 @@ export const ServiceRow = ({
 
   return (
     <>
-      <TableRow key={index} onClick={() => setOpen(!open)}>
+      <TableRow key={index}>
         <CenteredTableCell>
           <IconButton
             aria-label="expand row"
@@ -75,8 +79,24 @@ export const ServiceRow = ({
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </CenteredTableCell>
-        <LeftAlignedTableCellMaxWidth>{row.title}</LeftAlignedTableCellMaxWidth>
-        {!mobileMode && <LeftAlignedTableCell>{abstract}</LeftAlignedTableCell>}
+        <LeftAlignedTableCellMaxWidth onClick={() => setOpen(!open)}>
+          {row.title}
+        </LeftAlignedTableCellMaxWidth>
+        {!mobileMode && (
+          <LeftAlignedTableCell>
+            {abstract}
+            <br />
+            {row.keywords.split(",").map((keyword) => (
+              <Chip
+                label={keyword}
+                variant="outlined"
+                size="small"
+                color="primary"
+                sx={{ mt: 1, mr: 2, color: theme.palette.primary.main }}
+              />
+            ))}
+          </LeftAlignedTableCell>
+        )}
         <CenteredTableCell>
           <Tooltip title={row.provider}>
             <Icon>
