@@ -148,7 +148,7 @@ async def get_data(
             text_query = " ".join(text_query)
 
         redis_query = redis_query_from_parameters(text_query, service, provider, lang.value)
-        redis_data, parsed_language  = search_redis_with_parameters(redis_query, lang,  0, 40000)
+        redis_data, parsed_language, lang_string  = search_redis_with_parameters(redis_query, lang,  0, 40000)
 
         t1 = time()
         print(
@@ -174,6 +174,7 @@ async def get_data(
             word_list_clean,
             known_terms,
             parsed_language,
+            lang_string
         )
         fastapi_logger.info(
             f"Ranking ET: {round(time() - t1, 2)} (lang={parsed_language})"
@@ -219,7 +220,7 @@ async def get_data_by_keywords(
         fastapi_logger.info("Redis queried using KEYWORD(S) with: %s", redis_query)
 
         offset = page * limit
-        redis_data, parsed_language = search_redis_with_keywords(
+        redis_data, parsed_language, lang_string = search_redis_with_keywords(
             redis_query, lang, offset, limit
         )
 
@@ -241,6 +242,7 @@ async def get_data_by_keywords(
             word_list_clean,
             known_terms,
             parsed_language,
+            lang_string
         )
         fastapi_logger.info(
             "Ranking ET: %.2fs (lang=%s)",
