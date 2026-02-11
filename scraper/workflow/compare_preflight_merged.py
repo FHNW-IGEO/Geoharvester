@@ -3,6 +3,7 @@
 import json
 from pathlib import Path
 import pandas as pd
+from datetime import datetime
 
 MERGED_DATA_PKL = Path("data/merged_data.pkl") # From Git
 PREFLIGHT_HASHES = Path("../artifacts/preflight-hashes.json") # From preflight - only hash
@@ -58,6 +59,10 @@ def main():
         if not needs_processing:
             continue
 
+        # For debugging:
+        timestamp = datetime.now().strftime("%d, %m, %Y")
+        reason = "new" if current_hash is None else "changed" if preflight_hash != current_hash else "unknown"
+
         datasets_to_process.append({
             "dataset_id": dataset_id,
             "provider": diag["provider"],
@@ -65,7 +70,9 @@ def main():
             "service_url": diag["service_url"],
             "service_type": diag["service_type"],
             "preflight_hash": preflight_hash,
-            "current_hash": current_hash
+            "current_hash": current_hash,
+            "timestamp": timestamp,
+            "reason": reason
         })
 
         # Write output JSON for downstream pipeline

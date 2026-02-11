@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - Scraper_time_stamps #TODO Remove after test runs
   schedule:
     - cron: "0 0 * * 6" # Saturday at 0:00
 
@@ -416,19 +417,20 @@ jobs:
           name: merged_data_pkl
           path: scraper/data/merged_data.pkl
 
-      - name: Commit merged data to repository
-        if: github.ref == 'refs/heads/main'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          # TODO: ADD after test runs
+      # - name: Commit merged data to repository
+      #   if: github.ref == 'refs/heads/main'
+      #   run: |
+      #     git config user.name "github-actions[bot]"
+      #     git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add data/merged_data.pkl
+      #     git add data/merged_data.pkl
 
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "Update merged dataset (pipeline)"
-            git push origin main
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     if git diff --cached --quiet; then
+      #       echo "No changes to commit"
+      #     else
+      #       git commit -m "Update merged dataset (pipeline)"
+      #       git push origin main
+      #     fi
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
