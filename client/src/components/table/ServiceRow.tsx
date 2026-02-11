@@ -12,12 +12,9 @@ import {
 import { Geoservice } from "../../types";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-
 import { SubRow } from "./SubRow";
 import { getIcon } from "../../custom/getIcon";
-import "../../styles.css";
-
-const mockKeywords = ["mock1", "mock2", "mock3", "mock4"];
+import { useIntl } from "react-intl";
 
 export const ServiceRow = ({
   row,
@@ -35,6 +32,7 @@ export const ServiceRow = ({
   const [open, setOpen] = useState(false);
   useEffect(() => setOpen(false), [page, total]);
   const theme = useTheme();
+  const intl = useIntl();
 
   const CenteredTableCell = styled(TableCell)(() => ({
     "&": {
@@ -66,6 +64,10 @@ export const ServiceRow = ({
 
   const qualitynum = `chart x-${row.metaquality}`;
 
+  const handleChipClick = (label: string) => {
+    console.log(label);
+  };
+
   return (
     <>
       <TableRow key={index}>
@@ -86,14 +88,21 @@ export const ServiceRow = ({
           <LeftAlignedTableCell>
             {abstract}
             <br />
-            {mockKeywords.map((keyword) => (
-              <Chip
-                label={keyword}
-                variant="outlined"
-                size="small"
-                color="primary"
-                sx={{ mt: 1, mr: 2, color: theme.palette.primary.main }}
-              />
+            {row.keywords_nlp.sort().map((keyword, i) => (
+              <Tooltip
+                title={intl.formatMessage({ id: "keyword.lookup" })}
+                arrow
+              >
+                <Chip
+                  key={keyword + i}
+                  label={keyword}
+                  variant="outlined"
+                  size="small"
+                  color="primary"
+                  onClick={() => handleChipClick(keyword)}
+                  sx={{ mt: 1, mr: 0.5, color: theme.palette.primary.main }}
+                />
+              </Tooltip>
             ))}
           </LeftAlignedTableCell>
         )}

@@ -36,6 +36,7 @@ export const getData = async (
     ...response,
     data: { ...response.data, page: response.data.page - 1 },
   }; // Translate back to zero indexed MUI value
+  console.log(result);
   return result;
 };
 

@@ -14,7 +14,8 @@ export interface Geoservice {
   tree: string;
   group: string;
   abstract: string;
-  keywords: string;
+  keywords: string[];
+  keywords_nlp: string[];
   legend: string;
   contact: string;
   endpoint: string;

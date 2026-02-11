@@ -4,8 +4,6 @@ import { COLWIDTH } from "components/table/settings";
 const sharedStyles = {
   overflow: "hidden",
   textOverflow: "ellipsis",
-  //   whiteSpace: "nowrap"/*  */ as const,
-  //   wordBreak: "break-word" as const,
   borderBottom: "none !important",
   padding: 4,
   border: "1px solid black",
@@ -35,8 +33,8 @@ export const components: Components = {
         backgroundColor: "#ffffff",
         color: "rgba(0, 0, 0, 0.87)",
         boxShadow: "0px 2px 8px rgba(0,0,0,0.15)",
-        fontSize: 16,
-        fontWeight: 400,
+        fontSize: 14,
+        fontWeight: 500,
         border: "1px solid grey",
       },
       arrow: {

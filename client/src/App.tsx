@@ -15,26 +15,8 @@ import { Footer } from "./components/Footer";
 import { Stack } from "@mui/material";
 import { FirstSearchUI } from "./components/table/FirstSearchUI";
 import { LanguageContext } from "./lang/LanguageContext";
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#007CC3",
-      light: "#7FBDE1",
-      contrastText: "#ffffff",
-    },
-    secondary: {
-      main: "#ffffff",
-
-      contrastText: "#007CC3",
-    },
-    info: {
-      main: "#E8E8E8",
-      light: "#C0C0C0",
-      contrastText: "#ffffff",
-    },
-  },
-});
+import { theme } from "./theme/index";
+import "./styles.css";
 
 export type SearchResult = {
   page: number;

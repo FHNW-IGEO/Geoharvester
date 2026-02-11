@@ -27,8 +27,6 @@ import {
 import { useViewport } from "../../custom/ViewportHook";
 import { PlaceholderWidget } from "./PlaceholderUI";
 
-import "../../styles.css";
-
 type TableProps = {
   docs: Geoservice[];
   responseState: RESPONSESTATE;
