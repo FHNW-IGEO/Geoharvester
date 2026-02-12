@@ -9,7 +9,7 @@ import {
   styled,
   useTheme,
 } from "@mui/material";
-import { Geoservice } from "../../types";
+import { Geoservice, SearchParameters } from "../../types";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { SubRow } from "./SubRow";
@@ -22,12 +22,14 @@ export const ServiceRow = ({
   page,
   total,
   mobileMode,
+  triggerSearchbyKeyword,
 }: {
   row: Geoservice;
   index: number;
   page: number;
   total: number;
   mobileMode: boolean;
+  triggerSearchbyKeyword: (parameters: SearchParameters) => void;
 }) => {
   const [open, setOpen] = useState(false);
   useEffect(() => setOpen(false), [page, total]);
@@ -65,7 +67,7 @@ export const ServiceRow = ({
   const qualitynum = `chart x-${row.metaquality}`;
 
   const handleChipClick = (label: string) => {
-    console.log(label);
+    triggerSearchbyKeyword({ searchString: label, page: 0 });
   };
 
   return (
@@ -98,9 +100,9 @@ export const ServiceRow = ({
                   label={keyword}
                   variant="outlined"
                   size="small"
-                  color="primary"
+                  color="info"
                   onClick={() => handleChipClick(keyword)}
-                  sx={{ mt: 1, mr: 0.5, color: theme.palette.primary.main }}
+                  sx={{ mt: 1, mr: 0.5, color: theme.palette.info.main }}
                 />
               </Tooltip>
             ))}

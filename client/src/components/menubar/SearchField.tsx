@@ -39,7 +39,6 @@ export const SearchField = ({
   const responsiveUI = useViewport().width < BREAKPOINT1000;
   const intl = useIntl();
 
-  // const [localSearchString, setLocalSearchString] = useState("");
   const drawerEnabled = fromDrawer ? fromDrawer : false;
 
   return (

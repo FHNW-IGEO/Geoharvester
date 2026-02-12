@@ -2,7 +2,7 @@
 from typing import List, Optional
 
 from pydantic import BaseModel, field_validator
-from redis.commands.search.field import (GeoField, NumericField, TextField,
+from redis.commands.search.field import (NumericField, TextField,
                                          TextField)
 from typing import Optional, List, Union
 

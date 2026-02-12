@@ -118,7 +118,7 @@ async def get_data(
     provider: EnumProviderType = EnumProviderType.none,
     lang: EnumLangType = EnumLangType.de,
     page: int = 0,
-    limit: int = 1000,
+    limit: int = 50000,
 ):
     """Route for the get_data request
         query: The query string used for searching
@@ -129,13 +129,12 @@ async def get_data(
         service: Service enum, either WMS, WMTS, WFS
     """
     t0 = time()
-    offset = page * limit
 
     # Search step
     try:
         if not query_string:
             redis_query = "@service:(WMS | WMTS | WFS)"
-            redis_data, _ = search_redis_with_parameters(redis_query, lang, offset, limit)
+            redis_data, _ = search_redis_with_parameters(redis_query, lang, 0, limit)
             return paginate(redis_data.docs)
 
         if len(query_string) < 1:
@@ -149,7 +148,7 @@ async def get_data(
             text_query = " ".join(text_query)
 
         redis_query = redis_query_from_parameters(text_query, service, provider, lang.value)
-        redis_data, parsed_language  = search_redis_with_parameters(redis_query, lang,  0, 40000)
+        redis_data, parsed_language  = search_redis_with_parameters(redis_query, lang,  0, limit)
 
         t1 = time()
         print(
@@ -204,7 +203,7 @@ async def get_data_by_keywords(
     query_string: Optional[str] = None,
     lang: EnumLangType = EnumLangType.de,
     page: int = 0,
-    limit: int = 1000,
+    limit: int = 50000,
 ):
     if not query_string or len(query_string) <= 1:
         fastapi_logger.debug("Empty or too short query_string")
@@ -214,15 +213,13 @@ async def get_data_by_keywords(
         t1 = time()
 
         known_terms, word_list_clean, text_query = sanitize_and_kg_check(
-            query_string, kg, language_dict, lang.value
+            query_string, kg, language_dict, lang
         )
 
         redis_query = redis_query_from_keywords(text_query, lang.value)
-        fastapi_logger.info("Redis queried using KEYWORD(S) with: %s", redis_query)
 
-        offset = page * limit
         redis_data, parsed_language = search_redis_with_keywords(
-            redis_query, lang, offset, limit
+            redis_query, lang, 0, limit
         )
 
     except Exception as e:

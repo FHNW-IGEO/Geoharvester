@@ -230,23 +230,20 @@ def redis_query_from_keywords(query_string: str, lang: str = "de"):
     Build a query string based on the parameters provided.
     
     """
-    queryable_parameters = []
-    fields = [
-        "keywords",
-        f"keywords_{lang}",
-        f"keywords_nlp_{lang}",
-    ]
+    if query_string:
+        tokens = tokenize_query(query_string)
+        token_query = transform_wordlist_to_query(tokens, lang)
+        text_fields = [
+            "keywords_nlp",
+            f"keywords_{lang}",
+            f"keywords_nlp_{lang}",
+        ]
 
-    tokens = tokenize_query(query_string)
-    token_query = transform_wordlist_to_query(tokens, lang)
+        field_queries = [f"@{field}:({token_query})" for field in text_fields]
+        text_query = " | ".join(field_queries) 
 
-    field_queries = [f"@{field}:{token_query}" for field in fields]
-    text_query = " | ".join(field_queries)
-    print(text_query)
-    queryable_parameters.append(text_query)
+        return text_query
 
-    return " ".join(queryable_parameters)
-    
 
 def search_redis_with_parameters(redis_query, lang: EnumLangType, offset, limit=50000):
     LANG_MAP = {
@@ -256,6 +253,8 @@ def search_redis_with_parameters(redis_query, lang: EnumLangType, offset, limit=
         EnumLangType.de: ("german", "de"),
     }
     parsed_language, lang_string = LANG_MAP.get(lang, ("german", "de"))
+
+    print("q", redis_query)
 
     return r.ft(SVC_INDEX_ID).search(Query(redis_query)
             .sort_by('metaquality', asc=False)
@@ -288,7 +287,7 @@ def search_redis_with_parameters(redis_query, lang: EnumLangType, offset, limit=
             ), parsed_language
 
 
-def search_redis_with_keywords(redis_query, lang: EnumLangType, offset, limit=50000):
+def search_redis_with_keywords(redis_query, lang: EnumLangType, offset=0, limit=50000):
     LANG_MAP = {
         EnumLangType.fr: ("french", "fr"),
         EnumLangType.it: ("italian", "it"),

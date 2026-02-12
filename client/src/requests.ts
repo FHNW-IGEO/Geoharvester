@@ -36,7 +36,24 @@ export const getData = async (
     ...response,
     data: { ...response.data, page: response.data.page - 1 },
   }; // Translate back to zero indexed MUI value
-  console.log(result);
+  return result;
+};
+
+export const getDataByKeyword = async (
+  query_string: string,
+  lang: LANGUAGE = LANGUAGE.DE,
+  pageParam: number = 0,
+  size: number = DEFAULTCHUNKSIZE,
+) => {
+  const page = pageParam + 1; // FastAPI Pagination uses 1 as first index
+  const offset = 0;
+  const response = await axios(routes.getData, {
+    params: { query_string, lang, offset, page, size },
+  });
+  const result = {
+    ...response,
+    data: { ...response.data, page: response.data.page - 1 },
+  }; // Translate back to zero indexed MUI value
   return result;
 };
 

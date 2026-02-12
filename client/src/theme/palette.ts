@@ -12,8 +12,8 @@ export const palette: PaletteOptions = {
     contrastText: "#007CC3",
   },
   info: {
-    main: "#E8E8E8",
-    light: "#C0C0C0",
+    main: "#A0A0A0",
+    light: "#08080",
     contrastText: "#ffffff",
   },
   warning: {

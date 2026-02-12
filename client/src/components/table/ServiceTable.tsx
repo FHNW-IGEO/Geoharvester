@@ -37,6 +37,7 @@ type TableProps = {
   setTablePage: (page: number) => void;
   rowsPerPage: number;
   triggerSearch: (parameters: SearchParameters) => void;
+  triggerSearchbyKeyword: (parameters: SearchParameters) => void;
   searchParameters: SearchParameters;
 };
 
@@ -52,6 +53,7 @@ export const ServiceTable = ({
   setRowsPerPage,
   rowsPerPage,
   triggerSearch,
+  triggerSearchbyKeyword,
   searchParameters,
 }: TableProps) => {
   const [order, setOrder] = useState<Order>("asc");
@@ -271,6 +273,7 @@ export const ServiceTable = ({
                   page={tablePage}
                   total={total}
                   mobileMode={mobileMode}
+                  triggerSearchbyKeyword={triggerSearchbyKeyword}
                 />
               ))}
             </TableBody>
