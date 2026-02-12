@@ -89,7 +89,7 @@ export const ServiceRow = ({
         {!mobileMode && (
           <LeftAlignedTableCell>
             {abstract}
-            <br />
+            {/* <br />
             {row.keywords_nlp.sort().map((keyword, i) => (
               <Tooltip
                 title={intl.formatMessage({ id: "keyword.lookup" })}
@@ -105,7 +105,7 @@ export const ServiceRow = ({
                   sx={{ mt: 1, mr: 0.5, color: theme.palette.info.main }}
                 />
               </Tooltip>
-            ))}
+            ))}*/}
           </LeftAlignedTableCell>
         )}
         <CenteredTableCell>
