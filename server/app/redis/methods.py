@@ -2,7 +2,7 @@
 import uuid
 from string import punctuation
 from time import time
-from typing import Optional, List, Union
+from typing import Optional, List
 import re
 import pandas as pd
 from app.constants import EnumLangType, EnumProviderType, EnumServiceType
@@ -11,7 +11,7 @@ from fastapi.logger import logger as fastapi_logger
 from langdetect import detect
 from nltk.stem import SnowballStemmer
 from redis.commands.search.indexDefinition import IndexDefinition, IndexType
-from redis.commands.search.query import Query, SortbyField
+from redis.commands.search.query import Query
 import json
 
 from server.app.redis.redis_manager import r

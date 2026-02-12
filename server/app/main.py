@@ -5,6 +5,7 @@ import os
 import warnings
 from time import time
 from typing import Union, Optional
+from redis.commands.search.query import Query
 
 from app.constants import (DEFAULTSIZE, EnumLangType, EnumProviderType,
                            EnumServiceType)
@@ -15,12 +16,14 @@ from app.redis.methods import (create_index, drop_redis_db, ingest_data,
                                redis_query_from_parameters, results_ranking, redis_query_from_keywords,
                                search_redis_with_parameters, search_redis_with_keywords )
 from app.redis.schemas import (SVC_INDEX_ID, SVC_KEY, SVC_PREFIX,
-                               GeoserviceModel, geoservices_schema)
+                               GeoserviceModel, geoservices_schema, KeywordHistogram)
 from fastapi import FastAPI, HTTPException
 from fastapi.logger import logger as fastapi_logger
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_pagination import Page, add_pagination, paginate
 from fastapi_pagination.customization import CustomizedPage, UseParamsFields
+from collections import Counter
+import json
 
 
 from server.app.redis.redis_manager import r
@@ -63,11 +66,9 @@ GeoharvesterPage = CustomizedPage[
     UseParamsFields(size=DEFAULTSIZE)
 ]
 
-
 dataframe=None
 datajson=None
 language_dict = {'en': 'english', 'fr': 'french', 'de': 'german', 'it': 'italian'}
-
 
 @app.on_event("startup")
 async def startup_event():
@@ -259,6 +260,62 @@ async def get_data_by_keywords(
         return paginate([])
 
     return paginate(ranked_results)
+
+
+
+
+@app.get(
+    "/api/getKeywordHistogram",
+    response_model=list[KeywordHistogram],
+)
+async def build_keyword_histogram(field: str= "keywords_nlp"):
+    """
+    Build a histogram of values for a given JSON field.
+
+    :param redis_client: redis connection
+    :param index_name: RediSearch index name
+    :param field: JSON field name (e.g. "keywords", "keywords_nlp")
+    :return: List of (keyword, count) sorted by frequency desc
+    """
+
+    counter = Counter()
+
+    # Get all document IDs via FT.SEARCH (fast and indexed)
+    res = r.ft(SVC_INDEX_ID).search(Query("*").paging(0, 1000000))
+
+    for doc in res.docs:
+        key = doc.id
+
+        # Fetch raw JSON
+        raw = r.json().get(key)
+
+        if not raw or field not in raw:
+            continue
+
+        value = raw[field]
+
+        # If array field
+        if isinstance(value, list):
+            for v in value:
+                if isinstance(v, str) and v.strip():
+                    counter[v.strip().lower()] += 1
+
+        # If single string field
+        elif isinstance(value, str):
+            tokens = value.split()
+            for token in tokens:
+                token = token.strip().lower()
+                if token:
+                    counter[token] += 1
+
+    # Sort by frequency descending
+    sorted_keywords = sorted(counter.items(), key=lambda x: x[1], reverse=True)
+    print(sorted_keywords)
+    return [
+        KeywordHistogram(keyword=keyword, count=count)
+        for keyword, count in sorted_keywords
+    ]   
+
 
 
 add_pagination(app)

@@ -95,3 +95,8 @@ class GeoserviceModel(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class KeywordHistogram(BaseModel):
+    keyword: str
+    count: int
