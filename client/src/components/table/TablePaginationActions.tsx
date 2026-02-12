@@ -4,7 +4,6 @@ import IconButton from "@mui/material/IconButton";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import LastPageIcon from "@mui/icons-material/LastPage";
 
 interface TablePaginationActionsProps {
   mobileMode: boolean;
@@ -15,15 +14,15 @@ interface TablePaginationActionsProps {
   displayedRecordsEnd: number;
   onPageChange: (
     event: React.MouseEvent<HTMLButtonElement>,
-    newPage: number
+    newPage: number,
   ) => void;
   handleChangePageForward?: (
     event: React.MouseEvent<HTMLButtonElement>,
-    newPage: number
+    newPage: number,
   ) => void;
   handleChangePageBackward?: (
     event: React.MouseEvent<HTMLButtonElement>,
-    newPage: number
+    newPage: number,
   ) => void;
   handleSetPageZero?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
@@ -44,19 +43,19 @@ export const TablePaginationActions = (props: TablePaginationActionsProps) => {
   } = props;
 
   const handleBackButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     handleChangePageBackward && handleChangePageBackward(event, page - 1);
   };
 
   const handleNextButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     handleChangePageForward && handleChangePageForward(event, page + 1);
   };
 
   const handleFirstPageButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     handleSetPageZero && handleSetPageZero(event);
   };

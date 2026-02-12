@@ -4,8 +4,6 @@ import Button from "@mui/material/Button";
 import { SearchField, SearchProps } from "./SearchField";
 import { FormattedMessage } from "react-intl";
 
-import "../../styles.css";
-
 export const SearchDrawer = ({
   localSearchString,
   setLocalSearchString,
@@ -17,7 +15,11 @@ export const SearchDrawer = ({
 }: SearchProps & { drawerOpen: boolean }) => {
   return (
     <div>
-      <Button variant="contained" onClick={() => setDrawerOpen(true)}>
+      <Button
+        variant="contained"
+        onClick={() => setDrawerOpen(true)}
+        sx={{ ml: 2 }}
+      >
         <FormattedMessage id="search.searchButton" defaultMessage="Suchen" />
       </Button>
       <SwipeableDrawer

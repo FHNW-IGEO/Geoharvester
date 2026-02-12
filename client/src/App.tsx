@@ -1,41 +1,22 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { ServiceTable } from "./components/table/ServiceTable";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import { Header } from "./components/menubar/Header";
 import { Geoservice, SearchParameters } from "./types";
 import {
-  DEFAULTLANGUAGE,
   PROVIDER,
   RESPONSESTATE,
   SERVICE,
   DEFAULTROWSPERPAGE,
   DEFAULTCHUNKSIZE,
-} from "./constants";
-import { getData } from "./requests";
+} from "./appConstants";
+import { getData, getDataByKeyword } from "./requests";
 import { Footer } from "./components/Footer";
 import { Stack } from "@mui/material";
 import { FirstSearchUI } from "./components/table/FirstSearchUI";
 import { LanguageContext } from "./lang/LanguageContext";
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#007CC3",
-      light: "#7FBDE1",
-      contrastText: "#ffffff",
-    },
-    secondary: {
-      main: "#ffffff",
-
-      contrastText: "#007CC3",
-    },
-    info: {
-      main: "#E8E8E8",
-      light: "#C0C0C0",
-      contrastText: "#ffffff",
-    },
-  },
-});
+import { theme } from "./theme/index";
+import "./styles.css";
 
 export type SearchResult = {
   page: number;
@@ -48,7 +29,7 @@ export type SearchResult = {
 function App() {
   const [searchResult, setSearchResult] = useState({} as SearchResult);
   const [responseState, setResponseState] = useState(
-    RESPONSESTATE.UNINITIALIZED
+    RESPONSESTATE.UNINITIALIZED,
   );
 
   const [tablePage, setTablePage] = useState<number>(0); // Needed for the table UI and to dertermine when to make an API call
@@ -67,13 +48,35 @@ function App() {
   };
 
   const [searchParameters, setSearchParameters] = useState<SearchParameters>(
-    defaultSearchParameter
+    defaultSearchParameter,
   );
   const { items, total } = searchResult;
 
   const updateSearchParameters = (parameter: SearchParameters) => {
     // Required for resetting the search string with the x button and syncing state
     setSearchParameters(parameter);
+  };
+
+  const handleResponseParsing = (res: any, parameters: SearchParameters) => {
+    updateSearchParameters(parameters);
+    const { data } = res;
+    if (data.items.length > 0) {
+      setResponseState(RESPONSESTATE.SUCCESS);
+      setSearchResult(data);
+      setCurrentApiPage(data.page);
+      setTablePage(0);
+    } else {
+      setResponseState(RESPONSESTATE.EMPTY);
+      setSearchResult({} as SearchResult); // Fallback on error
+      setTablePage(0);
+    }
+  };
+
+  const handleResponseFailure = (e: any) => {
+    console.error(e);
+    setResponseState(RESPONSESTATE.ERROR);
+    setSearchResult({} as SearchResult); // Fallback on error
+    setTablePage(0);
   };
 
   const triggerSearch = async (parameters: SearchParameters) => {
@@ -87,28 +90,25 @@ function App() {
       provider,
       language,
       page,
-      DEFAULTCHUNKSIZE
+      DEFAULTCHUNKSIZE,
     )
-      .then((res) => {
-        updateSearchParameters(parameters);
-        const { data } = res;
-        if (data.items.length > 0) {
-          setResponseState(RESPONSESTATE.SUCCESS);
-          setSearchResult(data);
-          setCurrentApiPage(data.page);
-          setTablePage(0);
-        } else {
-          setResponseState(RESPONSESTATE.EMPTY);
-          setSearchResult({} as SearchResult); // Fallback on error
-          setTablePage(0);
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-        setResponseState(RESPONSESTATE.ERROR);
-        setSearchResult({} as SearchResult); // Fallback on error
-        setTablePage(0);
-      });
+      .then((res) => handleResponseParsing(res, parameters))
+      .catch((e) => handleResponseFailure(e));
+  };
+
+  const triggerSearchbyKeyword = async (parameters: SearchParameters) => {
+    const { searchString, page } = parameters;
+
+    setResponseState(RESPONSESTATE.WAITING);
+
+    await getDataByKeyword(
+      searchString as string,
+      language,
+      page,
+      DEFAULTCHUNKSIZE,
+    )
+      .then((res) => handleResponseParsing(res, parameters))
+      .catch((e) => handleResponseFailure(e));
   };
 
   return (
@@ -147,6 +147,7 @@ function App() {
               total,
               currentApiPage,
               triggerSearch,
+              triggerSearchbyKeyword,
             }}
             tablePage={tablePage}
             setTablePage={setTablePage}

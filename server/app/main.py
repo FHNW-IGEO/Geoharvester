@@ -2,29 +2,29 @@
 import json
 import logging
 import os
-import re
 import warnings
 from time import time
-from typing import Union
+from typing import Union, Optional
+from redis.commands.search.query import Query
 
 from app.constants import (DEFAULTSIZE, EnumLangType, EnumProviderType,
                            EnumServiceType)
-from app.processing.methods import (find_translation, generate_knowledge_graph,
-                                    import_pkl_into_dataframe,
-                                    open_knowledge_graph, split_search_string,
-                                    traverse_knowledge_graph)
+from app.processing.methods import ( generate_knowledge_graph,
+                                    import_pkl_into_dataframe, sanitize_and_kg_check,
+                                    )
 from app.redis.methods import (create_index, drop_redis_db, ingest_data,
-                               redis_query_from_parameters, results_ranking,
-                               search_redis, transform_wordlist_to_query)
+                               redis_query_from_parameters, results_ranking, redis_query_from_keywords,
+                               search_redis_with_parameters, search_redis_with_keywords )
 from app.redis.schemas import (SVC_INDEX_ID, SVC_KEY, SVC_PREFIX,
-                               GeoserviceModel, geoservices_schema)
-from fastapi import FastAPI, Query
+                               GeoserviceModel, geoservices_schema, KeywordHistogram)
+from fastapi import FastAPI, HTTPException
 from fastapi.logger import logger as fastapi_logger
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_pagination import Page, add_pagination, paginate
 from fastapi_pagination.customization import CustomizedPage, UseParamsFields
-from nltk.corpus import stopwords
-from pydantic import Field
+from collections import Counter
+import json
+
 
 from server.app.redis.redis_manager import r
 
@@ -66,9 +66,9 @@ GeoharvesterPage = CustomizedPage[
     UseParamsFields(size=DEFAULTSIZE)
 ]
 
-
 dataframe=None
 datajson=None
+language_dict = {'en': 'english', 'fr': 'french', 'de': 'german', 'it': 'italian'}
 
 @app.on_event("startup")
 async def startup_event():
@@ -108,15 +108,19 @@ async def startup_event():
         fastapi_logger.info("Redis initialized with {} records".format(total_keys))
 
 
-# Can be removed:
-# @app.get("/api")
-# async def root():
-#     '''Root endpoint'''
 
-#     return {"message": "running"}
-
-@app.get("/api/getData", response_model=GeoharvesterPage[GeoserviceModel])
-async def get_data(query_string: Union[str, None] = None,  service: EnumServiceType = EnumServiceType.none, provider:EnumProviderType = EnumProviderType.none, lang: EnumLangType = EnumLangType.de, page: int = 0, limit: int = 1000):
+@app.get(
+    "/api/getData",
+    response_model=GeoharvesterPage[GeoserviceModel],
+)
+async def get_data(
+    query_string: Union[str, None] = None,
+    service: EnumServiceType = EnumServiceType.none,
+    provider: EnumProviderType = EnumProviderType.none,
+    lang: EnumLangType = EnumLangType.de,
+    page: int = 0,
+    limit: int = 50000,
+):
     """Route for the get_data request
         query: The query string used for searching
         service: Service filter - wms, wmts, wfs
@@ -125,53 +129,193 @@ async def get_data(query_string: Union[str, None] = None,  service: EnumServiceT
         limit: Redis returns 10 results by default, allow more results to be returned
         service: Service enum, either WMS, WMTS, WFS
     """
-
     t0 = time()
-    if (query_string is None or query_string == ""):
-        redis_query = redis_query_from_parameters("", service, provider)
-        fastapi_logger.info("Redis queried without query_text: {}".format(redis_query))
 
-        redis_data, parsed_language = search_redis(redis_query, lang, 0, 40000)
-        # print(f"Total ET query: {round((time()-t0),2)}")
-        return paginate(redis_data.docs)
+    # Search step
+    try:
+        if not query_string:
+            redis_query = "@service:(WMS | WMTS | WFS)"
+            redis_data, _ = search_redis_with_parameters(redis_query, lang, 0, limit)
+            return paginate(redis_data.docs)
 
-    elif (query_string is not None and len(query_string) > 1):
-        language_dict = {'en': 'english', 'fr': 'french', 'de': 'german', 'it': 'italian'}
-        # Traverse knowledge graph for search terms
-        known_terms = traverse_knowledge_graph(kg, language_dict[lang], query_string)
-        for known_term in known_terms:
-            if len(known_term.split()) == 1:
-                known_terms.remove(known_term)
-        print(f"Known terms and synonyms from KG: {known_terms}")
-        # create word list without known terms
-        word_list = split_search_string(query_string, known_terms)
-        # stop words removal just for redis
-        stop_words = stopwords.words(language_dict[lang])
-        word_list_clean = [re.escape(word) for word in word_list if word not in stop_words] # Escape all special chars except _, otherwise Redis throws error
-        text_query = transform_wordlist_to_query(word_list_clean, lang)
+        if len(query_string) < 1:
+            print("Query string too short")
+            return paginate([])
 
-        redis_query = redis_query_from_parameters(text_query, service, provider)
-        fastapi_logger.info("Redis queried with: {}".format(redis_query))
+        known_terms, word_list_clean, text_query = sanitize_and_kg_check(query_string, kg, language_dict, lang)
+        print(text_query)
 
-        redis_data, parsed_language = search_redis(redis_query, lang, 0, 40000)
+        if isinstance(text_query, list):
+            text_query = " ".join(text_query)
+
+        redis_query = redis_query_from_parameters(text_query, service, provider, lang.value)
+        redis_data, parsed_language  = search_redis_with_parameters(redis_query, lang,  0, limit)
+
         t1 = time()
-        fastapi_logger.info(f"Redis queried in {round(t1-t0,2)} seconds")
+        print(
+            f"Redis queried in {round(t1 - t0, 2)} seconds"
+        )
 
-        # print(redis_data.docs)
+    except Exception as e:
+        print("Redis query failed")
+        print(e)
+        raise HTTPException(
+            status_code=500,
+            detail="Search backend failed",
+        ) from e
 
-        if len(redis_data.docs) > 0:
-            
-            ranked_results = results_ranking(redis_data.docs, word_list_clean, known_terms, parsed_language)
-            fastapi_logger.info(f"Ranking ET: {round((time()-t1),2)} on columns with lang={parsed_language}")
-            if ranked_results:
-                return paginate(ranked_results)
-            else:
-                pass
-        else:
-            pass
-    else:
-        print("Error...")
+    # Abort if no results found
+    if not redis_data.docs:
+        fastapi_logger.info("Redis returned 0 documents")
+        return paginate([])
 
-    return paginate([])
+    # Ranking step
+    try:
+        ranked_results = results_ranking(
+            redis_data.docs,
+            word_list_clean,
+            known_terms,
+            parsed_language
+        )
+        fastapi_logger.info(
+            f"Ranking ET: {round(time() - t1, 2)} (lang={parsed_language})"
+        )
+    except Exception as e:
+        fastapi_logger.exception("Ranking failed")
+        print(e)
+        raise HTTPException(
+            status_code=500,
+            detail="Result ranking failed",
+        ) from e
+
+    if not ranked_results:
+        fastapi_logger.info("Ranking produced 0 results")
+        return paginate([])
+
+    return paginate(ranked_results)
+
+
+
+@app.get(
+    "/api/getDataByKeywords",
+    response_model=GeoharvesterPage[GeoserviceModel],
+)
+async def get_data_by_keywords(
+    query_string: Optional[str] = None,
+    lang: EnumLangType = EnumLangType.de,
+    page: int = 0,
+    limit: int = 50000,
+):
+    if not query_string or len(query_string) <= 1:
+        fastapi_logger.debug("Empty or too short query_string")
+        return paginate([])
+
+    try:
+        t1 = time()
+
+        known_terms, word_list_clean, text_query = sanitize_and_kg_check(
+            query_string, kg, language_dict, lang
+        )
+
+        redis_query = redis_query_from_keywords(text_query, lang.value)
+
+        redis_data, parsed_language = search_redis_with_keywords(
+            redis_query, lang, 0, limit
+        )
+
+    except Exception as e:
+        fastapi_logger.exception("Failed during preprocessing / Redis search")
+        print(e)
+        raise HTTPException(
+            status_code=500,
+            detail="Internal error while querying data store",
+        )
+
+    if not redis_data.docs:
+        fastapi_logger.info("No Redis documents found")
+        return paginate([])
+
+    try:
+        ranked_results = results_ranking(
+            redis_data.docs,
+            word_list_clean,
+            known_terms,
+            parsed_language
+        )
+        fastapi_logger.info(
+            "Ranking ET: %.2fs (lang=%s)",
+            time() - t1,
+            parsed_language,
+        )
+
+    except Exception as e:
+        fastapi_logger.exception("Ranking failed")
+        raise HTTPException(
+            status_code=500,
+            detail="Internal error while ranking results",
+        )
+
+    if not ranked_results:
+        fastapi_logger.info("Ranking returned no results")
+        return paginate([])
+
+    return paginate(ranked_results)
+
+
+
+
+@app.get(
+    "/api/getKeywordHistogram",
+    response_model=list[KeywordHistogram],
+)
+async def build_keyword_histogram(field: str= "keywords_nlp"):
+    """
+    Build a histogram of values for a given JSON field.
+
+    :param redis_client: redis connection
+    :param index_name: RediSearch index name
+    :param field: JSON field name (e.g. "keywords", "keywords_nlp")
+    :return: List of (keyword, count) sorted by frequency desc
+    """
+
+    counter = Counter()
+
+    # Get all document IDs via FT.SEARCH (fast and indexed)
+    res = r.ft(SVC_INDEX_ID).search(Query("*").paging(0, 1000000))
+
+    for doc in res.docs:
+        key = doc.id
+
+        # Fetch raw JSON
+        raw = r.json().get(key)
+
+        if not raw or field not in raw:
+            continue
+
+        value = raw[field]
+
+        # If array field
+        if isinstance(value, list):
+            for v in value:
+                if isinstance(v, str) and v.strip():
+                    counter[v.strip().lower()] += 1
+
+        # If single string field
+        elif isinstance(value, str):
+            tokens = value.split()
+            for token in tokens:
+                token = token.strip().lower()
+                if token:
+                    counter[token] += 1
+
+    # Sort by frequency descending
+    sorted_keywords = sorted(counter.items(), key=lambda x: x[1], reverse=True)
+    print(sorted_keywords)
+    return [
+        KeywordHistogram(keyword=keyword, count=count)
+        for keyword, count in sorted_keywords
+    ]   
+
+
 
 add_pagination(app)

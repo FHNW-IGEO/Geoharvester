@@ -64,10 +64,14 @@ def normalize_url(url: str) -> str:
 def load_layers_by_service(path: Path):
     """
     Returns:
-        dict[str, dict[str, str]]
+        dict[str, dict[str, dict[str, str]]]
         {
             service_url: {
-                layer_name: layer_hash
+                layer_name: {
+                    layer_hash,
+                    timestamp,
+                    reason
+                }
             }
         }
     """
@@ -83,12 +87,17 @@ def load_layers_by_service(path: Path):
         service_url = normalize_url(r.get("service_url", ""))
         layer_name = r.get("layer_name")
         layer_hash = r.get("preflight_hash")
+        timestamp = r.get("timestamp")
+        reason = r.get("reason")
 
         if not service_url or not layer_name:
             continue
 
-        layers_by_service[service_url][layer_name] = layer_hash
-
+        layers_by_service[service_url][layer_name] = {
+            "hash": layer_hash,
+            "timestamp": timestamp,
+            "reason": reason,
+        }
     return layers_by_service
 
 
@@ -302,7 +311,17 @@ def get_service_info(source, only_layers: Optional[dict[str, str]] = None):
                 if only_layers is not None and this_layer not in only_layers:
                     continue
 
-                layer_hash = only_layers.get(this_layer) if only_layers is not None else None
+                layer_info = only_layers.get(this_layer) if only_layers else None
+
+                if layer_info:
+                    layer_hash = layer_info["hash"]
+                    timestamp = layer_info["timestamp"]
+                    reason = layer_info["reason"]
+                else:
+                    layer_hash = None
+                    timestamp = None
+                    reason = None
+
                 # Check that we have not yet processed this layer as a child of
                 # another layer before
                 if this_layer not in layers_done:
@@ -336,7 +355,7 @@ def get_service_info(source, only_layers: Optional[dict[str, str]] = None):
                                     layertree = "%s/%s" % (server_operator,
                                                            i.replace('"', ''))
 
-                                write_service_info(source, service, layer_hash,
+                                write_service_info(source, service, layer_hash, timestamp, reason,
                                                    this_layer,
                                                    layertree, group=i)
                                 layers_done.append(this_layer)
@@ -361,7 +380,7 @@ def get_service_info(source, only_layers: Optional[dict[str, str]] = None):
                         logger.debug("Analysing %s > %s > %s" % (server_operator,
                                                                 server_url,
                                                                 this_layer))
-                        write_service_info(source, service, this_layer,
+                        write_service_info(source, service, layer_hash, timestamp, reason, this_layer, 
                                            layertree, group=i)
                         layers_done.append(this_layer)
 
@@ -396,7 +415,7 @@ def get_service_info(source, only_layers: Optional[dict[str, str]] = None):
                                 logger.debug("Analysing %s > %s > %s >> %s" % (
                                     server_operator, server_url, this_layer,
                                     this_child_layer))
-                                write_service_info(source, service, child_layer_hash, 
+                                write_service_info(source, service, child_layer_hash, timestamp, reason, 
                                                    this_child_layer, layertree,
                                                    group=i)
                                 layers_done.append(this_child_layer)
@@ -437,7 +456,7 @@ def log_to_operator_csv(server_operator, server_url, error_details):
     return
 
 # keep:
-def write_service_info(source, service, hash, i, layertree, group):
+def write_service_info(source, service, hash,  timestamp, reason, i, layertree, group):
     """
     Write OGC GetCap results for a service, using a custom or default scraper 
     based on availability.
@@ -464,7 +483,7 @@ def write_service_info(source, service, hash, i, layertree, group):
         # run custom scraper
         if scraper_spec is not None:
             scraper = importlib.import_module(server_operator, package=None)
-            layer_data = scraper.scrape(source, service, hash, i, layertree, group,
+            layer_data = scraper.scrape(source, service, hash, timestamp, reason, i, layertree, group,
                                         layer_data, config.preview_PREFIX)
 
         # run default scraper
@@ -472,7 +491,7 @@ def write_service_info(source, service, hash, i, layertree, group):
             BASE_DIR = Path(__file__).resolve().parent / "scraper"
             sys.path.insert(0, str(BASE_DIR))
             scraper = importlib.import_module('default') 
-            layer_data = scraper.scrape(source, service, hash, i, layertree, group,
+            layer_data = scraper.scrape(source, service, hash, timestamp, reason, i, layertree, group,
                                         layer_data, config.preview_PREFIX)
 
         # Writing the Result file
