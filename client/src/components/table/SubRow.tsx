@@ -6,9 +6,15 @@ import {
   Tooltip,
   Table,
   TableBody,
-  TableContainer,
+  useTheme,
+  Stack,
+  Typography,
+  Chip,
+  Divider,
 } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
+import LaunchIcon from "@mui/icons-material/Launch";
+import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import { styled } from "@mui/material/styles";
 import {
   getArcgisproWFS,
@@ -18,34 +24,35 @@ import {
   getQgisWMS,
   getQgisWMTS,
 } from "../../requests";
-import { Geoservice } from "../../types";
+import { Geoservice, SearchParameters } from "../../types";
 import { PROVIDER } from "../../appConstants";
+import { useIntl } from "react-intl";
 
 export const SubRow = ({
   row,
   open,
   index,
   mobileMode,
+  triggerSearchbyKeyword,
 }: {
   row: Geoservice;
   open: boolean;
   index: number;
   mobileMode: boolean;
+  triggerSearchbyKeyword: (parameters: SearchParameters) => void;
 }) => {
+  const intl = useIntl();
+  const theme = useTheme();
+
   const rowsToInclude = mobileMode
     ? ["name", "contact", "abstract", "keywords", "metadata"]
-    : [
-        "name",
-        "contact",
-        "abstract",
-        "tree",
-        "group",
-        "keywords",
-        "metadata",
-        "endpoint",
-      ];
+    : ["name", "contact", "tree", "group", "keywords", "metadata", "endpoint"];
 
   const NULLVALUES = ["", "nan", "n.a", null];
+
+  const handleChipClick = (label: string) => {
+    triggerSearchbyKeyword({ searchString: label, page: 0 });
+  };
 
   const routeObjectBuilder = () => {
     if (!row || !row.service) {
@@ -77,21 +84,6 @@ export const SubRow = ({
     },
   }));
 
-  const LeftAlignedTableCell = styled(TableCell)(() => ({
-    "&": {
-      borderBottom: "none",
-      padding: "2px 0",
-      color: "#909090",
-    },
-  }));
-  const FillerTableCell = styled(TableCell)(() => ({
-    "&": {
-      borderBottom: "none",
-      padding: 0,
-      width: mobileMode ? 0 : 100 + 24,
-    },
-  }));
-
   return (
     <StyledTableRow key={index}>
       <TableCell
@@ -103,7 +95,181 @@ export const SubRow = ({
         colSpan={mobileMode ? 5 : 6}
       >
         <Collapse in={open} timeout="auto" unmountOnExit>
-          <TableContainer>
+          <Stack direction="row" spacing={1} sx={{ width: "100%" }}>
+            <Stack id="subRowField1">
+              <Typography variant="button" sx={{ paddingBottom: 1 }}>
+                {intl.formatMessage({
+                  id: "subrow.details",
+                  defaultMessage: "Details: ",
+                })}
+              </Typography>
+              <Typography variant="body2" sx={{ paddingBottom: 2 }}>
+                {intl.formatMessage({
+                  id: "subrow.contact",
+                  defaultMessage: "Kontakt: ",
+                })}
+                {row.contact}
+              </Typography>
+
+              <Typography variant="caption">Name: {row.name}</Typography>
+              <Stack>
+                <Typography variant="caption">
+                  Endpoint: {row.endpoint}
+                </Typography>
+                <Typography variant="caption">Tree: {row.tree}</Typography>
+                <Typography variant="caption">Group: {row.group}</Typography>
+              </Stack>
+              {/* </div> */}
+            </Stack>
+            <Stack sx={{ minWidth: 160, maxWidth: 160 }} id="subRowField2">
+              <Typography variant="button">
+                {intl.formatMessage({
+                  id: "subrow.tools",
+                  defaultMessage: "Tools: ",
+                })}
+              </Typography>
+
+              <Tooltip
+                title={intl.formatMessage({ id: "button.preview" })}
+                arrow
+              >
+                <Button
+                  sx={{ justifyContent: "flex-start" }}
+                  fullWidth
+                  startIcon={<LaunchIcon />}
+                  variant="text"
+                  onClick={() => {
+                    const url =
+                      row.provider === PROVIDER.BUND
+                        ? row.preview.replace("??", "'")
+                        : row.preview;
+                    window.open(url);
+                  }}
+                  disabled={NULLVALUES.includes(row.preview)}
+                >
+                  MapGeo
+                </Button>
+              </Tooltip>
+              {row.legend && row.legend.includes("http") && (
+                <Tooltip
+                  title={intl.formatMessage({ id: "button.legend" })}
+                  arrow
+                >
+                  <Button
+                    sx={{ justifyContent: "flex-start" }}
+                    fullWidth
+                    startIcon={<InsertPhotoIcon />}
+                    variant="text"
+                    onClick={() => {
+                      window.open(row.legend);
+                    }}
+                    disabled={NULLVALUES.includes(row.legend)}
+                  >
+                    Legende
+                  </Button>
+                </Tooltip>
+              )}
+              <Tooltip
+                title={intl.formatMessage({ id: "button.arcgis_handler" })}
+                arrow
+              >
+                <Button
+                  sx={{ justifyContent: "flex-start" }}
+                  fullWidth
+                  variant="text"
+                  onClick={routeObjectBuilder().arcgis_handler}
+                  startIcon={<DownloadIcon />}
+                  disabled={NULLVALUES.includes(row.endpoint)}
+                >
+                  ArcGIS
+                </Button>
+              </Tooltip>
+              <Tooltip
+                title={intl.formatMessage({ id: "button.qgis_handler" })}
+                arrow
+              >
+                <Button
+                  sx={{ justifyContent: "flex-start" }}
+                  fullWidth
+                  variant="text"
+                  onClick={routeObjectBuilder().qgis_handler}
+                  startIcon={<DownloadIcon />}
+                  disabled={NULLVALUES.includes(row.endpoint)}
+                >
+                  QGIS
+                </Button>
+              </Tooltip>
+            </Stack>
+            <Stack
+              sx={{
+                flexGrow: 1,
+              }}
+            >
+              <div id="subRowField3">
+                <div>
+                  <Typography variant="button">
+                    {intl.formatMessage({
+                      id: "subrow.keywords",
+                      defaultMessage: "Schlüsselwörter: ",
+                    })}
+                  </Typography>
+                </div>
+                {row.keywords.sort().map((keyword, i) => (
+                  <Tooltip
+                    title={intl.formatMessage({ id: "keyword.lookup" })}
+                    arrow
+                  >
+                    <Chip
+                      key={keyword + i}
+                      label={keyword}
+                      variant="outlined"
+                      size="small"
+                      color="info"
+                      onClick={() => handleChipClick(keyword)}
+                      sx={{
+                        mt: 1,
+                        mr: 0.5,
+                        color: theme.palette.info.main,
+                        maxWidth: 200,
+                      }}
+                    />
+                  </Tooltip>
+                ))}
+                <br />
+                <div style={{ paddingTop: 10 }}>
+                  <Typography variant="caption" sx={{ paddingBottom: 2 }}>
+                    {intl.formatMessage({
+                      id: "subrow.keywords_nlp",
+                      defaultMessage: "Schlüsselwörter: ",
+                    })}
+                  </Typography>
+                  <br />
+                  {row.keywords_nlp.sort().map((keyword, i) => (
+                    <Tooltip
+                      title={intl.formatMessage({ id: "keyword.lookup" })}
+                      arrow
+                    >
+                      <Chip
+                        key={keyword + i}
+                        label={keyword}
+                        variant="outlined"
+                        size="small"
+                        color="info"
+                        onClick={() => handleChipClick(keyword)}
+                        sx={{
+                          mt: 1,
+                          mr: 0.5,
+                          color: theme.palette.info.main,
+                          maxWidth: 200,
+                        }}
+                      />
+                    </Tooltip>
+                  ))}
+                </div>
+              </div>
+            </Stack>
+          </Stack>
+          {/* <TableContainer>
             <Table>
               <TableBody>
                 {rowsToInclude.map((prop) => (
@@ -214,7 +380,7 @@ export const SubRow = ({
                 )}
               </TableBody>
             </Table>
-          </TableContainer>
+          </TableContainer> */}
         </Collapse>
       </TableCell>
     </StyledTableRow>

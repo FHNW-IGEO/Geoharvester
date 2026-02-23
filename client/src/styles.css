@@ -40,3 +40,18 @@
 tr th span {
   color: white !important;
 }
+
+#subRowField1 {
+  border-right: 1px solid #f0f0f0;
+  padding: 20px;
+  min-width: 240px;
+  max-width: 240px;
+  margin-left: 120px;
+}
+#subRowField2 {
+  border-right: 1px solid #f0f0f0;
+  padding: 20px;
+}
+#subRowField3 {
+  padding: 20px;
+}

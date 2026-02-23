@@ -66,9 +66,9 @@ export const ServiceRow = ({
 
   const qualitynum = `chart x-${row.metaquality}`;
 
-  const handleChipClick = (label: string) => {
-    triggerSearchbyKeyword({ searchString: label, page: 0 });
-  };
+  // const handleChipClick = (label: string) => {
+  //   triggerSearchbyKeyword({ searchString: label, page: 0 });
+  // };
 
   return (
     <>
@@ -127,7 +127,13 @@ export const ServiceRow = ({
           </div>
         </CenteredTableCell>
       </TableRow>
-      <SubRow row={row} open={open} index={index} mobileMode={mobileMode} />
+      <SubRow
+        row={row}
+        open={open}
+        index={index}
+        mobileMode={mobileMode}
+        triggerSearchbyKeyword={triggerSearchbyKeyword}
+      />
     </>
   );
 };

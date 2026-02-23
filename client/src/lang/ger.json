@@ -22,5 +22,14 @@
   "translate.french": "Französisch",
   "translate.italian": "Italienisch",
   "translate.english": "Englisch",
-  "keyword.lookup": "Daten mit diesem Schlüsselwort suchen"
+  "keyword.lookup": "Daten mit diesem Schlüsselwort suchen",
+  "button.preview": "Öffnet den Layer im Mapgeo Portal",
+  "button.legend": "Lädt die Legende zum Layer",
+  "button.arcgis_handler": "Experimentell - Download für ArcGIS Pro",
+  "button.qgis_handler": "Experimentell - Download für QGIS",
+  "subrow.contact": "Kontakt: ",
+  "subrow.tools": "Werkzeuge:",
+  "subrow.details": "Details:",
+  "subrow.keywords": "Schlüsselwörter:",
+  "subrow.keywords_nlp": "Schlüsselwörter, generiert:"
 }

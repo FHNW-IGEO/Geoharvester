@@ -22,5 +22,14 @@
   "translate.french": "French",
   "translate.italian": "Italian",
   "translate.english": "English",
-  "keyword.lookup": "Search for data containing this keyword"
+  "keyword.lookup": "Search for data containing this keyword",
+  "button.preview": "Display layer in Mapgeo portal",
+  "button.legend": "Load legend for this layer",
+  "button.arcgis_handler": "Experimental - Download to ArcGIS Pro",
+  "button.qgis_handler": "Experimental - Download to QGIS",
+  "subrow.contact": "Contact: ",
+  "subrow.tools": "Tools:",
+  "subrow.details": "Details:",
+  "subrow.keywords": "Keywords:",
+  "subrow.keywords_nlp": "Keywords, extracted:"
 }
