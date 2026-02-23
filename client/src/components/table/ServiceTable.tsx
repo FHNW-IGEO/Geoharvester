@@ -178,7 +178,6 @@ export const ServiceTable = ({
           component={Paper}
           sx={{
             overflowX: "auto",
-            marginTop: "50px",
           }}
         >
           <Table stickyHeader aria-label="sticky table" ref={setTableReference}>

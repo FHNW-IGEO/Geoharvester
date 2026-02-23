@@ -194,8 +194,6 @@ async def get_data(
 
     return paginate(ranked_results)
 
-
-
 @app.get(
     "/api/getDataByKeywords",
     response_model=GeoharvesterPage[GeoserviceModel],
@@ -260,9 +258,6 @@ async def get_data_by_keywords(
         return paginate([])
 
     return paginate(ranked_results)
-
-
-
 
 @app.get(
     "/api/getKeywordHistogram",

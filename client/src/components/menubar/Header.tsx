@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AppBar } from "@mui/material";
+import { AppBar, Toolbar } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { MenuComponent } from "./MenuComponent";
 import { Filter } from "./Filter";
@@ -15,6 +15,7 @@ import { useViewport } from "../../custom/ViewportHook";
 import { SearchDrawer } from "./SearchDrawer";
 import { SearchParameters } from "types";
 import "../../styles.css";
+import { Stack } from "@mui/system";
 
 export type SearchBarProps = {
   localSearchString: string;
@@ -53,55 +54,59 @@ export const Header = ({
     });
   };
   return (
-    <AppBar
-      sx={{
-        backgroundColor: theme.palette.secondary.main,
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-          width: "100%",
-          height: 50,
+    <Stack direction="column">
+      <AppBar
+        position="sticky"
+        sx={{
+          backgroundColor: theme.palette.secondary.main,
         }}
       >
-        <MenuComponent />
-        {responseState === RESPONSESTATE.UNINITIALIZED ? (
-          <div />
-        ) : width > BREAKPOINT1000 ? (
-          <SearchField
-            fromDrawer={false}
-            {...{
-              localSearchString,
-              setLocalSearchString,
-              setDrawerOpen,
-              triggerSearch,
-              searchParameters,
-              updateSearchParameters,
-            }}
+        <div className="AppBarSpacing">
+          <MenuComponent />
+        </div>
+      </AppBar>
+      <AppBar
+        position="sticky"
+        sx={{
+          backgroundColor: theme.palette.secondary.main,
+          padding: 1,
+        }}
+      >
+        <div className="AppBarSpacing">
+          {responseState === RESPONSESTATE.UNINITIALIZED ? (
+            <div />
+          ) : width > BREAKPOINT1000 ? (
+            <SearchField
+              fromDrawer={false}
+              {...{
+                localSearchString,
+                setLocalSearchString,
+                setDrawerOpen,
+                triggerSearch,
+                searchParameters,
+                updateSearchParameters,
+              }}
+            />
+          ) : (
+            <SearchDrawer
+              {...{
+                localSearchString,
+                setLocalSearchString,
+                setDrawerOpen,
+                triggerSearch,
+                searchParameters,
+                updateSearchParameters,
+              }}
+              drawerOpen={drawerOpen}
+            />
+          )}
+          <Filter
+            handleChangeService={handleChangeService}
+            handleChangeProvider={handleChangeProvider}
+            searchParameters={searchParameters}
           />
-        ) : (
-          <SearchDrawer
-            {...{
-              localSearchString,
-              setLocalSearchString,
-              setDrawerOpen,
-              triggerSearch,
-              searchParameters,
-              updateSearchParameters,
-            }}
-            drawerOpen={drawerOpen}
-          />
-        )}
-        <Filter
-          handleChangeService={handleChangeService}
-          handleChangeProvider={handleChangeProvider}
-          searchParameters={searchParameters}
-        />
-      </div>
-    </AppBar>
+        </div>
+      </AppBar>
+    </Stack>
   );
 };

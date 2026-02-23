@@ -43,11 +43,13 @@ export const SearchField = ({
 
   return (
     <FormControl
+      fullWidth
       sx={{
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
         flexGrow: 2,
+        width: "100%",
       }}
       variant="standard"
     >
@@ -61,7 +63,7 @@ export const SearchField = ({
           defaultMessage: "Webservice suchen...",
         })}
         value={localSearchString}
-        style={{
+        sx={{
           flexGrow: 2,
           height: responsiveUI ? 56 : 40,
           backgroundColor: theme.palette.secondary.main,
