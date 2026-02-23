@@ -5,16 +5,13 @@ import {
   TableCell,
   Icon,
   Tooltip,
-  Chip,
   styled,
-  useTheme,
 } from "@mui/material";
 import { Geoservice, SearchParameters } from "../../types";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { SubRow } from "./SubRow";
 import { getIcon } from "../../custom/getIcon";
-import { useIntl } from "react-intl";
 
 export const ServiceRow = ({
   row,
@@ -33,8 +30,6 @@ export const ServiceRow = ({
 }) => {
   const [open, setOpen] = useState(false);
   useEffect(() => setOpen(false), [page, total]);
-  const theme = useTheme();
-  const intl = useIntl();
 
   const CenteredTableCell = styled(TableCell)(() => ({
     "&": {
@@ -66,10 +61,6 @@ export const ServiceRow = ({
 
   const qualitynum = `chart x-${row.metaquality}`;
 
-  // const handleChipClick = (label: string) => {
-  //   triggerSearchbyKeyword({ searchString: label, page: 0 });
-  // };
-
   return (
     <>
       <TableRow key={index}>
@@ -86,28 +77,7 @@ export const ServiceRow = ({
         <LeftAlignedTableCellMaxWidth onClick={() => setOpen(!open)}>
           {row.title}
         </LeftAlignedTableCellMaxWidth>
-        {!mobileMode && (
-          <LeftAlignedTableCell>
-            {abstract}
-            {/* <br />
-            {row.keywords_nlp.sort().map((keyword, i) => (
-              <Tooltip
-                title={intl.formatMessage({ id: "keyword.lookup" })}
-                arrow
-              >
-                <Chip
-                  key={keyword + i}
-                  label={keyword}
-                  variant="outlined"
-                  size="small"
-                  color="info"
-                  onClick={() => handleChipClick(keyword)}
-                  sx={{ mt: 1, mr: 0.5, color: theme.palette.info.main }}
-                />
-              </Tooltip>
-            ))}*/}
-          </LeftAlignedTableCell>
-        )}
+        {!mobileMode && <LeftAlignedTableCell>{abstract}</LeftAlignedTableCell>}
         <CenteredTableCell>
           <Tooltip title={row.provider}>
             <Icon>

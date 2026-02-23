@@ -4,14 +4,12 @@ import {
   Collapse,
   Button,
   Tooltip,
-  Table,
-  TableBody,
   useTheme,
   Stack,
   Typography,
   Chip,
-  Divider,
 } from "@mui/material";
+import { useIntl } from "react-intl";
 import DownloadIcon from "@mui/icons-material/Download";
 import LaunchIcon from "@mui/icons-material/Launch";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
@@ -26,7 +24,6 @@ import {
 } from "../../requests";
 import { Geoservice, SearchParameters } from "../../types";
 import { PROVIDER } from "../../appConstants";
-import { useIntl } from "react-intl";
 
 export const SubRow = ({
   row,
@@ -43,10 +40,6 @@ export const SubRow = ({
 }) => {
   const intl = useIntl();
   const theme = useTheme();
-
-  const rowsToInclude = mobileMode
-    ? ["name", "contact", "abstract", "keywords", "metadata"]
-    : ["name", "contact", "tree", "group", "keywords", "metadata", "endpoint"];
 
   const NULLVALUES = ["", "nan", "n.a", null];
 
@@ -119,87 +112,88 @@ export const SubRow = ({
                 <Typography variant="caption">Tree: {row.tree}</Typography>
                 <Typography variant="caption">Group: {row.group}</Typography>
               </Stack>
-              {/* </div> */}
             </Stack>
-            <Stack sx={{ minWidth: 160, maxWidth: 160 }} id="subRowField2">
-              <Typography variant="button">
-                {intl.formatMessage({
-                  id: "subrow.tools",
-                  defaultMessage: "Tools: ",
-                })}
-              </Typography>
+            {!mobileMode && (
+              <Stack sx={{ minWidth: 160, maxWidth: 160 }} id="subRowField2">
+                <Typography variant="button">
+                  {intl.formatMessage({
+                    id: "subrow.tools",
+                    defaultMessage: "Tools: ",
+                  })}
+                </Typography>
 
-              <Tooltip
-                title={intl.formatMessage({ id: "button.preview" })}
-                arrow
-              >
-                <Button
-                  sx={{ justifyContent: "flex-start" }}
-                  fullWidth
-                  startIcon={<LaunchIcon />}
-                  variant="text"
-                  onClick={() => {
-                    const url =
-                      row.provider === PROVIDER.BUND
-                        ? row.preview.replace("??", "'")
-                        : row.preview;
-                    window.open(url);
-                  }}
-                  disabled={NULLVALUES.includes(row.preview)}
-                >
-                  MapGeo
-                </Button>
-              </Tooltip>
-              {row.legend && row.legend.includes("http") && (
                 <Tooltip
-                  title={intl.formatMessage({ id: "button.legend" })}
+                  title={intl.formatMessage({ id: "button.preview" })}
                   arrow
                 >
                   <Button
                     sx={{ justifyContent: "flex-start" }}
                     fullWidth
-                    startIcon={<InsertPhotoIcon />}
+                    startIcon={<LaunchIcon />}
                     variant="text"
                     onClick={() => {
-                      window.open(row.legend);
+                      const url =
+                        row.provider === PROVIDER.BUND
+                          ? row.preview.replace("??", "'")
+                          : row.preview;
+                      window.open(url);
                     }}
-                    disabled={NULLVALUES.includes(row.legend)}
+                    disabled={NULLVALUES.includes(row.preview)}
                   >
-                    Legende
+                    MapGeo
                   </Button>
                 </Tooltip>
-              )}
-              <Tooltip
-                title={intl.formatMessage({ id: "button.arcgis_handler" })}
-                arrow
-              >
-                <Button
-                  sx={{ justifyContent: "flex-start" }}
-                  fullWidth
-                  variant="text"
-                  onClick={routeObjectBuilder().arcgis_handler}
-                  startIcon={<DownloadIcon />}
-                  disabled={NULLVALUES.includes(row.endpoint)}
+                {row.legend && row.legend.includes("http") && (
+                  <Tooltip
+                    title={intl.formatMessage({ id: "button.legend" })}
+                    arrow
+                  >
+                    <Button
+                      sx={{ justifyContent: "flex-start" }}
+                      fullWidth
+                      startIcon={<InsertPhotoIcon />}
+                      variant="text"
+                      onClick={() => {
+                        window.open(row.legend);
+                      }}
+                      disabled={NULLVALUES.includes(row.legend)}
+                    >
+                      Legende
+                    </Button>
+                  </Tooltip>
+                )}
+                <Tooltip
+                  title={intl.formatMessage({ id: "button.arcgis_handler" })}
+                  arrow
                 >
-                  ArcGIS
-                </Button>
-              </Tooltip>
-              <Tooltip
-                title={intl.formatMessage({ id: "button.qgis_handler" })}
-                arrow
-              >
-                <Button
-                  sx={{ justifyContent: "flex-start" }}
-                  fullWidth
-                  variant="text"
-                  onClick={routeObjectBuilder().qgis_handler}
-                  startIcon={<DownloadIcon />}
-                  disabled={NULLVALUES.includes(row.endpoint)}
+                  <Button
+                    sx={{ justifyContent: "flex-start" }}
+                    fullWidth
+                    variant="text"
+                    onClick={routeObjectBuilder().arcgis_handler}
+                    startIcon={<DownloadIcon />}
+                    disabled={NULLVALUES.includes(row.endpoint)}
+                  >
+                    ArcGIS
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  title={intl.formatMessage({ id: "button.qgis_handler" })}
+                  arrow
                 >
-                  QGIS
-                </Button>
-              </Tooltip>
-            </Stack>
+                  <Button
+                    sx={{ justifyContent: "flex-start" }}
+                    fullWidth
+                    variant="text"
+                    onClick={routeObjectBuilder().qgis_handler}
+                    startIcon={<DownloadIcon />}
+                    disabled={NULLVALUES.includes(row.endpoint)}
+                  >
+                    QGIS
+                  </Button>
+                </Tooltip>
+              </Stack>
+            )}
             <Stack
               sx={{
                 flexGrow: 1,
@@ -269,118 +263,6 @@ export const SubRow = ({
               </div>
             </Stack>
           </Stack>
-          {/* <TableContainer>
-            <Table>
-              <TableBody>
-                {rowsToInclude.map((prop) => (
-                  <TableRow>
-                    <FillerTableCell></FillerTableCell>
-                    <LeftAlignedTableCell
-                      style={{
-                        width: mobileMode ? "80px" : "200px",
-                        marginTop: 5,
-                      }}
-                    >
-                      {`${
-                        prop.charAt(0).toUpperCase() +
-                        prop.slice(1).toLocaleLowerCase()
-                      }:`}
-                    </LeftAlignedTableCell>
-                    <LeftAlignedTableCell
-                      colSpan={2}
-                      style={{
-                        width: "100%",
-                        display: "flex",
-                        wordBreak: "break-word",
-                      }}
-                    >
-                      {row[prop as keyof Geoservice]}
-                    </LeftAlignedTableCell>
-                  </TableRow>
-                ))}
-                <TableRow>
-                  <FillerTableCell></FillerTableCell>
-                  <LeftAlignedTableCell>Mapgeo:</LeftAlignedTableCell>
-                  <LeftAlignedTableCell
-                    colSpan={2}
-                    style={{
-                      display: "flex",
-                      wordBreak: "break-word",
-                    }}
-                  >
-                    <Tooltip title={row.preview} arrow>
-                      <Button
-                        style={{ padding: 0 }}
-                        variant="text"
-                        onClick={() => {
-                          const url =
-                            row.provider === PROVIDER.BUND
-                              ? row.preview.replace("??", "'")
-                              : row.preview;
-                          window.open(url);
-                        }}
-                        disabled={NULLVALUES.includes(row.preview)}
-                      >
-                        Service in MapGeo öffnen
-                      </Button>
-                    </Tooltip>
-                  </LeftAlignedTableCell>
-                </TableRow>
-                {!mobileMode && (
-                  <TableRow>
-                    <FillerTableCell />
-                    <LeftAlignedTableCell>Legend:</LeftAlignedTableCell>
-                    <LeftAlignedTableCell
-                      colSpan={2}
-                      style={{
-                        display: "flex",
-                        wordBreak: "break-word",
-                      }}
-                    >
-                      <Tooltip title={row.legend} arrow>
-                        <Button
-                          onClick={() => window.open(row.legend)}
-                          style={{ padding: 0 }}
-                          disabled={NULLVALUES.includes(row.legend)}
-                        >
-                          Legende öffnen
-                        </Button>
-                      </Tooltip>
-                    </LeftAlignedTableCell>
-                  </TableRow>
-                )}
-                {!mobileMode && (
-                  <TableRow>
-                    <FillerTableCell />
-                    <LeftAlignedTableCell></LeftAlignedTableCell>
-                    <LeftAlignedTableCell colSpan={2}>
-                      <Button
-                        variant="outlined"
-                        style={{
-                          marginRight: 30,
-                          marginTop: 10,
-                          marginBottom: 16,
-                        }}
-                        onClick={routeObjectBuilder().arcgis_handler}
-                        startIcon={<DownloadIcon />}
-                        disabled={NULLVALUES.includes(row.endpoint)}
-                      >
-                        For ArcGIS Pro
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        onClick={routeObjectBuilder().qgis_handler}
-                        startIcon={<DownloadIcon />}
-                        disabled={NULLVALUES.includes(row.endpoint)}
-                      >
-                        For QGIS
-                      </Button>
-                    </LeftAlignedTableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer> */}
         </Collapse>
       </TableCell>
     </StyledTableRow>
