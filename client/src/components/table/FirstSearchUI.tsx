@@ -1,3 +1,4 @@
+import { RESPONSESTATE } from "appConstants";
 import { SearchField, SearchProps } from "../menubar/SearchField";
 import Box from "@mui/material/Box";
 
@@ -8,9 +9,11 @@ export const FirstSearchUI = ({
   fromDrawer,
   triggerSearch,
   searchParameters,
+  responseState,
   updateSearchParameters,
 }: SearchProps & {
   fromDrawer: boolean;
+  responseState: RESPONSESTATE;
   setDrawerOpen: (state: boolean) => void;
 }) => {
   return (
@@ -24,6 +27,7 @@ export const FirstSearchUI = ({
             fromDrawer,
             triggerSearch,
             searchParameters,
+            responseState,
             updateSearchParameters,
           }}
         />

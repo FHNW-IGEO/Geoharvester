@@ -3,6 +3,7 @@ import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Button from "@mui/material/Button";
 import { SearchField, SearchProps } from "./SearchField";
 import { FormattedMessage } from "react-intl";
+import { RESPONSESTATE } from "appConstants";
 
 export const SearchDrawer = ({
   localSearchString,
@@ -11,8 +12,9 @@ export const SearchDrawer = ({
   drawerOpen,
   triggerSearch,
   searchParameters,
+  responseState,
   updateSearchParameters,
-}: SearchProps & { drawerOpen: boolean }) => {
+}: SearchProps & { drawerOpen: boolean; responseState: RESPONSESTATE }) => {
   return (
     <div>
       <Button
@@ -28,10 +30,7 @@ export const SearchDrawer = ({
         onClose={() => setDrawerOpen(false)}
         onOpen={() => setDrawerOpen(true)}
       >
-        <Box
-          className="SearchBox"
-          sx={{ height: 72, backgroundColor: "#f0f0f0" }}
-        >
+        <Box className="SearchBox" sx={{ height: 72 }}>
           <SearchField
             fromDrawer
             {...{
@@ -40,6 +39,7 @@ export const SearchDrawer = ({
               setDrawerOpen,
               triggerSearch,
               searchParameters,
+              responseState,
               updateSearchParameters,
             }}
           />

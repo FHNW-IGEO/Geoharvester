@@ -77,7 +77,7 @@ export const Filter = ({
               },
             },
           }}
-          style={{
+          sx={{
             backgroundColor: theme.palette.secondary.main,
             textAlign: "center",
             height: 40,

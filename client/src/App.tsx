@@ -133,6 +133,7 @@ function App() {
               setLocalSearchString,
               updateSearchParameters,
               triggerSearch,
+              responseState,
               searchParameters,
             }}
           />

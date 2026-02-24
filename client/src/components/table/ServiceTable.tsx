@@ -137,17 +137,17 @@ export const ServiceTable = ({
 
   const CenteredTableCell = styled(TableCell)(() => ({
     "&": {
-      backgroundColor: theme.palette.primary.main,
       padding: "0 1px",
       textAlign: "center",
+      color: theme.palette.primary.main,
     },
   }));
   const LeftAlignedTableCell = styled(TableCell)(() => ({
     "&": {
-      backgroundColor: theme.palette.primary.main,
+      backgroundColor: theme.palette.primary.contrastText,
       padding: 8,
       textAlign: "left",
-      color: theme.palette.secondary.main,
+      color: theme.palette.primary.main,
     },
   }));
 
@@ -227,15 +227,17 @@ export const ServiceTable = ({
                       <CenteredTableCell
                         key={index}
                         sortDirection={orderBy === sortProperty ? order : false}
-                        sx={{ padding: "0 !important", cursor: "pointer" }}
+                        sx={{
+                          padding: "0 !important",
+                          cursor: "pointer",
+                          color: "#000 !important",
+                        }}
                       >
                         <TableSortLabel
                           sx={{
+                            color: "#007CC3 !important",
                             "& .MuiTableSortLabel-icon": {
-                              color: "white !important",
-                            },
-                            "& .MuiTableSortLabel-root": {
-                              color: "white !important",
+                              color: "#007CC3 !important",
                             },
                           }}
                           active={true}
@@ -281,50 +283,71 @@ export const ServiceTable = ({
                 position: "sticky",
                 bottom: 0,
                 zIndex: 20,
-                backgroundColor: theme.palette.secondary.main,
               }}
             >
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[20, 50, 100, 200]}
-                  colSpan={mobileMode ? 5 : 6}
-                  count={total}
-                  rowsPerPage={rowsPerPage}
-                  page={tablePage}
-                  labelDisplayedRows={({
-                    from,
-                    to,
-                    count,
-                    page,
-                  }): React.ReactNode => {
-                    return width > BREAKPOINT600
-                      ? `${displayedRecordsStart}–${Math.min(
-                          total,
-                          displayedRecordsEnd,
-                        )} of ${count !== -1 ? count : `more than ${to}`}`
-                      : "";
+              <TableRow sx={{ height: 28 }}>
+                <TableCell
+                  colSpan={6}
+                  sx={{
+                    padding: 0,
+                    backgroundColor: "#f9f9f9",
+                    borderTop: "1px solid #C0C0C0",
                   }}
-                  SelectProps={{
-                    inputProps: {
-                      "aria-label": "rows per page",
-                    },
-                    native: true,
-                  }}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                  onPageChange={() => null}
-                  ActionsComponent={(props) => (
-                    <TablePaginationActions
-                      handleChangePageForward={handleChangePageForward}
-                      handleChangePageBackward={handleChangePageBackward}
-                      currentApiPage={currentApiPage}
-                      displayedRecordsStart={displayedRecordsStart}
-                      displayedRecordsEnd={displayedRecordsEnd}
-                      handleSetPageZero={() => setTablePage(0)}
-                      mobileMode={mobileMode}
-                      {...props}
-                    />
-                  )}
-                />
+                >
+                  <TablePagination
+                    rowsPerPageOptions={[20, 50, 100, 200]}
+                    colSpan={mobileMode ? 5 : 6}
+                    count={total}
+                    rowsPerPage={rowsPerPage}
+                    page={tablePage}
+                    sx={{
+                      "& .MuiToolbar-root": {
+                        minHeight: 36,
+                        height: 36,
+                        paddingLeft: 1,
+                        paddingRight: 1,
+                        justifyContent: "flex-end",
+                      },
+                      "& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows":
+                        {
+                          margin: 0,
+                        },
+                    }}
+                    labelDisplayedRows={({
+                      from,
+                      to,
+                      count,
+                      page,
+                    }): React.ReactNode => {
+                      return width > BREAKPOINT600
+                        ? `${displayedRecordsStart}–${Math.min(
+                            total,
+                            displayedRecordsEnd,
+                          )} of ${count !== -1 ? count : `more than ${to}`}`
+                        : "";
+                    }}
+                    SelectProps={{
+                      inputProps: {
+                        "aria-label": "rows per page",
+                      },
+                      native: true,
+                    }}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    onPageChange={() => null}
+                    ActionsComponent={(props) => (
+                      <TablePaginationActions
+                        handleChangePageForward={handleChangePageForward}
+                        handleChangePageBackward={handleChangePageBackward}
+                        currentApiPage={currentApiPage}
+                        displayedRecordsStart={displayedRecordsStart}
+                        displayedRecordsEnd={displayedRecordsEnd}
+                        handleSetPageZero={() => setTablePage(0)}
+                        mobileMode={mobileMode}
+                        {...props}
+                      />
+                    )}
+                  />
+                </TableCell>
               </TableRow>
             </TableFooter>
           </Table>

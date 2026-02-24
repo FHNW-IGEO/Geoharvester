@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 import SearchIcon from "@mui/icons-material/Search";
-import { BREAKPOINT1000 } from "../../appConstants";
+import { BREAKPOINT1000, RESPONSESTATE } from "../../appConstants";
 import { useViewport } from "../../custom/ViewportHook";
 import { SearchParameters } from "../../types";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -19,6 +19,7 @@ export type SearchProps = {
   setDrawerOpen: (state: boolean) => void;
   triggerSearch: (parameter: SearchParameters) => void;
   searchParameters: SearchParameters;
+  responseState: RESPONSESTATE;
   updateSearchParameters: (parameter: SearchParameters) => void;
 };
 
@@ -33,6 +34,7 @@ export const SearchField = ({
   fromDrawer,
   triggerSearch,
   searchParameters,
+  responseState,
   updateSearchParameters,
 }: SearchFieldProps) => {
   const theme = useTheme();
@@ -60,7 +62,7 @@ export const SearchField = ({
         type="outlined"
         placeholder={intl.formatMessage({
           id: "search.inputPlaceholder",
-          defaultMessage: "Webservice suchen...",
+          defaultMessage: "Webservice ...",
         })}
         value={localSearchString}
         sx={{
@@ -113,6 +115,14 @@ export const SearchField = ({
           fontSize: 12,
           ml: 0.5,
           minWidth: 120,
+          backgroundColor:
+            responseState === RESPONSESTATE.UNINITIALIZED
+              ? theme.palette.primary.main
+              : theme.palette.secondary.main,
+          color:
+            responseState === RESPONSESTATE.UNINITIALIZED
+              ? theme.palette.secondary.main
+              : theme.palette.primary.main,
         }}
         type="submit"
         variant="contained"
