@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Close } from "@mui/icons-material";
 import {
   AppBar,
@@ -6,7 +7,11 @@ import {
   Toolbar,
   Typography,
   useTheme,
+  Tab,
 } from "@mui/material";
+import { Box } from "@mui/system";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import { WordCloud } from "./tab1/WordCloud";
 
 export type VisViewProps = {
   visViewOpen: boolean;
@@ -15,6 +20,7 @@ export type VisViewProps = {
 
 export const VisView = ({ visViewOpen, setVisViewOpen }: VisViewProps) => {
   const theme = useTheme();
+  const [tabNr, setTabNr] = useState("1");
   return (
     <Drawer
       anchor="bottom"
@@ -46,11 +52,28 @@ export const VisView = ({ visViewOpen, setVisViewOpen }: VisViewProps) => {
             >
               <Close />
             </IconButton>
-
-            {/* <Button color="inherit">Login</Button> */}
           </Toolbar>
         </AppBar>
-        123
+        <Box sx={{ width: "100%", typography: "body1" }}>
+          <TabContext value={tabNr}>
+            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+              <TabList
+                variant="fullWidth"
+                centered
+                onChange={(_e: React.SyntheticEvent, v: string) => setTabNr(v)}
+              >
+                <Tab label="Wordcloud" value="1" />
+                <Tab label="tbd" value="2" />
+                <Tab label="tbd" value="3" />
+              </TabList>
+            </Box>
+            <TabPanel value="1">
+              <WordCloud />
+            </TabPanel>
+            <TabPanel value="2">Item Two</TabPanel>
+            <TabPanel value="3">Item Three</TabPanel>
+          </TabContext>
+        </Box>
       </div>
     </Drawer>
   );

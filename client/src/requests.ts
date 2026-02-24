@@ -9,6 +9,8 @@ import { LANGUAGE, SERVICE, DEFAULTCHUNKSIZE, PROVIDER } from "./appConstants";
 
 const routes = {
   getData: `/api/getData`,
+  getDataByKeywords: `/api/getDataByKeywords`,
+  getKeywordHistogram: `/api/getKeywordHistogram`,
   getArcgisproWFS: "/templates/arcgispro_wfs_template.lyrx",
   getArcgisproWMS: "/templates/arcgispro_wms_template.lyrx",
   getArcgisproWMTS: "/templates/arcgispro_wmts_template.lyrx",
@@ -47,13 +49,24 @@ export const getDataByKeyword = async (
 ) => {
   const page = pageParam + 1; // FastAPI Pagination uses 1 as first index
   const offset = 0;
-  const response = await axios(routes.getData, {
+  const response = await axios(routes.getDataByKeywords, {
     params: { query_string, lang, offset, page, size },
   });
   const result = {
     ...response,
     data: { ...response.data, page: response.data.page - 1 },
   }; // Translate back to zero indexed MUI value
+  return result;
+};
+
+export const getKeywordHistogram = async (field: string) => {
+  const response = await axios(routes.getKeywordHistogram, {
+    params: { field },
+  });
+  const result = {
+    ...response,
+    data: { ...response.data },
+  };
   return result;
 };
 

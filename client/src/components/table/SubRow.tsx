@@ -104,17 +104,96 @@ export const SubRow = ({
                 {row.contact}
               </Typography>
 
-              <Typography variant="caption">Name: {row.name}</Typography>
+              <Typography variant="caption">
+                <span className="bold">Name:</span>
+                <span className="long-url">{row.name}</span>
+              </Typography>
               <Stack>
                 <Typography variant="caption">
-                  Endpoint: {row.endpoint}
+                  <span className="bold">Endpoint:</span>
+                  <span className="long-url"> {row.endpoint}</span>
                 </Typography>
-                <Typography variant="caption">Tree: {row.tree}</Typography>
-                <Typography variant="caption">Group: {row.group}</Typography>
+                <Typography variant="caption">
+                  <span className="bold">Tree:</span>
+                  <span className="long-url">{row.tree}</span>
+                </Typography>
+                <Typography variant="caption">
+                  <span className="bold">Group:</span>
+                  <span className="long-url">{row.group}</span>
+                </Typography>
               </Stack>
             </Stack>
+
+            <Stack
+              sx={{
+                flexGrow: 1,
+              }}
+            >
+              <div id="subRowField2">
+                <div>
+                  <Typography variant="button">
+                    {intl.formatMessage({
+                      id: "subrow.keywords",
+                      defaultMessage: "Schlüsselwörter: ",
+                    })}
+                  </Typography>
+                </div>
+                {row.keywords.sort().map((keyword, i) => (
+                  <Tooltip
+                    title={intl.formatMessage({ id: "keyword.lookup" })}
+                    arrow
+                  >
+                    <Chip
+                      key={keyword + i}
+                      label={keyword}
+                      variant="outlined"
+                      size="small"
+                      color="info"
+                      onClick={() => handleChipClick(keyword)}
+                      sx={{
+                        mt: 1,
+                        mr: 0.5,
+                        color: theme.palette.info.main,
+                        maxWidth: 200,
+                      }}
+                    />
+                  </Tooltip>
+                ))}
+                <br />
+                <div style={{ paddingTop: 10 }}>
+                  <Typography variant="caption" sx={{ paddingBottom: 2 }}>
+                    {intl.formatMessage({
+                      id: "subrow.keywords_nlp",
+                      defaultMessage: "Schlüsselwörter: ",
+                    })}
+                  </Typography>
+                  <br />
+                  {row.keywords_nlp.sort().map((keyword, i) => (
+                    <Tooltip
+                      title={intl.formatMessage({ id: "keyword.lookup" })}
+                      arrow
+                    >
+                      <Chip
+                        key={keyword + i}
+                        label={keyword}
+                        variant="outlined"
+                        size="small"
+                        color="info"
+                        onClick={() => handleChipClick(keyword)}
+                        sx={{
+                          mt: 1,
+                          mr: 0.5,
+                          color: theme.palette.info.main,
+                          maxWidth: 200,
+                        }}
+                      />
+                    </Tooltip>
+                  ))}
+                </div>
+              </div>
+            </Stack>
             {!mobileMode && (
-              <Stack sx={{ minWidth: 160, maxWidth: 160 }} id="subRowField2">
+              <Stack sx={{ minWidth: 120, maxWidth: 120 }} id="subRowField3">
                 <Typography variant="button">
                   {intl.formatMessage({
                     id: "subrow.tools",
@@ -194,74 +273,6 @@ export const SubRow = ({
                 </Tooltip>
               </Stack>
             )}
-            <Stack
-              sx={{
-                flexGrow: 1,
-              }}
-            >
-              <div id="subRowField3">
-                <div>
-                  <Typography variant="button">
-                    {intl.formatMessage({
-                      id: "subrow.keywords",
-                      defaultMessage: "Schlüsselwörter: ",
-                    })}
-                  </Typography>
-                </div>
-                {row.keywords.sort().map((keyword, i) => (
-                  <Tooltip
-                    title={intl.formatMessage({ id: "keyword.lookup" })}
-                    arrow
-                  >
-                    <Chip
-                      key={keyword + i}
-                      label={keyword}
-                      variant="outlined"
-                      size="small"
-                      color="info"
-                      onClick={() => handleChipClick(keyword)}
-                      sx={{
-                        mt: 1,
-                        mr: 0.5,
-                        color: theme.palette.info.main,
-                        maxWidth: 200,
-                      }}
-                    />
-                  </Tooltip>
-                ))}
-                <br />
-                <div style={{ paddingTop: 10 }}>
-                  <Typography variant="caption" sx={{ paddingBottom: 2 }}>
-                    {intl.formatMessage({
-                      id: "subrow.keywords_nlp",
-                      defaultMessage: "Schlüsselwörter: ",
-                    })}
-                  </Typography>
-                  <br />
-                  {row.keywords_nlp.sort().map((keyword, i) => (
-                    <Tooltip
-                      title={intl.formatMessage({ id: "keyword.lookup" })}
-                      arrow
-                    >
-                      <Chip
-                        key={keyword + i}
-                        label={keyword}
-                        variant="outlined"
-                        size="small"
-                        color="info"
-                        onClick={() => handleChipClick(keyword)}
-                        sx={{
-                          mt: 1,
-                          mr: 0.5,
-                          color: theme.palette.info.main,
-                          maxWidth: 200,
-                        }}
-                      />
-                    </Tooltip>
-                  ))}
-                </div>
-              </div>
-            </Stack>
           </Stack>
         </Collapse>
       </TableCell>
