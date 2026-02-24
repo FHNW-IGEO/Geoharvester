@@ -16,6 +16,7 @@ import { Stack } from "@mui/material";
 import { FirstSearchUI } from "./components/table/FirstSearchUI";
 import { LanguageContext } from "./lang/LanguageContext";
 import { theme } from "./theme/index";
+import { VisView } from "./components/vis/VisView";
 import "./styles.css";
 
 export type SearchResult = {
@@ -36,11 +37,11 @@ function App() {
   const [currentApiPage, setCurrentApiPage] = useState(0); // Page of the paginated API, different than the UI table page.
   const [size, setSize] = useState(DEFAULTROWSPERPAGE);
   const [localSearchString, setLocalSearchString] = useState("");
+  const [visViewOpen, setVisViewOpen] = useState(false);
 
   const { language } = useContext(LanguageContext);
 
   const defaultSearchParameter = {
-    // searchString: undefined, // Using an empty string would cause useEffect diffing to fail when searching without text
     searchString: "", // Using an empty string would cause useEffect diffing to fail when searching without text
     service: SERVICE.NONE,
     provider: PROVIDER.NONE,
@@ -122,6 +123,8 @@ function App() {
             searchParameters,
             responseState,
             triggerSearch,
+            visViewOpen,
+            setVisViewOpen,
           }}
         />
         {responseState === RESPONSESTATE.UNINITIALIZED ? (
@@ -156,6 +159,7 @@ function App() {
         )}
         <Footer />
       </Stack>
+      {visViewOpen && <VisView {...{ visViewOpen, setVisViewOpen }} />}
     </ThemeProvider>
   );
 }

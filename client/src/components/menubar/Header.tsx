@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { AppBar, Toolbar } from "@mui/material";
-import { SelectChangeEvent } from "@mui/material/Select";
+import { AppBar, SelectChangeEvent, useTheme, Button } from "@mui/material";
+import { Stack } from "@mui/system";
 import { MenuComponent } from "./MenuComponent";
 import { Filter } from "./Filter";
 import {
@@ -10,12 +10,11 @@ import {
   RESPONSESTATE,
 } from "../../appConstants";
 import { SearchField } from "./SearchField";
-import { useTheme } from "@mui/material/styles";
 import { useViewport } from "../../custom/ViewportHook";
 import { SearchDrawer } from "./SearchDrawer";
 import { SearchParameters } from "types";
-import "../../styles.css";
-import { Stack } from "@mui/system";
+import InsightsIcon from "@mui/icons-material/Insights";
+import { VisViewProps } from "components/vis/VisView";
 
 export type SearchBarProps = {
   localSearchString: string;
@@ -33,7 +32,9 @@ export const Header = ({
   responseState,
   triggerSearch,
   updateSearchParameters,
-}: SearchBarProps) => {
+  visViewOpen,
+  setVisViewOpen,
+}: SearchBarProps & VisViewProps) => {
   const theme = useTheme();
   const { width } = useViewport();
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -65,6 +66,13 @@ export const Header = ({
       >
         <div className="AppBarSpacing">
           <MenuComponent />
+          <Button
+            endIcon={<InsightsIcon />}
+            onClick={() => setVisViewOpen(true)}
+            sx={{ mr: 2 }}
+          >
+            Vis
+          </Button>
         </div>
       </AppBar>
       <AppBar
