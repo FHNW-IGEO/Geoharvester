@@ -9,6 +9,7 @@ import {
   SERVICE,
   DEFAULTROWSPERPAGE,
   DEFAULTCHUNKSIZE,
+  BREAKPOINT600,
 } from "./appConstants";
 import { getData, getDataByKeyword } from "./requests";
 import { Footer } from "./components/Footer";
@@ -17,6 +18,8 @@ import { FirstSearchUI } from "./components/table/FirstSearchUI";
 import { LanguageContext } from "./lang/LanguageContext";
 import { theme } from "./theme/index";
 import { VisView } from "./components/vis/VisView";
+import { useViewport } from "./custom/ViewportHook";
+
 import "./styles.css";
 
 export type SearchResult = {
@@ -40,6 +43,8 @@ function App() {
   const [visViewOpen, setVisViewOpen] = useState(false);
 
   const { language } = useContext(LanguageContext);
+  const { width } = useViewport();
+  const mobileMode = width < BREAKPOINT600;
 
   const defaultSearchParameter = {
     searchString: "", // Using an empty string would cause useEffect diffing to fail when searching without text
@@ -125,6 +130,7 @@ function App() {
             triggerSearch,
             visViewOpen,
             setVisViewOpen,
+            mobileMode,
           }}
         />
         {responseState === RESPONSESTATE.UNINITIALIZED ? (
@@ -152,6 +158,7 @@ function App() {
               currentApiPage,
               triggerSearch,
               triggerSearchbyKeyword,
+              mobileMode,
             }}
             tablePage={tablePage}
             setTablePage={setTablePage}
@@ -159,7 +166,9 @@ function App() {
         )}
         <Footer />
       </Stack>
-      {visViewOpen && <VisView {...{ visViewOpen, setVisViewOpen }} />}
+      {visViewOpen && (
+        <VisView {...{ visViewOpen, setVisViewOpen, language }} />
+      )}
     </ThemeProvider>
   );
 }

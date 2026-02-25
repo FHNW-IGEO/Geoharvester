@@ -12,13 +12,19 @@ import {
 import { Box } from "@mui/system";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { WordCloud } from "./tab1/WordCloud";
+import { LANGUAGE } from "appConstants";
 
 export type VisViewProps = {
   visViewOpen: boolean;
   setVisViewOpen: (state: boolean) => void;
+  language: LANGUAGE;
 };
 
-export const VisView = ({ visViewOpen, setVisViewOpen }: VisViewProps) => {
+export const VisView = ({
+  visViewOpen,
+  setVisViewOpen,
+  language,
+}: VisViewProps) => {
   const theme = useTheme();
   const [tabNr, setTabNr] = useState("1");
   return (
@@ -67,8 +73,12 @@ export const VisView = ({ visViewOpen, setVisViewOpen }: VisViewProps) => {
                 <Tab label="tbd" value="3" />
               </TabList>
             </Box>
-            <TabPanel value="1">
-              <WordCloud open={visViewOpen} active={tabNr === "1"} />
+            <TabPanel value="1" sx={{ padding: 0 }}>
+              <WordCloud
+                open={visViewOpen}
+                active={tabNr === "1"}
+                language={language}
+              />
             </TabPanel>
             <TabPanel value="2">Item Two</TabPanel>
             <TabPanel value="3">Item Three</TabPanel>

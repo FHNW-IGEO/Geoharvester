@@ -8,6 +8,7 @@ import {
   SERVICE,
   BREAKPOINT1000,
   RESPONSESTATE,
+  LANGUAGE,
 } from "../../appConstants";
 import { SearchField } from "./SearchField";
 import { useViewport } from "../../custom/ViewportHook";
@@ -23,6 +24,7 @@ export type SearchBarProps = {
   responseState: RESPONSESTATE;
   triggerSearch: (parameters: SearchParameters) => void;
   updateSearchParameters: (parameters: SearchParameters) => void;
+  mobileMode: boolean;
 };
 
 export const Header = ({
@@ -32,9 +34,11 @@ export const Header = ({
   responseState,
   triggerSearch,
   updateSearchParameters,
-  visViewOpen,
   setVisViewOpen,
-}: SearchBarProps & VisViewProps) => {
+  mobileMode,
+}: SearchBarProps & {
+  setVisViewOpen: (state: boolean) => void;
+}) => {
   const theme = useTheme();
   const { width } = useViewport();
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -68,6 +72,7 @@ export const Header = ({
           <MenuComponent />
           <Button
             endIcon={<InsightsIcon />}
+            disabled={mobileMode}
             onClick={() => setVisViewOpen(true)}
             sx={{ mr: 2 }}
           >

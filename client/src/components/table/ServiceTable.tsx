@@ -24,8 +24,8 @@ import {
   RESPONSESTATE,
   BREAKPOINT600,
 } from "../../appConstants";
-import { useViewport } from "../../custom/ViewportHook";
 import { PlaceholderWidget } from "./PlaceholderUI";
+import { useViewport } from "../../custom/ViewportHook";
 
 type TableProps = {
   docs: Geoservice[];
@@ -39,6 +39,7 @@ type TableProps = {
   triggerSearch: (parameters: SearchParameters) => void;
   triggerSearchbyKeyword: (parameters: SearchParameters) => void;
   searchParameters: SearchParameters;
+  mobileMode: boolean;
 };
 
 type Order = "asc" | "desc";
@@ -55,16 +56,16 @@ export const ServiceTable = ({
   triggerSearch,
   triggerSearchbyKeyword,
   searchParameters,
+  mobileMode,
 }: TableProps) => {
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<string>("");
   const [tableRef, setTableReference] = useState<any>();
 
-  const { width } = useViewport();
-  const mobileMode = width < BREAKPOINT600;
-
   const theme = useTheme();
   const intl = useIntl();
+
+  const { width } = useViewport();
 
   const scrollToTop = () => tableRef && tableRef.scrollIntoView();
 

@@ -5,6 +5,17 @@ import { Wordcloud } from "@visx/wordcloud";
 import { useParentSize, ParentSize } from "@visx/responsive";
 import { Box } from "@mui/system";
 import { getKeywordHistogram } from "../../../requests";
+import {
+  AppBar,
+  Drawer,
+  IconButton,
+  Toolbar,
+  Typography,
+  useTheme,
+  Tab,
+} from "@mui/material";
+import { KEYWORDFIELD, LANGUAGE } from "../../../appConstants";
+import { WordCloudToolbar } from "./WordCloudToolbar";
 
 export interface WordData {
   text: string;
@@ -26,14 +37,19 @@ type SpiralType = "archimedean" | "rectangular";
 export const WordCloud = ({
   open,
   active,
+  language,
 }: {
   open: boolean;
   active: boolean;
+  language: LANGUAGE;
 }) => {
   const [spiralType, setSpiralType] = useState<SpiralType>("archimedean");
   const [withRotation, setWithRotation] = useState(false);
   const [keywordHistogram, setKeyWordHistogram] = useState<WordData[]>([]);
+  const [keywordfieldToSearch, setKeywordfieldToSearch] =
+    useState<KEYWORDFIELD>(KEYWORDFIELD.KEYWORDS);
   const showControls = true;
+  const theme = useTheme();
 
   useEffect(() => {
     const makeRequest = async () => {
@@ -61,64 +77,84 @@ export const WordCloud = ({
     fontScale ? fontScale(datum.value) : 0;
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <ParentSize>
-        {({ width }) => (
-          <Wordcloud
-            words={keywordHistogram}
-            width={width}
-            height={width * 0.5}
-            fontSize={fontSizeSetter}
-            font={"Impact"}
-            padding={2}
-            spiral={spiralType}
-            rotate={withRotation ? getRotationDegree : 0}
-            random={fixedValueGenerator}
-          >
-            {(cloudWords) =>
-              cloudWords.map((w, i) => (
-                <Text
-                  key={w.text}
-                  fill={colors[i % colors.length]}
-                  textAnchor={"middle"}
-                  transform={`translate(${w.x}, ${w.y}) rotate(${w.rotate})`}
-                  fontSize={w.size}
-                  fontFamily={w.font}
-                >
-                  {w.text}
-                </Text>
-              ))
-            }
-          </Wordcloud>
-        )}
-      </ParentSize>
-      {showControls && (
-        <div>
-          <label>
-            Spiral type &nbsp;
-            <select
-              onChange={(e) => setSpiralType(e.target.value as SpiralType)}
-              value={spiralType}
+    <>
+      <AppBar
+        position="static"
+        sx={{
+          backgroundColor: theme.palette.secondary.main,
+          padding: 0,
+          height: 50,
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Toolbar>
+          <WordCloudToolbar
+            {...{ language, keywordfieldToSearch, setKeywordfieldToSearch }}
+          />
+        </Toolbar>
+      </AppBar>
+      <Box sx={{ width: "100%" }}>
+        <ParentSize>
+          {({ width }) => (
+            <Wordcloud
+              words={keywordHistogram}
+              width={width}
+              height={width * 0.5}
+              fontSize={fontSizeSetter}
+              font={"Impact"}
+              padding={2}
+              spiral={spiralType}
+              rotate={withRotation ? getRotationDegree : 0}
+              random={fixedValueGenerator}
             >
-              <option key={"archimedean"} value={"archimedean"}>
-                archimedean
-              </option>
-              <option key={"rectangular"} value={"rectangular"}>
-                rectangular
-              </option>
-            </select>
-          </label>
-          <label>
-            With rotation &nbsp;
-            <input
-              type="checkbox"
-              checked={withRotation}
-              onChange={() => setWithRotation(!withRotation)}
-            />
-          </label>
-          <br />
-        </div>
-      )}
-    </Box>
+              {(cloudWords) =>
+                cloudWords.map((w, i) => (
+                  <Text
+                    key={w.text}
+                    fill={colors[i % colors.length]}
+                    textAnchor={"middle"}
+                    transform={`translate(${w.x}, ${w.y}) rotate(${w.rotate})`}
+                    fontSize={w.size}
+                    fontFamily={w.font}
+                    onClick={() => console.log(w.text)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    {w.text}
+                  </Text>
+                ))
+              }
+            </Wordcloud>
+          )}
+        </ParentSize>
+        {showControls && (
+          <div>
+            <label>
+              Spiral type &nbsp;
+              <select
+                onChange={(e) => setSpiralType(e.target.value as SpiralType)}
+                value={spiralType}
+              >
+                <option key={"archimedean"} value={"archimedean"}>
+                  archimedean
+                </option>
+                <option key={"rectangular"} value={"rectangular"}>
+                  rectangular
+                </option>
+              </select>
+            </label>
+            <label>
+              With rotation &nbsp;
+              <input
+                type="checkbox"
+                checked={withRotation}
+                onChange={() => setWithRotation(!withRotation)}
+              />
+            </label>
+            <br />
+          </div>
+        )}
+      </Box>
+    </>
   );
 };
