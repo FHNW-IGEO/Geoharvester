@@ -5,7 +5,6 @@ import os
 import warnings
 from time import time
 from typing import Union, Optional
-from redis.commands.search.query import Query
 
 from app.constants import (DEFAULTSIZE, EnumLangType, EnumProviderType,
                            EnumServiceType)
@@ -22,7 +21,6 @@ from fastapi.logger import logger as fastapi_logger
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_pagination import Page, add_pagination, paginate
 from fastapi_pagination.customization import CustomizedPage, UseParamsFields
-from collections import Counter
 import json
 
 
@@ -263,54 +261,38 @@ async def get_data_by_keywords(
     "/api/getKeywordHistogram",
     response_model=list[KeywordHistogram],
 )
-async def build_keyword_histogram(field: str= "keywords_nlp"):
+async def build_keyword_histogram(field: str= "keywords_nlp_as_tags"):
     """
     Build a histogram of values for a given JSON field.
-
-    :param redis_client: redis connection
-    :param index_name: RediSearch index name
-    :param field: JSON field name (e.g. "keywords", "keywords_nlp")
-    :return: List of (keyword, count) sorted by frequency desc
     """
 
-    counter = Counter()
+    res = r.execute_command(
+        "FT.AGGREGATE",
+        SVC_INDEX_ID,
+        "*",
+        "GROUPBY", "1", f"@{field}",
+        "REDUCE", "COUNT", "0", "AS", "count",
+        "SORTBY", "2", "@count", "DESC"
+    )
+    print(res)
 
-    # Get all document IDs via FT.SEARCH (fast and indexed)
-    res = r.ft(SVC_INDEX_ID).search(Query("*").paging(0, 1000000))
+    histogram = []
+    for row in res[1:]: # Skip the total number of results row
+        tag_bytes = row[1]
+        count_bytes = row[3]
 
-    for doc in res.docs:
-        key = doc.id
+        keyword = tag_bytes.decode("utf-8") if tag_bytes else ""
+        count = int(count_bytes)
 
-        # Fetch raw JSON
-        raw = r.json().get(key)
+        if keyword:
+            histogram.append(
+                KeywordHistogram(
+                    keyword=keyword,
+                    count=count
+                )
+            )
 
-        if not raw or field not in raw:
-            continue
-
-        value = raw[field]
-
-        # If array field
-        if isinstance(value, list):
-            for v in value:
-                if isinstance(v, str) and v.strip():
-                    counter[v.strip().lower()] += 1
-
-        # If single string field
-        elif isinstance(value, str):
-            tokens = value.split()
-            for token in tokens:
-                token = token.strip().lower()
-                if token:
-                    counter[token] += 1
-
-    # Sort by frequency descending
-    sorted_keywords = sorted(counter.items(), key=lambda x: x[1], reverse=True)
-    print(sorted_keywords)
-    return [
-        KeywordHistogram(keyword=keyword, count=count)
-        for keyword, count in sorted_keywords
-    ]   
-
+    return histogram
 
 
 add_pagination(app)

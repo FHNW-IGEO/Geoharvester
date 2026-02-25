@@ -4,6 +4,7 @@ import { scaleLog } from "@visx/scale";
 import { Wordcloud } from "@visx/wordcloud";
 import { useParentSize, ParentSize } from "@visx/responsive";
 import { Box } from "@mui/system";
+import { getKeywordHistogram } from "../../../requests";
 
 export interface WordData {
   text: string;
@@ -50,9 +51,15 @@ type SpiralType = "archimedean" | "rectangular";
 export const WordCloud = () => {
   const [spiralType, setSpiralType] = useState<SpiralType>("archimedean");
   const [withRotation, setWithRotation] = useState(false);
+  const [keywordHistogram, setKeyWordHistogram] = useState();
   const showControls = true;
+  console.log(keywordHistogram);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getKeywordHistogram("keywords_nlp").then((res) =>
+      setKeyWordHistogram(res.data),
+    );
+  }, []);
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -61,7 +68,7 @@ export const WordCloud = () => {
           <Wordcloud
             words={words}
             width={width}
-            height={width * 0.6}
+            height={width * 0.5}
             fontSize={fontSizeSetter}
             font={"Impact"}
             padding={2}

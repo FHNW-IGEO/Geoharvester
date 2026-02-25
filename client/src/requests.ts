@@ -63,11 +63,8 @@ export const getKeywordHistogram = async (field: string) => {
   const response = await axios(routes.getKeywordHistogram, {
     params: { field },
   });
-  const result = {
-    ...response,
-    data: { ...response.data },
-  };
-  return result;
+
+  return response;
 };
 
 const linkBuilder = (blob: any, fileName: string, fileExtension: string) => {

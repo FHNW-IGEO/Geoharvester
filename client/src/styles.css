@@ -64,6 +64,15 @@ tr th span {
   padding: 20px;
 }
 
+.bold {
+  font-weight: 700;
+}
+
+.long-url {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 /* ---- Vis ---- */
 /* WordCloud */
 
@@ -85,13 +94,4 @@ tr th span {
 }
 .wordcloud textarea {
   min-height: 100px;
-}
-
-.bold {
-  font-weight: 700;
-}
-
-.long-url {
-  overflow-wrap: anywhere;
-  word-break: break-word;
 }

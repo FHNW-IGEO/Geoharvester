@@ -2,16 +2,17 @@
 from typing import List, Optional
 
 from pydantic import BaseModel, field_validator
-from redis.commands.search.field import (NumericField, TextField,
+from redis.commands.search.field import (NumericField, TextField, TagField,
                                          TextField)
 from typing import Optional, List, Union
 
 ### Geoservices
 # Source data:  https://github.com/davidoesch/geoservice_harvester_poc/tree/main/data/geoservices_CH.csv
 
-SVC_PREFIX = "svc:"    
-SVC_KEY = SVC_PREFIX + '{}'
+SVC_PREFIX = "svc:"
 SVC_INDEX_ID = "py_{}_idx".format(SVC_PREFIX)
+SVC_KEY = SVC_PREFIX + '{}'
+
 
 geoservices_schema = (
     TextField('$.provider', as_name='provider', no_stem=True),
@@ -22,12 +23,13 @@ geoservices_schema = (
     TextField('$.group', as_name='group', no_stem=True,),
     TextField('$.abstract', as_name='abstract'),
     TextField('$.keywords', as_name='keywords'),
-    TextField('$.keywords_nlp', as_name='keywords_nlp'),
+    TagField('$.keywords', as_name='keywords_as_tags'),
+    TextField('$.keywords_nlp', as_name='keywords_nlp'),    
+    TagField('$.keywords_nlp', as_name='keywords_nlp_as_tags'),
     TextField('$.legend', as_name='legend', no_stem=True,),
     TextField('$.contact', as_name='contact', no_stem=True,),
     TextField('$.endpoint', as_name='endpoint', no_stem=True,),
     TextField('$.metadata', as_name='metadata', no_stem=True,),
-    # TextField('$.update', as_name='update', no_stem=True,),# WARNING: field not used
     TextField('$.service', as_name='service'),
     NumericField('$.max_zoom', as_name='max_zoom'),
     NumericField('$.center_lat', as_name='center_lat'),
@@ -35,7 +37,6 @@ geoservices_schema = (
     TextField('$.bbox', as_name='bbox', no_stem=True,),
     TextField('$.summary', as_name='summary', no_stem=True,),
     TextField('$.lang_3', as_name='lang_3'),
-    # TextField('$.lang_2', as_name='lang_2'), # WARNING field not used
     NumericField('$.metaquality', as_name='metaquality'),
     TextField('$.title_en', as_name='title_en'),
     TextField('$.title_de', as_name='title_de'),
@@ -53,6 +54,14 @@ geoservices_schema = (
     TextField('$.keywords_nlp_de', as_name='keywords_nlp_de'),
     TextField('$.keywords_nlp_it', as_name='keywords_nlp_it'),
     TextField('$.keywords_nlp_fr', as_name='keywords_nlp_fr'),
+    TagField('$.keywords_en', as_name='keywords_en_as_tags'),
+    TagField('$.keywords_de', as_name='keywords_de_as_tags'),
+    TagField('$.keywords_it', as_name='keywords_it_as_tags'),
+    TagField('$.keywords_fr', as_name='keywords_fr_as_tags'),
+    TagField('$.keywords_nlp_en', as_name='keywords_nlp_en_as_tags'),
+    TagField('$.keywords_nlp_de', as_name='keywords_nlp_de_as_tags'),
+    TagField('$.keywords_nlp_it', as_name='keywords_nlp_it_as_tags'),
+    TagField('$.keywords_nlp_fr', as_name='keywords_nlp_fr_as_tags'),
     )
 
 
