@@ -5,6 +5,9 @@ import os
 import warnings
 from time import time
 from typing import Union, Optional
+import re
+import json
+from collections import Counter
 
 from app.constants import (DEFAULTSIZE, EnumLangType, EnumProviderType,
                            EnumServiceType)
@@ -21,7 +24,6 @@ from fastapi.logger import logger as fastapi_logger
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_pagination import Page, add_pagination, paginate
 from fastapi_pagination.customization import CustomizedPage, UseParamsFields
-import json
 
 
 from server.app.redis.redis_manager import r
@@ -272,27 +274,31 @@ async def build_keyword_histogram(field: str= "keywords_nlp_as_tags"):
         "*",
         "GROUPBY", "1", f"@{field}",
         "REDUCE", "COUNT", "0", "AS", "count",
-        "SORTBY", "2", "@count", "DESC"
+        "SORTBY", "2", "@count", "DESC",
+        "LIMIT", "0", "100"  # Adjust to needs, this is the max number returned
     )
-    print(res)
 
-    histogram = []
+    counter = Counter()
+    append = counter.update  # local lookup for speed
+
+    number_regex = re.compile(r'^\d+$') # Exclude keywords that are just numbers
+
     for row in res[1:]: # Skip the total number of results row
         tag_bytes = row[1]
-        count_bytes = row[3]
+        if not tag_bytes:
+            continue
 
-        keyword = tag_bytes.decode("utf-8") if tag_bytes else ""
-        count = int(count_bytes)
+        count_bytes = int(row[3])
+        tags = [t.strip() for t in tag_bytes.decode("utf-8").split(",") if t.strip()]
 
-        if keyword:
-            histogram.append(
-                KeywordHistogram(
-                    keyword=keyword,
-                    count=count
-                )
-            )
+        tags = [t for t in tags if not number_regex.fullmatch(t)]
 
-    return histogram
+        if tags:
+            append({t: count_bytes for t in tags})
 
+    return [
+        KeywordHistogram(text=kw, value=cnt)
+        for kw, cnt in counter.most_common()
+    ]
 
 add_pagination(app)

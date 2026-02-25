@@ -68,7 +68,7 @@ export const VisView = ({ visViewOpen, setVisViewOpen }: VisViewProps) => {
               </TabList>
             </Box>
             <TabPanel value="1">
-              <WordCloud />
+              <WordCloud open={visViewOpen} active={tabNr === "1"} />
             </TabPanel>
             <TabPanel value="2">Item Two</TabPanel>
             <TabPanel value="3">Item Three</TabPanel>

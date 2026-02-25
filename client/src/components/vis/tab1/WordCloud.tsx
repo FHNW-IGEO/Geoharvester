@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Text } from "@visx/text";
 import { scaleLog } from "@visx/scale";
 import { Wordcloud } from "@visx/wordcloud";
@@ -13,60 +13,59 @@ export interface WordData {
 
 const colors = ["#143059", "#2F6B9A", "#82a6c2"];
 
-function wordFreq(text: string): WordData[] {
-  const words: string[] = text.replace(/\./g, "").split(/\s/);
-  const freqMap: Record<string, number> = {};
-
-  for (const w of words) {
-    if (!freqMap[w]) freqMap[w] = 0;
-    freqMap[w] += 1;
-  }
-  return Object.keys(freqMap).map((word) => ({
-    text: word,
-    value: freqMap[word],
-  }));
-}
-
 function getRotationDegree() {
   const rand = Math.random();
   const degree = rand > 0.5 ? 60 : -60;
   return rand * degree;
 }
 
-const words = wordFreq("aabb cc www");
-
-const fontScale = scaleLog({
-  domain: [
-    Math.min(...words.map((w) => w.value)),
-    Math.max(...words.map((w) => w.value)),
-  ],
-  range: [10, 100],
-});
-const fontSizeSetter = (datum: WordData) => fontScale(datum.value);
-
 const fixedValueGenerator = () => 0.5;
 
 type SpiralType = "archimedean" | "rectangular";
 
-export const WordCloud = () => {
+export const WordCloud = ({
+  open,
+  active,
+}: {
+  open: boolean;
+  active: boolean;
+}) => {
   const [spiralType, setSpiralType] = useState<SpiralType>("archimedean");
   const [withRotation, setWithRotation] = useState(false);
-  const [keywordHistogram, setKeyWordHistogram] = useState();
+  const [keywordHistogram, setKeyWordHistogram] = useState<WordData[]>([]);
   const showControls = true;
-  console.log(keywordHistogram);
 
   useEffect(() => {
-    getKeywordHistogram("keywords_nlp").then((res) =>
-      setKeyWordHistogram(res.data),
-    );
-  }, []);
+    const makeRequest = async () => {
+      try {
+        const res = await getKeywordHistogram("keywords_nlp_as_tags");
+        setKeyWordHistogram(res.data);
+      } catch (err) {
+        console.error("Error:", err);
+      }
+    };
+    makeRequest();
+  }, [open, active]);
+
+  const fontScale = useMemo(() => {
+    if (!keywordHistogram || keywordHistogram.length === 0) return null;
+
+    const values = keywordHistogram.map((w) => w.value);
+    return scaleLog({
+      domain: [Math.min(...values), Math.max(...values)],
+      range: [12, 50],
+    });
+  }, [keywordHistogram]);
+
+  const fontSizeSetter = (datum: WordData) =>
+    fontScale ? fontScale(datum.value) : 0;
 
   return (
     <Box sx={{ width: "100%" }}>
       <ParentSize>
         {({ width }) => (
           <Wordcloud
-            words={words}
+            words={keywordHistogram}
             width={width}
             height={width * 0.5}
             fontSize={fontSizeSetter}

@@ -107,5 +107,5 @@ class GeoserviceModel(BaseModel):
 
 
 class KeywordHistogram(BaseModel):
-    keyword: str
-    count: int
+    text: str
+    value: int
