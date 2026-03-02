@@ -54,14 +54,14 @@ export const WordCloud = ({
   useEffect(() => {
     const makeRequest = async () => {
       try {
-        const res = await getKeywordHistogram("keywords_nlp_as_tags");
+        const res = await getKeywordHistogram(keywordfieldToSearch);
         setKeyWordHistogram(res.data);
       } catch (err) {
         console.error("Error:", err);
       }
     };
     makeRequest();
-  }, [open, active]);
+  }, [open, active, keywordfieldToSearch]);
 
   const fontScale = useMemo(() => {
     if (!keywordHistogram || keywordHistogram.length === 0) return null;

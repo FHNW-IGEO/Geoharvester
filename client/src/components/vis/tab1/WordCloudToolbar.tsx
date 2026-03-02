@@ -59,6 +59,7 @@ export const WordCloudToolbar = ({
         autoComplete="off"
         labelId="select-provider-label"
         id="select-provider"
+        autoWidth
         value={keywordfieldToSearch}
         onChange={(e) => setKeywordfieldToSearch(e.target.value)}
         MenuProps={{
@@ -66,7 +67,6 @@ export const WordCloudToolbar = ({
             sx: {
               display: "flex",
               alignItem: "center",
-              height: "80vh",
             },
           },
         }}
