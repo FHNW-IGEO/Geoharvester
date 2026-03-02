@@ -86,9 +86,37 @@ export const LABELS: Record<string, Record<string, string>> = {
   },
 };
 
-export const langLabelMap: Record<string, string> = {
-  de: "deutschsprachig",
-  en: "English only",
-  it: "solo italiano",
-  fr: "français uniquement",
+export const LANG_OPTIONS: Record<string, Record<string, string>> = {
+  KEYWORDS_de: {
+    field: KEYWORDFIELD.KEYWORDS_de,
+    name: "Schlüsselwörter, nur Deutsch",
+  },
+  KEYWORDS_NLP_de: {
+    field: KEYWORDFIELD.KEYWORDS_NLP_de,
+    name: "Schlüsselwörter, generiert, nur Deutsch",
+  },
+  KEYWORDS_en: {
+    field: KEYWORDFIELD.KEYWORDS_en,
+    name: "Keywords, only English",
+  },
+  KEYWORDS_NLP_en: {
+    field: KEYWORDFIELD.KEYWORDS_NLP_en,
+    name: "Keywords, generated, only English",
+  },
+  KEYWORDS_fr: {
+    field: KEYWORDFIELD.KEYWORDS_fr,
+    name: "Mots-clés, seulement Français",
+  },
+  KEYWORDS_NLP_fr: {
+    field: KEYWORDFIELD.KEYWORDS_NLP_fr,
+    name: "Mots-clés, générés, seulement Français",
+  },
+  KEYWORDS_it: {
+    field: KEYWORDFIELD.KEYWORDS_NLP_it,
+    name: "Parole chiave, solo Italiano",
+  },
+  KEYWORDS_NLP_it: {
+    field: KEYWORDFIELD.KEYWORDS_NLP_it,
+    name: "Parole chiave, generate, solo Italiano",
+  },
 };

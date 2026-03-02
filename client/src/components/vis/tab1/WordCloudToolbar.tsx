@@ -9,7 +9,7 @@ import {
 import {
   KEYWORDFIELD,
   LABELS,
-  langLabelMap,
+  LANG_OPTIONS,
   LANGUAGE,
 } from "../../../appConstants";
 
@@ -38,17 +38,14 @@ export const WordCloudToolbar = ({
       },
     ];
 
-    const langField = KEYWORDFIELD[`KEYWORDS_${language}`];
-    const langNlpField = KEYWORDFIELD[`KEYWORDS_NLP_${language}`];
-
     options.push(
       {
-        field: langField,
-        name: `Keywords, generiert, ${langLabelMap[language]}`,
+        field: LANG_OPTIONS[`KEYWORDS_${language}`].field as KEYWORDFIELD,
+        name: LANG_OPTIONS[`KEYWORDS_${language}`].name,
       },
       {
-        field: langNlpField,
-        name: `Keywords, generiert, ${langLabelMap[language]}`,
+        field: LANG_OPTIONS[`KEYWORDS_NLP_${language}`].field as KEYWORDFIELD,
+        name: LANG_OPTIONS[`KEYWORDS_NLP_${language}`].name,
       },
     );
 
