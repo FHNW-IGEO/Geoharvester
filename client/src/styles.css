@@ -59,9 +59,11 @@ tr th span {
 #subRowField2 {
   padding: 20px;
 }
-#subRowField3 {
-  border-left: 1px solid #f0f0f0;
-  padding: 20px;
+.subRowCell {
+  text-align: left;
+  padding: 10px 5px 10px 20px;
+  vertical-align: top;
+  background-color: #fafbfc;
 }
 
 .bold {

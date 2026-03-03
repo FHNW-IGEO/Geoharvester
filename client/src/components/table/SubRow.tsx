@@ -79,36 +79,24 @@ export const SubRow = ({
   }));
 
   return (
-    <StyledTableRow
-      key={index}
-      sx={{
-        visibility: open ? "visible" : "collapse",
-      }}
-    >
-      <TableCell
-        style={{
-          textAlign: "left",
-          padding: 0,
-          backgroundColor: alpha(theme.palette.primary.main, 0.04),
-        }}
-        colSpan={2}
-      >
+    <StyledTableRow key={index}>
+      <TableCell className="subRowCell" colSpan={2}>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <Box sx={{ p: 1 }}>
-            <Typography variant="button" sx={{ paddingBottom: 1 }}>
+            <Typography variant="subtitle1">
               {intl.formatMessage({
                 id: "subrow.details",
                 defaultMessage: "Details: ",
               })}
             </Typography>
-            <Typography variant="body2" sx={{ paddingBottom: 2 }}>
-              {intl.formatMessage({
-                id: "subrow.contact",
-                defaultMessage: "Kontakt: ",
-              })}
-              {row.contact}
-            </Typography>
             <Stack>
+              <Typography variant="body2" sx={{ paddingBottom: 2 }}>
+                {intl.formatMessage({
+                  id: "subrow.contact",
+                  defaultMessage: "Kontakt: ",
+                })}
+                {row.contact}
+              </Typography>
               <Typography variant="caption">
                 <span className="bold">Name:</span>
                 <span className="long-url">{row.name}</span>
@@ -130,25 +118,46 @@ export const SubRow = ({
         </Collapse>
       </TableCell>
       {!mobileMode && (
-        <TableCell
-          style={{
-            textAlign: "left",
-            padding: 0,
-            backgroundColor: alpha(theme.palette.primary.main, 0.04),
-          }}
-        >
+        <TableCell className="subRowCell">
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ p: 1 }}>
-              <div id="subRowField2">
-                <div>
-                  <Typography variant="button">
-                    {intl.formatMessage({
-                      id: "subrow.keywords",
-                      defaultMessage: "Schlüsselwörter: ",
-                    })}
-                  </Typography>
-                </div>
-                {row.keywords.sort().map((keyword, i) => (
+              <Typography variant="subtitle1">
+                {intl.formatMessage({
+                  id: "subrow.keywords",
+                  defaultMessage: "Schlüsselwörter: ",
+                })}
+              </Typography>
+              {row.keywords.sort().map((keyword, i) => (
+                <Tooltip
+                  title={intl.formatMessage({ id: "keyword.lookup" })}
+                  arrow
+                >
+                  <Chip
+                    key={keyword + i}
+                    label={keyword}
+                    variant="outlined"
+                    size="small"
+                    color="info"
+                    onClick={() => handleChipClick(keyword)}
+                    sx={{
+                      mt: 1,
+                      mr: 0.5,
+                      color: theme.palette.info.main,
+                      maxWidth: 200,
+                    }}
+                  />
+                </Tooltip>
+              ))}
+              <br />
+              <div style={{ paddingTop: 10 }}>
+                <Typography variant="caption" sx={{ paddingBottom: 2 }}>
+                  {intl.formatMessage({
+                    id: "subrow.keywords_nlp",
+                    defaultMessage: "Schlüsselwörter: ",
+                  })}
+                </Typography>
+                <br />
+                {row.keywords_nlp.sort().map((keyword, i) => (
                   <Tooltip
                     title={intl.formatMessage({ id: "keyword.lookup" })}
                     arrow
@@ -169,58 +178,12 @@ export const SubRow = ({
                     />
                   </Tooltip>
                 ))}
-                <br />
-                <div style={{ paddingTop: 10 }}>
-                  <Typography variant="caption" sx={{ paddingBottom: 2 }}>
-                    {intl.formatMessage({
-                      id: "subrow.keywords_nlp",
-                      defaultMessage: "Schlüsselwörter: ",
-                    })}
-                  </Typography>
-                  <br />
-                  {row.keywords_nlp.sort().map((keyword, i) => (
-                    <Tooltip
-                      title={intl.formatMessage({ id: "keyword.lookup" })}
-                      arrow
-                    >
-                      <Chip
-                        key={keyword + i}
-                        label={keyword}
-                        variant="outlined"
-                        size="small"
-                        color="info"
-                        onClick={() => handleChipClick(keyword)}
-                        sx={{
-                          mt: 1,
-                          mr: 0.5,
-                          color: theme.palette.info.main,
-                          maxWidth: 200,
-                        }}
-                      />
-                    </Tooltip>
-                  ))}
-                </div>
               </div>
             </Box>
           </Collapse>
         </TableCell>
       )}
-      <TableCell
-        colSpan={1}
-        style={{
-          textAlign: "left",
-          padding: 0,
-          backgroundColor: alpha(theme.palette.primary.main, 0.04),
-        }}
-      ></TableCell>
-      <TableCell
-        colSpan={2}
-        style={{
-          textAlign: "left",
-          padding: 0,
-          backgroundColor: alpha(theme.palette.primary.main, 0.04),
-        }}
-      >
+      <TableCell colSpan={3} className="subRowCell">
         <Collapse in={open} timeout="auto" unmountOnExit>
           <Box sx={{ p: 1 }}>
             <Typography variant="subtitle1">
@@ -229,7 +192,7 @@ export const SubRow = ({
                 defaultMessage: "Tools: ",
               })}
             </Typography>
-            <Stack spacing={1}>
+            <Stack>
               <Tooltip
                 title={intl.formatMessage({ id: "button.preview" })}
                 arrow

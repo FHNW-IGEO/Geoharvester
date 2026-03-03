@@ -97,13 +97,15 @@ export const ServiceRow = ({
           </div>
         </CenteredTableCell>
       </TableRow>
-      <SubRow
-        row={row}
-        open={open}
-        index={index}
-        mobileMode={mobileMode}
-        triggerSearchbyKeyword={triggerSearchbyKeyword}
-      />
+      {open && (
+        <SubRow
+          row={row}
+          open={open}
+          index={index}
+          mobileMode={mobileMode}
+          triggerSearchbyKeyword={triggerSearchbyKeyword}
+        />
+      )}
     </>
   );
 };
