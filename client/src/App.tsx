@@ -113,7 +113,17 @@ function App() {
       page,
       DEFAULTCHUNKSIZE,
     )
-      .then((res) => handleResponseParsing(res, parameters))
+      .then((res) =>
+        handleResponseParsing(
+          res,
+          (parameters = {
+            searchString,
+            service: SERVICE.NONE,
+            provider: PROVIDER.NONE,
+            page: 0,
+          }),
+        ),
+      )
       .catch((e) => handleResponseFailure(e));
   };
 
