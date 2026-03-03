@@ -69,7 +69,12 @@ export const MenuComponent = () => {
           width="242"
           height="29"
           style={{ marginLeft: -10, cursor: "pointer" }}
-          onClick={() => window.location.reload()}
+          onClick={() => {
+            const url = new URL(window.location.href);
+            url.search = "";
+            window.history.pushState({}, "", url.toString());
+            window.location.reload();
+          }}
         />
       </div>
       <Menu

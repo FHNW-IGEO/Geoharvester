@@ -67,6 +67,7 @@ function App() {
     searchString: string | undefined,
     service: SERVICE | undefined,
     provider: PROVIDER | undefined,
+    language: string,
     page: number,
   ) => {
     const url = new URL(window.location.href);
@@ -86,6 +87,12 @@ function App() {
       url.searchParams.set("service", service);
     } else {
       url.searchParams.delete("service");
+    }
+
+    if (language) {
+      url.searchParams.set("lang", language);
+    } else {
+      url.searchParams.delete("lang");
     }
 
     if (page) {
@@ -122,7 +129,7 @@ function App() {
 
   const triggerSearch = async (parameters: SearchParameters) => {
     const { searchString, service, provider, page } = parameters;
-    updateURL(searchString, service, provider, page);
+    updateURL(searchString, service, provider, language, page);
 
     setResponseState(RESPONSESTATE.WAITING);
 
@@ -140,7 +147,7 @@ function App() {
 
   const triggerSearchbyKeyword = async (parameters: SearchParameters) => {
     const { searchString, page } = parameters;
-    updateURL(searchString, undefined, undefined, page);
+    updateURL(searchString, undefined, undefined, language, page);
 
     setResponseState(RESPONSESTATE.WAITING);
 
