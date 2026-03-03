@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ServiceTable } from "./components/table/ServiceTable";
 import { ThemeProvider } from "@mui/material/styles";
 import { Header } from "./components/menubar/Header";
@@ -63,6 +63,41 @@ function App() {
     setSearchParameters(parameter);
   };
 
+  const updateURL = (
+    searchString: string | undefined,
+    service: SERVICE | undefined,
+    provider: PROVIDER | undefined,
+    page: number,
+  ) => {
+    const url = new URL(window.location.href);
+    if (searchString) {
+      url.searchParams.set("searchString", searchString);
+    } else {
+      url.searchParams.delete("searchString");
+    }
+
+    if (provider) {
+      url.searchParams.set("provider", provider);
+    } else {
+      url.searchParams.delete("provider");
+    }
+
+    if (service) {
+      url.searchParams.set("service", service);
+    } else {
+      url.searchParams.delete("service");
+    }
+
+    if (page) {
+      url.searchParams.set("page", page.toString());
+    } else {
+      url.searchParams.delete("page");
+    }
+
+    // Update the browser's URL without refreshing the page
+    window.history.pushState({}, "", url.toString());
+  };
+
   const handleResponseParsing = (res: any, parameters: SearchParameters) => {
     updateSearchParameters(parameters);
     const { data } = res;
@@ -87,6 +122,7 @@ function App() {
 
   const triggerSearch = async (parameters: SearchParameters) => {
     const { searchString, service, provider, page } = parameters;
+    updateURL(searchString, service, provider, page);
 
     setResponseState(RESPONSESTATE.WAITING);
 
@@ -104,6 +140,7 @@ function App() {
 
   const triggerSearchbyKeyword = async (parameters: SearchParameters) => {
     const { searchString, page } = parameters;
+    updateURL(searchString, undefined, undefined, page);
 
     setResponseState(RESPONSESTATE.WAITING);
 
@@ -126,6 +163,27 @@ function App() {
       )
       .catch((e) => handleResponseFailure(e));
   };
+
+  useEffect(() => {
+    // Trigger a search on copy paste with search params
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const searchString = urlParams.get("searchString");
+    const service = urlParams.get("service") as SERVICE | null;
+    const provider = urlParams.get("provider") as PROVIDER | null;
+    const page = urlParams.get("page");
+
+    if (searchString || service || provider || page) {
+      const searchParams: SearchParameters = {
+        searchString: searchString || "",
+        service: service || SERVICE.NONE,
+        provider: provider || PROVIDER.NONE,
+        page: page ? parseInt(page, 10) : 0,
+      };
+      setSearchParameters(searchParams);
+      triggerSearch(searchParams);
+    }
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
