@@ -4,7 +4,9 @@ import {
   useTheme,
   MenuItem,
   Select,
-  SelectChangeEvent,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
 } from "@mui/material";
 import {
   KEYWORDFIELD,
@@ -12,19 +14,31 @@ import {
   LANG_OPTIONS,
   LANGUAGE,
 } from "../../../appConstants";
+import { SpiralType } from "./WordCloud";
+import { Stack } from "@mui/system";
+import { useIntl } from "react-intl";
 
 type WordCloudToolbarProps = {
   language: LANGUAGE;
   keywordfieldToSearch: KEYWORDFIELD;
   setKeywordfieldToSearch: (state: KEYWORDFIELD) => void;
+  setSpiralType: (state: SpiralType) => void;
+  spiralType: SpiralType;
+  withRotation: boolean;
+  setWithRotation: (state: boolean) => void;
 };
 
 export const WordCloudToolbar = ({
   language,
   keywordfieldToSearch,
   setKeywordfieldToSearch,
+  setSpiralType,
+  spiralType,
+  withRotation,
+  setWithRotation,
 }: WordCloudToolbarProps) => {
   const theme = useTheme();
+  const intl = useIntl();
 
   const selectOptions = useMemo(() => {
     const options = [
@@ -53,42 +67,95 @@ export const WordCloudToolbar = ({
   }, [language]);
 
   return (
-    <FormControl variant="outlined">
-      <Select
-        className="Dropdown"
-        autoComplete="off"
-        labelId="select-provider-label"
-        id="select-provider"
-        autoWidth
-        value={keywordfieldToSearch}
-        onChange={(e) => setKeywordfieldToSearch(e.target.value)}
-        MenuProps={{
-          PaperProps: {
-            sx: {
-              display: "flex",
-              alignItem: "center",
+    <Stack
+      direction="row"
+      sx={{
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "100%",
+      }}
+    >
+      <FormControl variant="outlined">
+        <Select
+          className="Dropdown"
+          autoComplete="off"
+          autoWidth
+          value={keywordfieldToSearch}
+          onChange={(e) => setKeywordfieldToSearch(e.target.value)}
+          MenuProps={{
+            PaperProps: {
+              sx: {
+                display: "flex",
+                alignItems: "center",
+              },
             },
-          },
-        }}
-        sx={{
-          backgroundColor: theme.palette.secondary.main,
-          textAlign: "center",
-          height: 40,
-          color: theme.palette.primary.main,
-        }}
-      >
-        {selectOptions.map((option, i) => {
-          return (
-            <MenuItem
-              key={i}
-              value={option.field}
-              sx={{ display: "flex", alignItems: "center" }}
-            >
-              {option.name}
+          }}
+          sx={{
+            backgroundColor: theme.palette.secondary.main,
+            textAlign: "center",
+            height: 40,
+            color: theme.palette.primary.main,
+          }}
+        >
+          {selectOptions.map((option, i) => {
+            return (
+              <MenuItem
+                key={i}
+                value={option.field}
+                sx={{ display: "flex", alignItems: "center" }}
+              >
+                {option.name}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
+
+      <Stack direction="row" alignItems="center" spacing={2}>
+        <FormControl variant="outlined">
+          <Select
+            className="Dropdown"
+            autoWidth
+            onChange={(e) => setSpiralType(e.target.value as SpiralType)}
+            value={spiralType}
+            MenuProps={{
+              PaperProps: {
+                sx: {
+                  display: "flex",
+                  alignItems: "center",
+                },
+              },
+            }}
+            sx={{
+              backgroundColor: theme.palette.secondary.main,
+              textAlign: "center",
+              height: 40,
+              color: theme.palette.primary.main,
+            }}
+          >
+            <MenuItem key={"archimedean"} value={"archimedean"}>
+              archimedean
             </MenuItem>
-          );
-        })}
-      </Select>
-    </FormControl>
+            <MenuItem key={"rectangular"} value={"rectangular"}>
+              rectangular
+            </MenuItem>
+          </Select>
+        </FormControl>
+        <FormControlLabel
+          sx={{ color: theme.palette.primary.main }}
+          control={
+            <Checkbox
+              checked={withRotation}
+              onChange={() => setWithRotation(!withRotation)}
+              size="large"
+            />
+          }
+          label={intl.formatMessage({
+            id: "dropdown.rotation",
+            defaultMessage: "Rotation",
+          })}
+        />
+      </Stack>
+    </Stack>
   );
 };

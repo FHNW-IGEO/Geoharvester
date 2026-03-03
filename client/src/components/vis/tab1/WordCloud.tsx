@@ -32,7 +32,7 @@ function getRotationDegree() {
 
 const fixedValueGenerator = () => 0.5;
 
-type SpiralType = "archimedean" | "rectangular";
+export type SpiralType = "archimedean" | "rectangular";
 
 export const WordCloud = ({
   open,
@@ -48,7 +48,6 @@ export const WordCloud = ({
   const [keywordHistogram, setKeyWordHistogram] = useState<WordData[]>([]);
   const [keywordfieldToSearch, setKeywordfieldToSearch] =
     useState<KEYWORDFIELD>(KEYWORDFIELD.KEYWORDS);
-  const showControls = true;
   const theme = useTheme();
 
   useEffect(() => {
@@ -90,7 +89,15 @@ export const WordCloud = ({
       >
         <Toolbar>
           <WordCloudToolbar
-            {...{ language, keywordfieldToSearch, setKeywordfieldToSearch }}
+            {...{
+              language,
+              keywordfieldToSearch,
+              setKeywordfieldToSearch,
+              setSpiralType,
+              spiralType,
+              withRotation,
+              setWithRotation,
+            }}
           />
         </Toolbar>
       </AppBar>
@@ -127,33 +134,6 @@ export const WordCloud = ({
             </Wordcloud>
           )}
         </ParentSize>
-        {showControls && (
-          <div>
-            <label>
-              Spiral type &nbsp;
-              <select
-                onChange={(e) => setSpiralType(e.target.value as SpiralType)}
-                value={spiralType}
-              >
-                <option key={"archimedean"} value={"archimedean"}>
-                  archimedean
-                </option>
-                <option key={"rectangular"} value={"rectangular"}>
-                  rectangular
-                </option>
-              </select>
-            </label>
-            <label>
-              With rotation &nbsp;
-              <input
-                type="checkbox"
-                checked={withRotation}
-                onChange={() => setWithRotation(!withRotation)}
-              />
-            </label>
-            <br />
-          </div>
-        )}
       </Box>
     </>
   );

@@ -275,13 +275,14 @@ async def build_keyword_histogram(field: str= "keywords_nlp_as_tags"):
         "GROUPBY", "1", f"@{field}",
         "REDUCE", "COUNT", "0", "AS", "count",
         "SORTBY", "2", "@count", "DESC",
-        "LIMIT", "0", "100"  # Adjust to needs, this is the max number returned
+        "LIMIT", "0", "500"  # Adjust to needs, this is the max number returned
     )
 
     counter = Counter()
     append = counter.update  # local lookup for speed
 
     number_regex = re.compile(r'^\d+$') # Exclude keywords that are just numbers
+    http_regex = re.compile(r'https?') # Same for http or https
 
     for row in res[1:]: # Skip the total number of results row
         tag_bytes = row[1]
@@ -289,9 +290,15 @@ async def build_keyword_histogram(field: str= "keywords_nlp_as_tags"):
             continue
 
         count_bytes = int(row[3])
-        tags = [t.strip() for t in tag_bytes.decode("utf-8").split(",") if t.strip()]
+        tags = [
+            t.strip().strip('[]"\'')
+            for t in tag_bytes.decode("utf-8").split(",")
+            if t.strip()
+        ]
 
-        tags = [t for t in tags if not number_regex.fullmatch(t)]
+        tags = [t for t in tags if t.lower() != "nan" and not number_regex.fullmatch(t) and not http_regex.search(t)]
+
+
 
         if tags:
             append({t: count_bytes for t in tags})

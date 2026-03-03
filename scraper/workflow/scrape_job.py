@@ -22,7 +22,6 @@ import warnings
 import xml.etree.ElementTree as ET
 from pathlib import Path
 import requests
-from requests.exceptions import ReadTimeout, ConnectTimeout
 from owslib.wfs import WebFeatureService
 from owslib.wms import WebMapService
 from owslib.wmts import WebMapTileService
@@ -33,6 +32,8 @@ from collections import defaultdict
 import pytz
 import pandas as pd
 from typing import Optional
+from urllib.parse import urlparse, urlunparse
+
 
 sys.path.append('../')
 import scraper.configuration as config
@@ -53,7 +54,6 @@ DATASETS_TO_PROCESS = Path("../artifacts/datasets_to_process.json")
 OUTPUT_CSV = Path("scrape_job_output.csv")
 OUTPUT_PKL = Path("scrape_job_output.pkl")
 
-from urllib.parse import urlparse, urlunparse
 
 def normalize_url(url: str) -> str:
     parsed = urlparse(url)
@@ -229,7 +229,7 @@ def is_online(source):
         log_to_operator_csv(server_operator, server_url, error_details)
     return success
 
-def get_service_info(source, only_layers: Optional[dict[str, str]] = None):
+def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = None):
     """
     Extracts information from an OGC web service (WMS, WMTS, WFS) using the 
     OWSLib library. This function takes a dictionary called "source" as input 
@@ -251,6 +251,16 @@ def get_service_info(source, only_layers: Optional[dict[str, str]] = None):
     Parameters:
         source (dict): A dictionary containing the GetCapabilities URL and 
         Description of the OGC web service.
+        only_layers:         dict[str, dict[str, dict[str, str]]]
+        {
+            service_url: {
+                layer_name: {
+                    layer_hash,
+                    timestamp,
+                    reason
+                }
+            }
+        }
 
     Returns:
         None
@@ -455,7 +465,6 @@ def log_to_operator_csv(server_operator, server_url, error_details):
         f.write(error_log + "\n")
     return
 
-# keep:
 def write_service_info(source, service, hash,  timestamp, reason, i, layertree, group):
     """
     Write OGC GetCap results for a service, using a custom or default scraper 
@@ -562,6 +571,7 @@ if __name__ == "__main__":
 
         # Skip services with no changed layers
         if not only_layers:
+            print("Skipped:" source)
             continue
 
         get_service_info(source, only_layers=only_layers)
