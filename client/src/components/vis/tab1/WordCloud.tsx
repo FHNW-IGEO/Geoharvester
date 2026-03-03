@@ -2,18 +2,10 @@ import { useEffect, useState, useMemo } from "react";
 import { Text } from "@visx/text";
 import { scaleLog } from "@visx/scale";
 import { Wordcloud } from "@visx/wordcloud";
-import { useParentSize, ParentSize } from "@visx/responsive";
+import { ParentSize } from "@visx/responsive";
 import { Box } from "@mui/system";
 import { getKeywordHistogram } from "../../../requests";
-import {
-  AppBar,
-  Drawer,
-  IconButton,
-  Toolbar,
-  Typography,
-  useTheme,
-  Tab,
-} from "@mui/material";
+import { AppBar, Toolbar, useTheme } from "@mui/material";
 import { KEYWORDFIELD, LANGUAGE } from "../../../appConstants";
 import { WordCloudToolbar } from "./WordCloudToolbar";
 
@@ -68,7 +60,7 @@ export const WordCloud = ({
     const values = keywordHistogram.map((w) => w.value);
     return scaleLog({
       domain: [Math.min(...values), Math.max(...values)],
-      range: [12, 50],
+      range: [20, 70],
     });
   }, [keywordHistogram]);
 
@@ -101,38 +93,41 @@ export const WordCloud = ({
           />
         </Toolbar>
       </AppBar>
-      <Box sx={{ width: "100%" }}>
+      <Box sx={{ width: "100%", height: "100%" }}>
         <ParentSize>
-          {({ width }) => (
-            <Wordcloud
-              words={keywordHistogram}
-              width={width}
-              height={width * 0.5}
-              fontSize={fontSizeSetter}
-              font={"Impact"}
-              padding={2}
-              spiral={spiralType}
-              rotate={withRotation ? getRotationDegree : 0}
-              random={fixedValueGenerator}
-            >
-              {(cloudWords) =>
-                cloudWords.map((w, i) => (
-                  <Text
-                    key={w.text}
-                    fill={colors[i % colors.length]}
-                    textAnchor={"middle"}
-                    transform={`translate(${w.x}, ${w.y}) rotate(${w.rotate})`}
-                    fontSize={w.size}
-                    fontFamily={w.font}
-                    onClick={() => console.log(w.text)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    {w.text}
-                  </Text>
-                ))
-              }
-            </Wordcloud>
-          )}
+          {({ width, height }) => {
+            const pad = 10;
+            return (
+              <Wordcloud
+                words={keywordHistogram}
+                width={width - pad * 2}
+                height={height - pad * 2}
+                fontSize={fontSizeSetter}
+                font={"Calibri"}
+                padding={2}
+                spiral={spiralType}
+                rotate={withRotation ? getRotationDegree : 0}
+                random={fixedValueGenerator}
+              >
+                {(cloudWords) =>
+                  cloudWords.map((w, i) => (
+                    <Text
+                      key={w.text}
+                      fill={colors[i % colors.length]}
+                      textAnchor={"middle"}
+                      transform={`translate(${w.x}, ${w.y}) rotate(${w.rotate})`}
+                      fontSize={w.size}
+                      fontFamily={w.font}
+                      onClick={() => console.log(w.text)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {w.text}
+                    </Text>
+                  ))
+                }
+              </Wordcloud>
+            );
+          }}
         </ParentSize>
       </Box>
     </>

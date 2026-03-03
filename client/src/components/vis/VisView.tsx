@@ -33,7 +33,7 @@ export const VisView = ({
       open={visViewOpen}
       onClose={() => setVisViewOpen(false)}
     >
-      <div style={{ minHeight: "90vh" }}>
+      <Box style={{ height: "90vh", display: "flex", flexDirection: "column" }}>
         <AppBar
           position="static"
           sx={{
@@ -60,7 +60,15 @@ export const VisView = ({
             </IconButton>
           </Toolbar>
         </AppBar>
-        <Box sx={{ width: "100%", typography: "body1" }}>
+        <Box
+          sx={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+            overflow: "hidden",
+          }}
+        >
           <TabContext value={tabNr}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
               <TabList
@@ -73,7 +81,16 @@ export const VisView = ({
                 <Tab label="tbd" value="3" />
               </TabList>
             </Box>
-            <TabPanel value="1" sx={{ padding: 0 }}>
+            <TabPanel
+              value="1"
+              sx={{
+                flex: 1,
+                padding: 0,
+                display: "flex",
+                flexDirection: "column",
+                overflow: "hidden",
+              }}
+            >
               <WordCloud
                 open={visViewOpen}
                 active={tabNr === "1"}
@@ -84,7 +101,7 @@ export const VisView = ({
             <TabPanel value="3">Item Three</TabPanel>
           </TabContext>
         </Box>
-      </div>
+      </Box>
     </Drawer>
   );
 };

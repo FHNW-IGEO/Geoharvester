@@ -296,7 +296,7 @@ async def build_keyword_histogram(field: str= "keywords_nlp_as_tags"):
             if t.strip()
         ]
 
-        tags = [t for t in tags if t.lower() != "nan" and not number_regex.fullmatch(t) and not http_regex.search(t)]
+        tags = [t for t in tags if t.lower() not in {"nan", "null", "none", "nul", "aucun", "nullo", "nessuno"} and not number_regex.fullmatch(t) and not http_regex.search(t)]
 
 
 
