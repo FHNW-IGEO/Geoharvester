@@ -8,6 +8,7 @@ import { getKeywordHistogram } from "../../../requests";
 import { AppBar, Toolbar, useTheme } from "@mui/material";
 import { KEYWORDFIELD, LANGUAGE } from "../../../appConstants";
 import { WordCloudToolbar } from "./WordCloudToolbar";
+import { SearchParameters } from "types";
 
 export interface WordData {
   text: string;
@@ -30,10 +31,14 @@ export const WordCloud = ({
   open,
   active,
   language,
+  triggerSearchbyKeyword,
+  closeVisView,
 }: {
   open: boolean;
   active: boolean;
   language: LANGUAGE;
+  triggerSearchbyKeyword: (parameters: SearchParameters) => void;
+  closeVisView: () => void;
 }) => {
   const [spiralType, setSpiralType] = useState<SpiralType>("archimedean");
   const [withRotation, setWithRotation] = useState(false);
@@ -118,7 +123,13 @@ export const WordCloud = ({
                       transform={`translate(${w.x}, ${w.y}) rotate(${w.rotate})`}
                       fontSize={w.size}
                       fontFamily={w.font}
-                      onClick={() => console.log(w.text)}
+                      onClick={() => {
+                        closeVisView();
+                        triggerSearchbyKeyword({
+                          searchString: w.text,
+                          page: 0,
+                        });
+                      }}
                       style={{ cursor: "pointer" }}
                     >
                       {w.text}

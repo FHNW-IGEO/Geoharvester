@@ -23,8 +23,6 @@ import { LanguageContext } from "../../lang/LanguageContext";
 import { LANGUAGE } from "../../appConstants";
 import geoharvesterLogo from "./logo.png";
 
-import "../../styles.css";
-
 export const MenuComponent = () => {
   const { setLanguage, language } = useContext(LanguageContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

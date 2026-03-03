@@ -177,7 +177,9 @@ function App() {
         <Footer />
       </Stack>
       {visViewOpen && (
-        <VisView {...{ visViewOpen, setVisViewOpen, language }} />
+        <VisView
+          {...{ visViewOpen, setVisViewOpen, language, triggerSearchbyKeyword }}
+        />
       )}
     </ThemeProvider>
   );

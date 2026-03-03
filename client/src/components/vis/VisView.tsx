@@ -13,17 +13,20 @@ import { Box } from "@mui/system";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { WordCloud } from "./tab1/WordCloud";
 import { LANGUAGE } from "appConstants";
+import { SearchParameters } from "types";
 
 export type VisViewProps = {
   visViewOpen: boolean;
   setVisViewOpen: (state: boolean) => void;
   language: LANGUAGE;
+  triggerSearchbyKeyword: (parameters: SearchParameters) => void;
 };
 
 export const VisView = ({
   visViewOpen,
   setVisViewOpen,
   language,
+  triggerSearchbyKeyword,
 }: VisViewProps) => {
   const theme = useTheme();
   const [tabNr, setTabNr] = useState("1");
@@ -93,8 +96,10 @@ export const VisView = ({
             >
               <WordCloud
                 open={visViewOpen}
+                closeVisView={() => setVisViewOpen(false)}
                 active={tabNr === "1"}
                 language={language}
+                triggerSearchbyKeyword={triggerSearchbyKeyword}
               />
             </TabPanel>
             <TabPanel value="2">Item Two</TabPanel>
