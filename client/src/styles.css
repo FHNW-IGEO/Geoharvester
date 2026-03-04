@@ -49,21 +49,9 @@ tr th span {
   color: white !important;
 }
 
-#subRowField1 {
-  border-right: 1px solid #f0f0f0;
-  padding: 20px;
-  min-width: 320px;
-  max-width: 320px;
-  margin-left: 120px;
-}
-#subRowField2 {
-  padding: 20px;
-}
 .subRowCell {
   text-align: left;
-  padding: 10px 5px 10px 20px;
-  vertical-align: top;
-  background-color: #fafbfc;
+  vertical-align: top !important;
 }
 
 .bold {

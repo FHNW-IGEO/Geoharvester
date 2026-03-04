@@ -19,7 +19,6 @@ import { LanguageContext } from "./lang/LanguageContext";
 import { theme } from "./theme/index";
 import { VisView } from "./components/vis/VisView";
 import { useViewport } from "./custom/ViewportHook";
-
 import "./styles.css";
 
 export type SearchResult = {

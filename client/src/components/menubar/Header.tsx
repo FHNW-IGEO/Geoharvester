@@ -2,7 +2,6 @@ import { useState } from "react";
 import { AppBar, SelectChangeEvent, useTheme, Button } from "@mui/material";
 import { Stack } from "@mui/system";
 import { useIntl } from "react-intl";
-
 import { MenuComponent } from "./MenuComponent";
 import { Filter } from "./Filter";
 import {
@@ -10,14 +9,12 @@ import {
   SERVICE,
   BREAKPOINT1000,
   RESPONSESTATE,
-  LANGUAGE,
 } from "../../appConstants";
 import { SearchField } from "./SearchField";
 import { useViewport } from "../../custom/ViewportHook";
 import { SearchDrawer } from "./SearchDrawer";
 import { SearchParameters } from "types";
 import InsightsIcon from "@mui/icons-material/Insights";
-import { VisViewProps } from "components/vis/VisView";
 
 export type SearchBarProps = {
   localSearchString: string;

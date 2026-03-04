@@ -24,7 +24,7 @@ import {
 } from "../../requests";
 import { Geoservice, SearchParameters } from "../../types";
 import { PROVIDER } from "../../appConstants";
-import { alpha, Box } from "@mui/system";
+import { Box } from "@mui/system";
 
 export const SubRow = ({
   row,
@@ -79,11 +79,20 @@ export const SubRow = ({
   }));
 
   return (
-    <StyledTableRow key={index}>
-      <TableCell className="subRowCell" colSpan={2}>
+    <StyledTableRow
+      key={index}
+      sx={{
+        boxShadow: "inset 0 8px 8px -8px rgba(0,0,0,0.25)",
+      }}
+    >
+      <TableCell></TableCell>
+      <TableCell className="subRowCell" colSpan={1}>
         <Collapse in={open} timeout="auto" unmountOnExit>
-          <Box sx={{ p: 1 }}>
-            <Typography variant="subtitle1">
+          <Box>
+            <Typography
+              variant="subtitle2"
+              sx={{ pb: 1, color: theme.palette.info.main }}
+            >
               {intl.formatMessage({
                 id: "subrow.details",
                 defaultMessage: "Details: ",
@@ -118,10 +127,13 @@ export const SubRow = ({
         </Collapse>
       </TableCell>
       {!mobileMode && (
-        <TableCell className="subRowCell">
+        <TableCell className="subRowCell" colSpan={2}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ p: 1 }}>
-              <Typography variant="subtitle1">
+            <Box>
+              <Typography
+                variant="subtitle2"
+                sx={{ pb: 0, color: theme.palette.info.main }}
+              >
                 {intl.formatMessage({
                   id: "subrow.keywords",
                   defaultMessage: "Schlüsselwörter: ",
@@ -131,9 +143,9 @@ export const SubRow = ({
                 <Tooltip
                   title={intl.formatMessage({ id: "keyword.lookup" })}
                   arrow
+                  key={keyword + i}
                 >
                   <Chip
-                    key={keyword + i}
                     label={keyword}
                     variant="outlined"
                     size="small"
@@ -150,10 +162,13 @@ export const SubRow = ({
               ))}
               <br />
               <div style={{ paddingTop: 10 }}>
-                <Typography variant="caption" sx={{ paddingBottom: 2 }}>
+                <Typography
+                  variant="caption"
+                  sx={{ paddingBottom: 2, color: theme.palette.info.main }}
+                >
                   {intl.formatMessage({
                     id: "subrow.keywords_nlp",
-                    defaultMessage: "Schlüsselwörter: ",
+                    defaultMessage: "Schlüsselwörter,generiert: ",
                   })}
                 </Typography>
                 <br />
@@ -161,18 +176,18 @@ export const SubRow = ({
                   <Tooltip
                     title={intl.formatMessage({ id: "keyword.lookup" })}
                     arrow
+                    key={keyword + i}
                   >
                     <Chip
-                      key={keyword + i}
                       label={keyword}
                       variant="outlined"
                       size="small"
-                      color="info"
                       onClick={() => handleChipClick(keyword)}
                       sx={{
                         mt: 1,
                         mr: 0.5,
                         color: theme.palette.info.main,
+
                         maxWidth: 200,
                       }}
                     />
@@ -183,13 +198,16 @@ export const SubRow = ({
           </Collapse>
         </TableCell>
       )}
-      <TableCell colSpan={3} className="subRowCell">
+      <TableCell colSpan={2} className="subRowCell">
         <Collapse in={open} timeout="auto" unmountOnExit>
-          <Box sx={{ p: 1 }}>
-            <Typography variant="subtitle1">
+          <Box>
+            <Typography
+              variant="subtitle2"
+              sx={{ pb: 1, color: theme.palette.info.main }}
+            >
               {intl.formatMessage({
                 id: "subrow.tools",
-                defaultMessage: "Tools: ",
+                defaultMessage: "Tools ",
               })}
             </Typography>
             <Stack>
@@ -198,7 +216,7 @@ export const SubRow = ({
                 arrow
               >
                 <Button
-                  sx={{ justifyContent: "flex-start" }}
+                  sx={{ justifyContent: "flex-start", pl: 3 }}
                   fullWidth
                   startIcon={<LaunchIcon />}
                   variant="text"
@@ -220,7 +238,7 @@ export const SubRow = ({
                   arrow
                 >
                   <Button
-                    sx={{ justifyContent: "flex-start" }}
+                    sx={{ justifyContent: "flex-start", pl: 3 }}
                     fullWidth
                     startIcon={<InsertPhotoIcon />}
                     variant="text"
@@ -238,7 +256,7 @@ export const SubRow = ({
                 arrow
               >
                 <Button
-                  sx={{ justifyContent: "flex-start" }}
+                  sx={{ justifyContent: "flex-start", pl: 3 }}
                   fullWidth
                   variant="text"
                   onClick={routeObjectBuilder().arcgis_handler}
@@ -253,7 +271,7 @@ export const SubRow = ({
                 arrow
               >
                 <Button
-                  sx={{ justifyContent: "flex-start" }}
+                  sx={{ justifyContent: "flex-start", pl: 3 }}
                   fullWidth
                   variant="text"
                   onClick={routeObjectBuilder().qgis_handler}

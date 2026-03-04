@@ -29,9 +29,9 @@
   "button.arcgis_handler": "Expérimental - Téléchargement pour ArcGIS Pro",
   "button.qgis_handler": "Expérimental - Téléchargement pour QGIS",
   "subrow.contact": "Contact: ",
-  "subrow.tools": "Outils:",
-  "subrow.details": "Détails:",
-  "subrow.keywords": "Parole chiave:",
+  "subrow.tools": "Outils",
+  "subrow.details": "Détails",
+  "subrow.keywords": "Parole chiave",
   "subrow.keywords_nlp": "Parole chiave, generate:",
   "vis.header": "Visualisations"
 }
