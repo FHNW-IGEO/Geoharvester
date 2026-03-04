@@ -14,6 +14,7 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { WordCloud } from "./tab1/WordCloud";
 import { LANGUAGE } from "appConstants";
 import { SearchParameters } from "types";
+import { useIntl } from "react-intl";
 
 export type VisViewProps = {
   visViewOpen: boolean;
@@ -29,6 +30,8 @@ export const VisView = ({
   triggerSearchbyKeyword,
 }: VisViewProps) => {
   const theme = useTheme();
+  const intl = useIntl();
+
   const [tabNr, setTabNr] = useState("1");
   return (
     <Drawer
@@ -49,7 +52,10 @@ export const VisView = ({
         >
           <Toolbar>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Visualisierungen
+              {intl.formatMessage({
+                id: "vis.header",
+                defaultMessage: "Visualisierungen",
+              })}
             </Typography>
             <IconButton
               size="small"
@@ -80,8 +86,8 @@ export const VisView = ({
                 onChange={(_e: React.SyntheticEvent, v: string) => setTabNr(v)}
               >
                 <Tab label="Wordcloud" value="1" />
-                <Tab label="tbd" value="2" />
-                <Tab label="tbd" value="3" />
+                <Tab label="coming soon" value="2" disabled />
+                <Tab label="coming soon" value="3" disabled />
               </TabList>
             </Box>
             <TabPanel

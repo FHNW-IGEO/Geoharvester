@@ -32,5 +32,6 @@
   "subrow.tools": "Utensili:",
   "subrow.details": "Dettagli:",
   "subrow.keywords": "Mots-clés:",
-  "subrow.keywords_nlp": "Mots-clés, générés:"
+  "subrow.keywords_nlp": "Mots-clés, générés:",
+  "vis.header": "Visualizzazioni"
 }

@@ -32,5 +32,6 @@
   "subrow.tools": "Outils:",
   "subrow.details": "Détails:",
   "subrow.keywords": "Parole chiave:",
-  "subrow.keywords_nlp": "Parole chiave, generate:"
+  "subrow.keywords_nlp": "Parole chiave, generate:",
+  "vis.header": "Visualisations"
 }

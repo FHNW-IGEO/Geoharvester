@@ -32,5 +32,6 @@
   "subrow.tools": "Tools:",
   "subrow.details": "Details:",
   "subrow.keywords": "Keywords:",
-  "subrow.keywords_nlp": "Keywords, extracted:"
+  "subrow.keywords_nlp": "Keywords, extracted:",
+  "vis.header": "Visualisations"
 }

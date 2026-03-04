@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { AppBar, SelectChangeEvent, useTheme, Button } from "@mui/material";
 import { Stack } from "@mui/system";
+import { useIntl } from "react-intl";
+
 import { MenuComponent } from "./MenuComponent";
 import { Filter } from "./Filter";
 import {
@@ -40,6 +42,8 @@ export const Header = ({
   setVisViewOpen: (state: boolean) => void;
 }) => {
   const theme = useTheme();
+  const intl = useIntl();
+
   const { width } = useViewport();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -76,7 +80,10 @@ export const Header = ({
             onClick={() => setVisViewOpen(true)}
             sx={{ mr: 2 }}
           >
-            Vis
+            {intl.formatMessage({
+              id: "vis.header",
+              defaultMessage: "Visualisierungen",
+            })}
           </Button>
         </div>
       </AppBar>
