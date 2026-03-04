@@ -126,7 +126,7 @@ def service_result_empty():
                       "metadata": "n.a.", "update": "n.a.", "legend": "n.a.",
                       "service": "n.a.", "max_zoom": "n.a.",
                       "center_lat": "n.a.", "center_lon": "n.a.",
-                      "bbox": "n.a."}
+                      "bbox": "n.a.", "hash": "n.a.", "timestamp": "n.a.", "reason": "n.a."}
     return SERVICE_RESULT
 
 
@@ -571,7 +571,6 @@ if __name__ == "__main__":
 
         # Skip services with no changed layers
         if not only_layers:
-            print("Skipped:" source)
             continue
 
         get_service_info(source, only_layers=only_layers)
