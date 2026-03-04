@@ -109,6 +109,11 @@ def scrape(source,service, hash, timestamp, reason, i,layertree, group,layer_dat
     type=source['URL']
     #breakpoint()
 
+   #technical
+    layer_data["hash"]= hash
+    layer_data["timestamp"]= timestamp
+    layer_data["reason"]= reason
+
     #owner
     layer_data["provider"]= source['Description']
     
@@ -286,8 +291,6 @@ def scrape(source,service, hash, timestamp, reason, i,layertree, group,layer_dat
     # Round the zoom level to the nearest integer and return it.
     layer_data["max_zoom"]= round(zoom) # 7  is the map.geo.admin.ch map zoom at approx 1:20k
    
-
-
     #now the service specific stuff
 
     #see if we work with mf-geoadmin3

@@ -5,7 +5,9 @@ import os
 import warnings
 from time import time
 from typing import Union, Optional
-from redis.commands.search.query import Query
+import re
+import json
+from collections import Counter
 
 from app.constants import (DEFAULTSIZE, EnumLangType, EnumProviderType,
                            EnumServiceType)
@@ -22,8 +24,6 @@ from fastapi.logger import logger as fastapi_logger
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_pagination import Page, add_pagination, paginate
 from fastapi_pagination.customization import CustomizedPage, UseParamsFields
-from collections import Counter
-import json
 
 
 from server.app.redis.redis_manager import r
@@ -194,8 +194,6 @@ async def get_data(
 
     return paginate(ranked_results)
 
-
-
 @app.get(
     "/api/getDataByKeywords",
     response_model=GeoharvesterPage[GeoserviceModel],
@@ -261,61 +259,53 @@ async def get_data_by_keywords(
 
     return paginate(ranked_results)
 
-
-
-
 @app.get(
     "/api/getKeywordHistogram",
     response_model=list[KeywordHistogram],
 )
-async def build_keyword_histogram(field: str= "keywords_nlp"):
+async def build_keyword_histogram(field: str= "keywords_nlp_as_tags"):
     """
     Build a histogram of values for a given JSON field.
-
-    :param redis_client: redis connection
-    :param index_name: RediSearch index name
-    :param field: JSON field name (e.g. "keywords", "keywords_nlp")
-    :return: List of (keyword, count) sorted by frequency desc
     """
 
+    res = r.execute_command(
+        "FT.AGGREGATE",
+        SVC_INDEX_ID,
+        "*",
+        "GROUPBY", "1", f"@{field}",
+        "REDUCE", "COUNT", "0", "AS", "count",
+        "SORTBY", "2", "@count", "DESC",
+        "LIMIT", "0", "500"  # Adjust to needs, this is the max number returned
+    )
+
     counter = Counter()
+    append = counter.update  # local lookup for speed
 
-    # Get all document IDs via FT.SEARCH (fast and indexed)
-    res = r.ft(SVC_INDEX_ID).search(Query("*").paging(0, 1000000))
+    number_regex = re.compile(r'^\d+$') # Exclude keywords that are just numbers
+    http_regex = re.compile(r'https?') # Same for http or https
 
-    for doc in res.docs:
-        key = doc.id
-
-        # Fetch raw JSON
-        raw = r.json().get(key)
-
-        if not raw or field not in raw:
+    for row in res[1:]: # Skip the total number of results row
+        tag_bytes = row[1]
+        if not tag_bytes:
             continue
 
-        value = raw[field]
+        count_bytes = int(row[3])
+        tags = [
+            t.strip().strip('[]"\'')
+            for t in tag_bytes.decode("utf-8").split(",")
+            if t.strip()
+        ]
 
-        # If array field
-        if isinstance(value, list):
-            for v in value:
-                if isinstance(v, str) and v.strip():
-                    counter[v.strip().lower()] += 1
+        tags = [t for t in tags if t.lower() not in {"nan", "null", "none", "nul", "aucun", "nullo", "nessuno"} and not number_regex.fullmatch(t) and not http_regex.search(t)]
 
-        # If single string field
-        elif isinstance(value, str):
-            tokens = value.split()
-            for token in tokens:
-                token = token.strip().lower()
-                if token:
-                    counter[token] += 1
 
-    # Sort by frequency descending
-    sorted_keywords = sorted(counter.items(), key=lambda x: x[1], reverse=True)
-    print(sorted_keywords)
+
+        if tags:
+            append({t: count_bytes for t in tags})
+
     return [
-        KeywordHistogram(keyword=keyword, count=count)
-        for keyword, count in sorted_keywords
-    ]   
-
-
+        KeywordHistogram(text=kw, value=cnt)
+        for kw, cnt in counter.most_common()
+    ]
 
 add_pagination(app)

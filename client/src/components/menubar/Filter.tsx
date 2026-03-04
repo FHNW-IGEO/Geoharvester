@@ -10,7 +10,6 @@ import { getIcon } from "../../custom/getIcon";
 import { SearchParameters } from "types";
 import { useViewport } from "../../custom/ViewportHook";
 import { useIntl } from "react-intl";
-import "../../styles.css";
 
 export type SearchBarProps = {
   setSearchResult: (searchResult: any) => void;
@@ -77,7 +76,7 @@ export const Filter = ({
               },
             },
           }}
-          style={{
+          sx={{
             backgroundColor: theme.palette.secondary.main,
             textAlign: "center",
             height: 40,

@@ -23,8 +23,6 @@ import { LanguageContext } from "../../lang/LanguageContext";
 import { LANGUAGE } from "../../appConstants";
 import geoharvesterLogo from "./logo.png";
 
-import "../../styles.css";
-
 export const MenuComponent = () => {
   const { setLanguage, language } = useContext(LanguageContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -71,7 +69,12 @@ export const MenuComponent = () => {
           width="242"
           height="29"
           style={{ marginLeft: -10, cursor: "pointer" }}
-          onClick={() => window.location.reload()}
+          onClick={() => {
+            const url = new URL(window.location.href);
+            url.search = "";
+            window.history.pushState({}, "", url.toString());
+            window.location.reload();
+          }}
         />
       </div>
       <Menu

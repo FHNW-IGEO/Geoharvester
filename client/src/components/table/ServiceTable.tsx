@@ -24,8 +24,8 @@ import {
   RESPONSESTATE,
   BREAKPOINT600,
 } from "../../appConstants";
-import { useViewport } from "../../custom/ViewportHook";
 import { PlaceholderWidget } from "./PlaceholderUI";
+import { useViewport } from "../../custom/ViewportHook";
 
 type TableProps = {
   docs: Geoservice[];
@@ -39,6 +39,7 @@ type TableProps = {
   triggerSearch: (parameters: SearchParameters) => void;
   triggerSearchbyKeyword: (parameters: SearchParameters) => void;
   searchParameters: SearchParameters;
+  mobileMode: boolean;
 };
 
 type Order = "asc" | "desc";
@@ -55,16 +56,15 @@ export const ServiceTable = ({
   triggerSearch,
   triggerSearchbyKeyword,
   searchParameters,
+  mobileMode,
 }: TableProps) => {
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<string>("");
   const [tableRef, setTableReference] = useState<any>();
 
-  const { width } = useViewport();
-  const mobileMode = width < BREAKPOINT600;
-
   const theme = useTheme();
   const intl = useIntl();
+  const { width } = useViewport();
 
   const scrollToTop = () => tableRef && tableRef.scrollIntoView();
 
@@ -137,17 +137,10 @@ export const ServiceTable = ({
 
   const CenteredTableCell = styled(TableCell)(() => ({
     "&": {
-      backgroundColor: theme.palette.primary.main,
-      padding: "0 1px",
-      textAlign: "center",
-    },
-  }));
-  const LeftAlignedTableCell = styled(TableCell)(() => ({
-    "&": {
-      backgroundColor: theme.palette.primary.main,
       padding: 8,
-      textAlign: "left",
-      color: theme.palette.secondary.main,
+      textAlign: "center",
+      color: theme.palette.primary.main,
+      backgroundColor: theme.palette.primary.contrastText,
     },
   }));
 
@@ -178,26 +171,25 @@ export const ServiceTable = ({
           component={Paper}
           sx={{
             overflowX: "auto",
-            marginTop: "50px",
           }}
         >
           <Table stickyHeader aria-label="sticky table" ref={setTableReference}>
             <TableHead>
               <TableRow>
                 <CenteredTableCell></CenteredTableCell>
-                <LeftAlignedTableCell>
+                <CenteredTableCell>
                   <FormattedMessage
                     id="table.header.title"
                     defaultMessage="Title"
                   />
-                </LeftAlignedTableCell>
+                </CenteredTableCell>
                 {width > BREAKPOINT600 && (
-                  <LeftAlignedTableCell>
+                  <CenteredTableCell>
                     <FormattedMessage
                       id="table.header.abstract"
                       defaultMessage="Abstract"
                     />
-                  </LeftAlignedTableCell>
+                  </CenteredTableCell>
                 )}
                 {[
                   {
@@ -224,37 +216,37 @@ export const ServiceTable = ({
                 ].map((column, index) => {
                   const { col_header, sortProperty } = column;
                   return (
-                    <>
-                      <CenteredTableCell
-                        key={index}
-                        sortDirection={orderBy === sortProperty ? order : false}
-                        sx={{ padding: "0 !important", cursor: "pointer" }}
+                    <CenteredTableCell
+                      key={index}
+                      sortDirection={orderBy === sortProperty ? order : false}
+                      sx={{
+                        padding: "0 !important",
+                        cursor: "pointer",
+                        color: "#000 !important",
+                      }}
+                    >
+                      <TableSortLabel
+                        sx={{
+                          color: "#007CC3 !important",
+                          "& .MuiTableSortLabel-icon": {
+                            color: "#007CC3 !important",
+                          },
+                        }}
+                        active={true}
+                        direction={orderBy === sortProperty ? order : "desc"}
+                        onClick={createSortHandler(sortProperty)}
                       >
-                        <TableSortLabel
-                          sx={{
-                            "& .MuiTableSortLabel-icon": {
-                              color: "white !important",
-                            },
-                            "& .MuiTableSortLabel-root": {
-                              color: "white !important",
-                            },
-                          }}
-                          active={true}
-                          direction={orderBy === sortProperty ? order : "desc"}
-                          onClick={createSortHandler(sortProperty)}
-                        >
-                          {mobileMode ? col_header.slice(0, 8) : col_header}
-                          {orderBy === sortProperty ? (
-                            <Box component="span" sx={visuallyHidden}>
-                              {order === "desc"
-                                ? "sorted descending"
-                                : "sorted ascending"}
-                              + ro
-                            </Box>
-                          ) : null}
-                        </TableSortLabel>
-                      </CenteredTableCell>
-                    </>
+                        {mobileMode ? col_header.slice(0, 8) : col_header}
+                        {orderBy === sortProperty ? (
+                          <Box component="span" sx={visuallyHidden}>
+                            {order === "desc"
+                              ? "sorted descending"
+                              : "sorted ascending"}
+                            + ro
+                          </Box>
+                        ) : null}
+                      </TableSortLabel>
+                    </CenteredTableCell>
                   );
                 })}
               </TableRow>
@@ -270,6 +262,7 @@ export const ServiceTable = ({
                 <ServiceRow
                   row={row}
                   index={index}
+                  key={index}
                   page={tablePage}
                   total={total}
                   mobileMode={mobileMode}
@@ -282,16 +275,30 @@ export const ServiceTable = ({
                 position: "sticky",
                 bottom: 0,
                 zIndex: 20,
-                backgroundColor: theme.palette.secondary.main,
               }}
             >
-              <TableRow>
+              <TableRow sx={{ height: 28 }}>
                 <TablePagination
                   rowsPerPageOptions={[20, 50, 100, 200]}
                   colSpan={mobileMode ? 5 : 6}
                   count={total}
                   rowsPerPage={rowsPerPage}
                   page={tablePage}
+                  sx={{
+                    "& .MuiToolbar-root": {
+                      minHeight: 36,
+                      height: 36,
+                      paddingLeft: 1,
+                      paddingRight: 1,
+                      justifyContent: "flex-end",
+                      backgroundColor: "#f9f9f9",
+                      borderTop: "1px solid #C0C0C0",
+                    },
+                    "& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows":
+                      {
+                        margin: 0,
+                      },
+                  }}
                   labelDisplayedRows={({
                     from,
                     to,

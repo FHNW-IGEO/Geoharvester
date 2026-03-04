@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ServiceTable } from "./components/table/ServiceTable";
 import { ThemeProvider } from "@mui/material/styles";
 import { Header } from "./components/menubar/Header";
@@ -9,6 +9,7 @@ import {
   SERVICE,
   DEFAULTROWSPERPAGE,
   DEFAULTCHUNKSIZE,
+  BREAKPOINT600,
 } from "./appConstants";
 import { getData, getDataByKeyword } from "./requests";
 import { Footer } from "./components/Footer";
@@ -16,6 +17,8 @@ import { Stack } from "@mui/material";
 import { FirstSearchUI } from "./components/table/FirstSearchUI";
 import { LanguageContext } from "./lang/LanguageContext";
 import { theme } from "./theme/index";
+import { VisView } from "./components/vis/VisView";
+import { useViewport } from "./custom/ViewportHook";
 import "./styles.css";
 
 export type SearchResult = {
@@ -36,11 +39,13 @@ function App() {
   const [currentApiPage, setCurrentApiPage] = useState(0); // Page of the paginated API, different than the UI table page.
   const [size, setSize] = useState(DEFAULTROWSPERPAGE);
   const [localSearchString, setLocalSearchString] = useState("");
+  const [visViewOpen, setVisViewOpen] = useState(false);
 
   const { language } = useContext(LanguageContext);
+  const { width } = useViewport();
+  const mobileMode = width < BREAKPOINT600;
 
   const defaultSearchParameter = {
-    // searchString: undefined, // Using an empty string would cause useEffect diffing to fail when searching without text
     searchString: "", // Using an empty string would cause useEffect diffing to fail when searching without text
     service: SERVICE.NONE,
     provider: PROVIDER.NONE,
@@ -55,6 +60,48 @@ function App() {
   const updateSearchParameters = (parameter: SearchParameters) => {
     // Required for resetting the search string with the x button and syncing state
     setSearchParameters(parameter);
+  };
+
+  const updateURL = (
+    searchString: string | undefined,
+    service: SERVICE | undefined,
+    provider: PROVIDER | undefined,
+    language: string,
+    page: number,
+  ) => {
+    const url = new URL(window.location.href);
+    if (searchString) {
+      url.searchParams.set("searchString", searchString);
+    } else {
+      url.searchParams.delete("searchString");
+    }
+
+    if (provider) {
+      url.searchParams.set("provider", provider);
+    } else {
+      url.searchParams.delete("provider");
+    }
+
+    if (service) {
+      url.searchParams.set("service", service);
+    } else {
+      url.searchParams.delete("service");
+    }
+
+    if (language) {
+      url.searchParams.set("lang", language);
+    } else {
+      url.searchParams.delete("lang");
+    }
+
+    if (page) {
+      url.searchParams.set("page", page.toString());
+    } else {
+      url.searchParams.delete("page");
+    }
+
+    // Update the browser's URL without refreshing the page
+    window.history.pushState({}, "", url.toString());
   };
 
   const handleResponseParsing = (res: any, parameters: SearchParameters) => {
@@ -81,6 +128,7 @@ function App() {
 
   const triggerSearch = async (parameters: SearchParameters) => {
     const { searchString, service, provider, page } = parameters;
+    updateURL(searchString, service, provider, language, page);
 
     setResponseState(RESPONSESTATE.WAITING);
 
@@ -98,6 +146,7 @@ function App() {
 
   const triggerSearchbyKeyword = async (parameters: SearchParameters) => {
     const { searchString, page } = parameters;
+    updateURL(searchString, undefined, undefined, language, page);
 
     setResponseState(RESPONSESTATE.WAITING);
 
@@ -107,9 +156,40 @@ function App() {
       page,
       DEFAULTCHUNKSIZE,
     )
-      .then((res) => handleResponseParsing(res, parameters))
+      .then((res) =>
+        handleResponseParsing(
+          res,
+          (parameters = {
+            searchString,
+            service: SERVICE.NONE,
+            provider: PROVIDER.NONE,
+            page: 0,
+          }),
+        ),
+      )
       .catch((e) => handleResponseFailure(e));
   };
+
+  useEffect(() => {
+    // Trigger a search on copy paste with search params
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const searchString = urlParams.get("searchString");
+    const service = urlParams.get("service") as SERVICE | null;
+    const provider = urlParams.get("provider") as PROVIDER | null;
+    const page = urlParams.get("page");
+
+    if (searchString || service || provider || page) {
+      const searchParams: SearchParameters = {
+        searchString: searchString || "",
+        service: service || SERVICE.NONE,
+        provider: provider || PROVIDER.NONE,
+        page: page ? parseInt(page, 10) : 0,
+      };
+      setSearchParameters(searchParams);
+      triggerSearch(searchParams);
+    }
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -122,6 +202,9 @@ function App() {
             searchParameters,
             responseState,
             triggerSearch,
+            visViewOpen,
+            setVisViewOpen,
+            mobileMode,
           }}
         />
         {responseState === RESPONSESTATE.UNINITIALIZED ? (
@@ -133,6 +216,7 @@ function App() {
               setLocalSearchString,
               updateSearchParameters,
               triggerSearch,
+              responseState,
               searchParameters,
             }}
           />
@@ -148,6 +232,7 @@ function App() {
               currentApiPage,
               triggerSearch,
               triggerSearchbyKeyword,
+              mobileMode,
             }}
             tablePage={tablePage}
             setTablePage={setTablePage}
@@ -155,6 +240,11 @@ function App() {
         )}
         <Footer />
       </Stack>
+      {visViewOpen && (
+        <VisView
+          {...{ visViewOpen, setVisViewOpen, language, triggerSearchbyKeyword }}
+        />
+      )}
     </ThemeProvider>
   );
 }

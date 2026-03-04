@@ -1,8 +1,9 @@
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import Button from "@mui/material/Button";
+import { Button, useTheme } from "@mui/material";
 import { SearchField, SearchProps } from "./SearchField";
 import { FormattedMessage } from "react-intl";
+import { RESPONSESTATE } from "appConstants";
 
 export const SearchDrawer = ({
   localSearchString,
@@ -11,14 +12,22 @@ export const SearchDrawer = ({
   drawerOpen,
   triggerSearch,
   searchParameters,
+  responseState,
   updateSearchParameters,
-}: SearchProps & { drawerOpen: boolean }) => {
+}: SearchProps & { drawerOpen: boolean; responseState: RESPONSESTATE }) => {
+  const theme = useTheme();
+
   return (
     <div>
       <Button
         variant="contained"
         onClick={() => setDrawerOpen(true)}
-        sx={{ ml: 2 }}
+        sx={{
+          ml: 1,
+          backgroundColor: theme.palette.secondary.main,
+          color: theme.palette.primary.main,
+          width: 120,
+        }}
       >
         <FormattedMessage id="search.searchButton" defaultMessage="Suchen" />
       </Button>
@@ -28,10 +37,7 @@ export const SearchDrawer = ({
         onClose={() => setDrawerOpen(false)}
         onOpen={() => setDrawerOpen(true)}
       >
-        <Box
-          className="SearchBox"
-          sx={{ height: 72, backgroundColor: "#f0f0f0" }}
-        >
+        <Box className="SearchBox" sx={{ height: 72 }}>
           <SearchField
             fromDrawer
             {...{
@@ -40,6 +46,7 @@ export const SearchDrawer = ({
               setDrawerOpen,
               triggerSearch,
               searchParameters,
+              responseState,
               updateSearchParameters,
             }}
           />
