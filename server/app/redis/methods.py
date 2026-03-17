@@ -182,8 +182,8 @@ def escape_token(token: str) -> str:
 
 def redis_query_from_parameters(
     query_string: Optional[str] = None,
-    service: EnumServiceType = EnumServiceType.none,
-    provider: EnumProviderType = EnumServiceType.none,
+    service: Optional[str] = None,
+    provider: Optional[str] = None,
     lang: str = "de"
 ):
     """
@@ -193,35 +193,36 @@ def redis_query_from_parameters(
 
     if query_string:
         tokens = tokenize_query(query_string)
-        token_query = transform_wordlist_to_query(tokens, lang)
 
-        text_fields = [
-            "title",
-            "title_en", "title_de", "title_it", "title_fr",
-            "abstract",
-            "abstract_en", "abstract_de", "abstract_it", "abstract_fr",
-            "keywords",
-            "keywords_en", "keywords_de", "keywords_it", "keywords_fr",
-            "keywords_nlp",
-            "keywords_nlp_en", "keywords_nlp_de",
-            "keywords_nlp_it", "keywords_nlp_fr",
-        ]
+        if tokens:
+            token_query = transform_wordlist_to_query(tokens, lang)
 
-        field_queries = [f"@{field}:({token_query})" for field in text_fields]
-        text_query = " | ".join(field_queries) 
-        queryable_parameters.append(text_query)
+            text_fields = [
+                "title",
+                "title_en", "title_de", "title_it", "title_fr",
+                "abstract",
+                "abstract_en", "abstract_de", "abstract_it", "abstract_fr",
+                "keywords",
+                "keywords_en", "keywords_de", "keywords_it", "keywords_fr",
+                "keywords_nlp",
+                "keywords_nlp_en", "keywords_nlp_de",
+                "keywords_nlp_it", "keywords_nlp_fr",
+            ]
+
+            field_queries = [f"@{field}:({token_query})" for field in text_fields]
+            text_query = " | ".join(field_queries) 
+            queryable_parameters.append(text_query)
 
     # --- Service filter ---
-    if service is not EnumServiceType.none:
+    if service is not None:
         queryable_parameters.append(f"@service:({service.value})")
 
     # --- Provider filter ---
-    if provider:
+    if provider is not None:
         queryable_parameters.append(f"@provider:({escape_token(provider.value)})")
 
     if not queryable_parameters:
-        # return everything (but limited to known services)
-        return "@service:(WMS | WMTS | WFS)"
+        return "*"
 
     return " ".join(queryable_parameters)
 

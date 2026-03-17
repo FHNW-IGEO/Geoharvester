@@ -213,6 +213,8 @@ def find_translation(kg:Graph, text:str, verify_language:str=None)->list:
     return translations
 
 def sanitize_and_kg_check(query_string, kg,language_dict, lang ):
+    if not query_string:
+        return [] , [],  ""
     # Traverse knowledge graph for search terms
     known_terms = traverse_knowledge_graph(kg, language_dict[lang], query_string)
     for known_term in known_terms:

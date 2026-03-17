@@ -26,7 +26,6 @@ class EnumServiceType(str, Enum):
     wms = "wms"
     wmts = "wmts"
     wfs = "wfs"
-    none = ""
 
 
 class EnumProviderType(str, Enum):
@@ -58,7 +57,6 @@ class EnumProviderType(str, Enum):
     ST_BE = "ST_BE",
     ASIT = "ASIT",
     SOSM = "SOSM",
-    none = ""
 
 class EnumLangType(str, Enum):
     en = "en",

@@ -115,8 +115,8 @@ async def startup_event():
 )
 async def get_data(
     query_string: Union[str, None] = None,
-    service: EnumServiceType = EnumServiceType.none,
-    provider: EnumProviderType = EnumProviderType.none,
+    service: Union[EnumServiceType, None] = None,
+    provider: Union[EnumProviderType, None] = None,
     lang: EnumLangType = EnumLangType.de,
     page: int = 0,
     limit: int = 50000,
@@ -133,17 +133,16 @@ async def get_data(
 
     # Search step
     try:
-        if not query_string:
-            redis_query = "@service:(WMS | WMTS | WFS)"
-            redis_data, _ = search_redis_with_parameters(redis_query, lang, 0, limit)
-            return paginate(redis_data.docs)
+        if not query_string and not provider and not service:
+            redis_query = "*"
+            redis_data, _ = search_redis_with_parameters(redis_query, lang, 0, 500)
+            return paginate(redis_data.docs or [])
 
-        if len(query_string) < 1:
+        if query_string and len(query_string) < 1:
             print("Query string too short")
             return paginate([])
 
         known_terms, word_list_clean, text_query = sanitize_and_kg_check(query_string, kg, language_dict, lang)
-        print(text_query)
 
         if isinstance(text_query, list):
             text_query = " ".join(text_query)
@@ -153,7 +152,7 @@ async def get_data(
 
         t1 = time()
         print(
-            f"Redis queried in {round(t1 - t0, 2)} seconds"
+            f"Redis queried in {round(t1 - t0, 2)} seconds with query {redis_query}"
         )
 
     except Exception as e:
