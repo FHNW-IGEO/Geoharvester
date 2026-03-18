@@ -198,12 +198,12 @@ async def get_data(
     response_model=GeoharvesterPage[GeoserviceModel],
 )
 async def get_data_by_keywords(
-    query_string: Optional[str] = None,
+    query_string: str,
     lang: EnumLangType = EnumLangType.de,
     page: int = 0,
     limit: int = 50000,
 ):
-    if not query_string or len(query_string) <= 1:
+    if not query_string:
         fastapi_logger.debug("Empty or too short query_string")
         return paginate([])
 
@@ -264,7 +264,7 @@ async def get_data_by_keywords(
 )
 async def build_keyword_histogram(field: str= "keywords_nlp_as_tags"):
     """
-    Build a histogram of values for a given JSON field.
+    Build a histogram of values for a given keyword field.
     """
 
     res = r.execute_command(

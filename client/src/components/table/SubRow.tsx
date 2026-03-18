@@ -139,27 +139,30 @@ export const SubRow = ({
                   defaultMessage: "Schlüsselwörter: ",
                 })}
               </Typography>
-              {row.keywords.sort().map((keyword, i) => (
-                <Tooltip
-                  title={intl.formatMessage({ id: "keyword.lookup" })}
-                  arrow
-                  key={keyword + i}
-                >
-                  <Chip
-                    label={keyword}
-                    variant="outlined"
-                    size="small"
-                    color="info"
-                    onClick={() => handleChipClick(keyword)}
-                    sx={{
-                      mt: 1,
-                      mr: 0.5,
-                      color: theme.palette.info.main,
-                      maxWidth: 200,
-                    }}
-                  />
-                </Tooltip>
-              ))}
+              {row.keywords
+                .sort()
+                .filter((k) => k !== "")
+                .map((keyword, i) => (
+                  <Tooltip
+                    title={intl.formatMessage({ id: "keyword.lookup" })}
+                    arrow
+                    key={keyword + i}
+                  >
+                    <Chip
+                      label={keyword}
+                      variant="outlined"
+                      size="small"
+                      color="info"
+                      onClick={() => handleChipClick(keyword)}
+                      sx={{
+                        mt: 1,
+                        mr: 0.5,
+                        color: theme.palette.info.main,
+                        maxWidth: 200,
+                      }}
+                    />
+                  </Tooltip>
+                ))}
               <br />
               <div style={{ paddingTop: 10 }}>
                 <Typography
@@ -172,27 +175,30 @@ export const SubRow = ({
                   })}
                 </Typography>
                 <br />
-                {row.keywords_nlp.sort().map((keyword, i) => (
-                  <Tooltip
-                    title={intl.formatMessage({ id: "keyword.lookup" })}
-                    arrow
-                    key={keyword + i}
-                  >
-                    <Chip
-                      label={keyword}
-                      variant="outlined"
-                      size="small"
-                      onClick={() => handleChipClick(keyword)}
-                      sx={{
-                        mt: 1,
-                        mr: 0.5,
-                        color: theme.palette.info.main,
+                {row.keywords_nlp
+                  .sort()
+                  .filter((k) => k !== "")
+                  .map((keyword, i) => (
+                    <Tooltip
+                      title={intl.formatMessage({ id: "keyword.lookup" })}
+                      arrow
+                      key={keyword + i}
+                    >
+                      <Chip
+                        label={keyword}
+                        variant="outlined"
+                        size="small"
+                        onClick={() => handleChipClick(keyword)}
+                        sx={{
+                          mt: 1,
+                          mr: 0.5,
+                          color: theme.palette.info.main,
 
-                        maxWidth: 200,
-                      }}
-                    />
-                  </Tooltip>
-                ))}
+                          maxWidth: 200,
+                        }}
+                      />
+                    </Tooltip>
+                  ))}
               </div>
             </Box>
           </Collapse>
