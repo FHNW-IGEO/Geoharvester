@@ -115,11 +115,11 @@ async def startup_event():
 )
 async def get_data(
     query_string: Union[str, None] = None,
-    service: Union[EnumServiceType, None] = None,
-    provider: Union[EnumProviderType, None] = None,
+    service: Optional[EnumServiceType] = None,
+    provider: Optional[EnumProviderType] = None,
     lang: EnumLangType = EnumLangType.de,
     page: int = 0,
-    limit: int = 50000,
+    limit: int = 500,
 ):
     """Route for the get_data request
         query: The query string used for searching

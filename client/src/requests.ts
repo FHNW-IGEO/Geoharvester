@@ -29,10 +29,17 @@ export const getData = async (
 ) => {
   const page = pageParam + 1; // FastAPI Pagination uses 1 as first index
   const offset = 0;
-  const service = servicetype === SERVICE.NONE ? "" : servicetype;
-  const provider = providertype === PROVIDER.NONE ? "" : providertype;
+  const params = {
+    ...(query_string && { query_string }),
+    ...(providertype !== PROVIDER.NONE && { provider: providertype }),
+    ...(servicetype !== SERVICE.NONE && { service: servicetype }),
+    lang,
+    offset,
+    page,
+    size,
+  };
   const response = await axios(routes.getData, {
-    params: { query_string, service, provider, lang, offset, page, size },
+    params,
   });
   const result = {
     ...response,
@@ -49,8 +56,16 @@ export const getDataByKeyword = async (
 ) => {
   const page = pageParam + 1; // FastAPI Pagination uses 1 as first index
   const offset = 0;
+  const params = {
+    ...(query_string && { query_string }),
+    lang,
+    offset,
+    page,
+    size,
+  };
+
   const response = await axios(routes.getDataByKeywords, {
-    params: { query_string, lang, offset, page, size },
+    params: params,
   });
   const result = {
     ...response,
