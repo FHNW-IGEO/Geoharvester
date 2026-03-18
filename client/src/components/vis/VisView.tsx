@@ -86,8 +86,6 @@ export const VisView = ({
                 onChange={(_e: React.SyntheticEvent, v: string) => setTabNr(v)}
               >
                 <Tab label="Wordcloud" value="1" />
-                <Tab label="coming soon" value="2" disabled />
-                <Tab label="coming soon" value="3" disabled />
               </TabList>
             </Box>
             <TabPanel
