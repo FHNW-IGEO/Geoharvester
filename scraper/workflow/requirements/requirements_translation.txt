@@ -11,6 +11,7 @@ torch==2.2.2
 sentence-transformers==2.2.2
 transformers==4.39.3
 huggingface-hub==0.20.3
+spacy==3.7.4
 
 # Language processing
 langdetect==1.0.9
@@ -20,6 +21,5 @@ matplotlib==3.7.1
 nltk==3.7
 rake_nltk==1.0.6
 pyLDAvis==3.4.0
-langdetect==1.0.9
 bert-extractive-summarizer==0.10.1
 
