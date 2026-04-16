@@ -422,7 +422,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add data/merged_data.pkl
+          git fetch origin main
+          git rebase origin/main
+
+          git add scraper/data/merged_data.pkl
 
           if git diff --cached --quiet; then
             echo "No changes to commit"
@@ -430,5 +433,3 @@ jobs:
             git commit -m "Update merged dataset (pipeline)"
             git push origin main
           fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
