@@ -52,8 +52,9 @@ def main():
         current_hash = merged_hashes.get(dataset_id)
 
         # Compare latest preflight against what is in merged_data.pkl:
+        # TODO: Remove KT_SG condition after reprocessing
         needs_processing = (
-            current_hash is None or preflight_hash != current_hash
+            current_hash is None or preflight_hash != current_hash or diag["provider"] == "KT_SG"
         )
 
         if not needs_processing:
