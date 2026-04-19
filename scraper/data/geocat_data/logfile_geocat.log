@@ -1,5 +1,6 @@
-[2026-04-12 03:03:17] FinalFetchError (forward) at position 1905: AttributeError: 'NoneType' object has no attribute 'strip'
-[2026-04-12 03:03:18] FinalFetchError (forward) at position 1906: AttributeError: 'NoneType' object has no attribute 'strip'
-[2026-04-12 03:03:19] FinalFetchError (forward) at position 1907: AttributeError: 'NoneType' object has no attribute 'strip'
-[2026-04-12 03:03:29] FinalFetchError (forward) at position 1913: AttributeError: 'NoneType' object has no attribute 'strip'
-[2026-04-12 03:03:30] FinalFetchError (forward) at position 1914: AttributeError: 'NoneType' object has no attribute 'strip'
+[2026-04-19 03:24:50] FinalFetchError (forward) at position 1901: AttributeError: 'NoneType' object has no attribute 'strip'
+[2026-04-19 03:24:51] FinalFetchError (forward) at position 1902: AttributeError: 'NoneType' object has no attribute 'strip'
+[2026-04-19 03:24:51] FinalFetchError (forward) at position 1903: AttributeError: 'NoneType' object has no attribute 'strip'
+[2026-04-19 03:24:56] FinalFetchError (forward) at position 1909: AttributeError: 'NoneType' object has no attribute 'strip'
+[2026-04-19 03:24:57] FinalFetchError (forward) at position 1910: AttributeError: 'NoneType' object has no attribute 'strip'
+[2026-04-19 03:36:47] FinalFetchError (forward) at position 11957: ValueError: ExceptionReport at position 11957
