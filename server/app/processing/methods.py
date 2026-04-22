@@ -100,8 +100,13 @@ def search_by_terms_dataframe(word_list: List[str], dataframe):
 
 def open_knowledge_graph(cog_home:str, kg_name:str)->Graph:
     return Graph(kg_name, cog_home=cog_home)
-def generate_knowledge_graph(kg_name:str,kg_data_path:str, cog_home:str,
-                             load_synonyms:bool=False, update:bool=False):
+def generate_knowledge_graph(
+        kg_name: str,
+        kg_data_path: str,
+        cog_home: str,
+        load_hashes: str = None,
+        load_synonyms: bool = False,
+        update: bool = False):
     """
     initializes the knowledge graph loading the data from the dataframe
     Parameters
@@ -123,22 +128,61 @@ def generate_knowledge_graph(kg_name:str,kg_data_path:str, cog_home:str,
         initialized graph
     """
     kg = Graph(kg_name, cog_home=cog_home)
-    print("KG: Filtering translations...")
+
+    print("KG system: Filtering translations...")
     kg_data = pd.read_pickle(kg_data_path)
     kg_data = filter_translations(kg_data)
-    print("KG: Loading data in the knowledge graph...")
-    for i, row in kg_data.iterrows():
-        kg.put(row["ENG"].lower(), "means", row["DEU"].title(), update=update)
-        kg.put(row["ITA"].lower(), "means", row["DEU"].title(), update=update)
-        kg.put(row["FRA"].lower(), "means", row["DEU"].title(), update=update)
-        kg.put(row["DEU"].title(), "lang", "german", update=update)
-        kg.put(row["FRA"].lower(), "lang", "french", update=update)
-        kg.put(row["ENG"].lower(), "lang", "english", update=update)
-        kg.put(row["ITA"].lower(), "lang", "italian", update=update)
-    if load_synonyms:
-        print("KG: Building synonyms...")
 
+    # normalize once
+    kg_data["ENG"] = kg_data["ENG"].str.lower()
+    kg_data["ITA"] = kg_data["ITA"].str.lower()
+    kg_data["FRA"] = kg_data["FRA"].str.lower()
+    kg_data["DEU"] = kg_data["DEU"].str.title()
+
+    # build hash dictionary
+    hash_dict = {}
+    if load_hashes:
+        kg_hashes = pd.read_pickle(load_hashes)
+        hash_dict = (
+            kg_hashes.groupby("term")["hashes"]
+            .apply(list)
+            .to_dict()
+        )
+
+    print("KG system: Loading data in the knowledge graph...")
+
+    for i, row in enumerate(kg_data.itertuples(index=False)):
+
+        print(f"{i}/{len(kg_data)}")
+
+        eng = row.ENG
+        ita = row.ITA
+        fra = row.FRA
+        deu = row.DEU
+
+        kg.put(eng, "means", deu, update=update)
+        kg.put(ita, "means", deu, update=update)
+        kg.put(fra, "means", deu, update=update)
+
+        kg.put(deu, "lang", "german", update=update)
+        kg.put(fra, "lang", "french", update=update)
+        kg.put(eng, "lang", "english", update=update)
+        kg.put(ita, "lang", "italian", update=update)
+
+        if load_hashes:
+
+            for term in [eng, ita, fra, deu]:
+
+                if term in hash_dict:
+
+                    for data_row in hash_dict[term]:
+                        for hh in data_row:
+                            kg.put(term, "hashes", hh, update=update)
+
+    if load_synonyms:
+        print("KG system: Building synonyms...")
         build_synonyms(kg, "german", ["english", "french", "italian"])
+
     return kg
 
 def filter_translations(kg_data:pd.DataFrame):
@@ -228,3 +272,9 @@ def sanitize_and_kg_check(query_string, kg,language_dict, lang ):
     word_list_clean = [re.escape(word) for word in word_list if word not in stop_words] # Escape all special chars except _, otherwise Redis throws error
     text_query = transform_wordlist_to_query(word_list_clean, lang)
     return known_terms, word_list_clean, text_query
+
+def find_hashes_from_term(hashes_df:pd.DataFrame, term:str)->list:
+    hashes = []
+    for hh in hashes_df[hashes_df["term"] == term]["hashes"].values.tolist():
+        hashes.extend(hh)
+    return hashes

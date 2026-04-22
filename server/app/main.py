@@ -11,9 +11,8 @@ from collections import Counter
 
 from app.constants import (DEFAULTSIZE, EnumLangType, EnumProviderType,
                            EnumServiceType)
-from app.processing.methods import ( generate_knowledge_graph,
-                                    import_pkl_into_dataframe, sanitize_and_kg_check,
-                                    )
+from app.processing.methods import ( generate_knowledge_graph, import_pkl_into_dataframe,
+                                    sanitize_and_kg_check, find_hashes_from_term)
 from app.redis.methods import (create_index, drop_redis_db, ingest_data,
                                redis_query_from_parameters, results_ranking, redis_query_from_keywords,
                                search_redis_with_parameters, search_redis_with_keywords )
@@ -76,13 +75,18 @@ async def startup_event():
     # Overwrite config limit for a maximum of 10000 search results:
     r.ft().config_set("MAXSEARCHRESULTS", "-1" )
 
-    global dataframe, kg
+    global dataframe, kg, hashes_df
     url_github_repo = "https://raw.githubusercontent.com/FHNW-IGEO/Geoharvester/main/"
     url_geoservices_CH_pkl = os.path.join(url_github_repo, 'scraper/data/', "merged_data.pkl")
     dataframe = import_pkl_into_dataframe(url_geoservices_CH_pkl)
     url_kg_dataframe = os.path.join(url_github_repo, 'knowledge_graph', "kg_data.pkl")
+    url_kg_hashes = os.path.join(url_github_repo, 'knowledge_graph', "kg_hashes.pkl")
+    hashes_df = import_pkl_into_dataframe(url_kg_hashes)
     t0 = time()
-    kg = generate_knowledge_graph('GeoHarvester', url_kg_dataframe, "knowledge_graph",
+    kg = generate_knowledge_graph(kg_name='GeoHarvester',
+                                  kg_data_path=url_kg_dataframe,
+                                  cog_home="knowledge_graph",
+                                  load_hashes=url_kg_hashes,
                                   load_synonyms=True)
     print(f"Knowledge graph generated in {round(time() - t0,2)} seconds")
     
