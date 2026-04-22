@@ -8,7 +8,7 @@ REDIS_PORT = 6379 # See docker-compose, port / expose
 #---------------------------------------------------------------------------------------------------------------  
 # URLs:
 # Scraper related URLs:
-url_github_repo = "https://raw.githubusercontent.com/FHNW-IVGI/Geoharvester/main/scraper/data/"
+url_github_repo = "https://raw.githubusercontent.com/FHNW-IGEO/Geoharvester/main/scraper/data/"
 url_github_repo_suffix = "?raw=true"
 
 url_geodata_CH_csv = f"{url_github_repo}geodata_CH.csv{url_github_repo_suffix}"
@@ -26,7 +26,6 @@ class EnumServiceType(str, Enum):
     wms = "wms"
     wmts = "wmts"
     wfs = "wfs"
-    none = ""
 
 
 class EnumProviderType(str, Enum):
@@ -58,7 +57,6 @@ class EnumProviderType(str, Enum):
     ST_BE = "ST_BE",
     ASIT = "ASIT",
     SOSM = "SOSM",
-    none = ""
 
 class EnumLangType(str, Enum):
     en = "en",

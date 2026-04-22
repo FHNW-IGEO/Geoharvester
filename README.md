@@ -1,4 +1,4 @@
-[![Scraper](https://github.com/FHNW-IVGI/Geoharvester/actions/workflows/run_scraper.yml/badge.svg)](https://github.com/FHNW-IVGI/Geoharvester/actions/workflows/run_scraper.yml)
+[![Scraper](https://github.com/FHNW-IGEO/Geoharvester/actions/workflows/run_scraper.yml/badge.svg)](https://github.com/FHNW-IGEO/Geoharvester/actions/workflows/run_scraper.yml)
 
 # NDGI Project Geoharvester
 
@@ -8,10 +8,10 @@ A scraper, search engine and data portal for Swiss Geoservices (WMS, WFS, WFTS).
 
 > [!Tip]
 >
-> We scrape data based on the URLs in this [source.csv file](https://github.com/FHNW-IVGI/Geoharvester/blob/main/scraper/sources.csv). If you have additional services that should be included or know of servers/urls that are no longer valid, please let us know. Either:
+> We scrape data based on the URLs in this [source.csv file](https://github.com/FHNW-IGEO/Geoharvester/blob/main/scraper/sources.csv). If you have additional services that should be included or know of servers/urls that are no longer valid, please let us know. Either:
 >
-> - Open an [issue for this project](https://github.com/FHNW-IVGI/Geoharvester/issues) OR
-> - Open a pull request with changes to the [source.csv](https://github.com/FHNW-IVGI/Geoharvester/blob/main/scraper/sources.csv).
+> - Open an [issue for this project](https://github.com/FHNW-IGEO/Geoharvester/issues) OR
+> - Open a pull request with changes to the [source.csv](https://github.com/FHNW-IGEO/Geoharvester/blob/main/scraper/sources.csv).
 
 ## Stack & Deployment
 
@@ -88,4 +88,4 @@ b) For a "single source of truth" approach, install the "dev containers" extensi
 
 #### SwaggerUI
 
-Fast API comes with Swagger UI preinstalled. If you have the backend running (see steps above), Swagger UI is available on http://localhost:8000/api/docs. See the wiki pages of this repo for the documentation of this project.
+Fast API comes with Swagger UI preinstalled. If you have the backend running (see steps above), Swagger UI is available on http://localhost:8000/api/docs. See the wiki pages of this repository for the documentation of this project.

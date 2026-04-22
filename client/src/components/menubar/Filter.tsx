@@ -5,12 +5,11 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
-import { PROVIDER, SERVICE, BREAKPOINT600 } from "src/constants";
-import { getIcon } from "src/custom/getIcon";
-import { SearchParameters } from "src/types";
-import { useViewport } from "src/custom/ViewportHook";
+import { PROVIDER, SERVICE, BREAKPOINT600 } from "../../appConstants";
+import { getIcon } from "../../custom/getIcon";
+import { SearchParameters } from "types";
+import { useViewport } from "../../custom/ViewportHook";
 import { useIntl } from "react-intl";
-import "../../styles.css";
 
 export type SearchBarProps = {
   setSearchResult: (searchResult: any) => void;
@@ -77,7 +76,7 @@ export const Filter = ({
               },
             },
           }}
-          style={{
+          sx={{
             backgroundColor: theme.palette.secondary.main,
             textAlign: "center",
             height: 40,

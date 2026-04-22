@@ -15,6 +15,7 @@ import csv
 import glob
 import importlib
 import logging
+import logging.config
 import os
 import re
 import sys
@@ -22,13 +23,18 @@ import warnings
 import xml.etree.ElementTree as ET
 from collections import defaultdict
 from statistics import mean
+from pathlib import Path
 
 import configuration as config
+print("CONFIG IMPORTED FROM:", config.__file__)
 import requests
+from requests.exceptions import ReadTimeout, ConnectTimeout
 import utils
 from owslib.wfs import WebFeatureService
 from owslib.wms import WebMapService
 from owslib.wmts import WebMapTileService
+from io import BytesIO
+import random
 
 """ from oauth2client.service_account import ServiceAccountCredentials
 from googleapiclient.discovery import build
@@ -42,12 +48,20 @@ import httplib2
 import pandas as pd
 import pytz
 
+# From Github UI - to limit the source processing for debugging
+sourceProcessingLimit_raw = os.getenv("SOURCE_LIMIT")
+sourceProcessingLimit = int(sourceProcessingLimit_raw) if sourceProcessingLimit_raw else None
+
 # globals
 warnings.filterwarnings('ignore')
-sys.path.insert(0, config.SOURCE_SCRAPER_DIR)
+#sys.path.insert(0, config.SOURCE_SCRAPER_DIR)
 
 service_keys = (("WMSGetCap", "n.a."),
                 ("WMTSGetCap", "n.a."), ("WFSGetCap", "n.a."))
+
+# Initialize and configure the logger
+logging.config.dictConfig(config.LOGGING_CONFIG)
+logger = logging.getLogger("Scraping log")
 
 
 def service_result_empty():
@@ -172,7 +186,7 @@ def is_online(source):
         log_to_operator_csv(server_operator, server_url, error_details)
     return success
 
-
+# keep:
 def get_service_info(source):
     """
     Extracts information from an OGC web service (WMS, WMTS, WFS) using the 
@@ -218,9 +232,9 @@ def get_service_info(source):
         service_type = None
         try:
             if source_version is not None:
-                service = WebMapService(server_url, version=source_version)
+                service = WebMapService(server_url, version=source_version, timeout=config.SCRAPER_REQUEST_TIMEOUT)
             else:
-                service = WebMapService(server_url)
+                service = WebMapService(server_url, timeout=config.SCRAPER_REQUEST_TIMEOUT)
             service_type = "WMS"
             # We assume WMSs can have child/parent relations
             children_possible = True
@@ -229,7 +243,7 @@ def get_service_info(source):
 
         if service_type is None:
             try:
-                service = WebMapTileService(server_url)
+                service = WebMapTileService(server_url, timeout=config.SCRAPER_REQUEST_TIMEOUT)
                 service_type = "WMTS"
                 # We assume WMTSs can't have child/parent relations
                 children_possible = False
@@ -239,10 +253,10 @@ def get_service_info(source):
         if service_type is None:
             try:
                 if source_version is None:
-                    service = WebFeatureService(server_url, version='2.0.0')
+                    service = WebFeatureService(server_url, version='2.0.0', timeout=config.SCRAPER_REQUEST_TIMEOUT)
                 else:
                     service = WebFeatureService(server_url,
-                                                version=source_version)
+                                                version=source_version, timeout=config.SCRAPER_REQUEST_TIMEOUT)
                 service_type = "WFS"
                 # We assume WFSs can't have child/parent relations
                 children_possible = False
@@ -314,7 +328,7 @@ def get_service_info(source):
                         else:
                             layertree = "%s/%s" % (server_operator,
                                                    i.replace('"', ''))
-                        logger.info("Analysing %s > %s > %s" % (server_operator,
+                        logger.debug("Analysing %s > %s > %s" % (server_operator,
                                                                 server_url,
                                                                 this_layer))
                         write_service_info(source, service, this_layer,
@@ -340,7 +354,7 @@ def get_service_info(source):
                                 else:
                                     layertree = "%s/%s" % (server_operator,
                                                            i.replace('"', ''))
-                                logger.info("Analysing %s > %s > %s >> %s" % (
+                                logger.debug("Analysing %s > %s > %s >> %s" % (
                                     server_operator, server_url, this_layer,
                                     this_child_layer))
                                 write_service_info(source, service,
@@ -383,7 +397,7 @@ def log_to_operator_csv(server_operator, server_url, error_details):
         f.write(error_log + "\n")
     return
 
-
+# keep:
 def write_service_info(source, service, i, layertree, group):
     """
     Write OGC GetCap results for a service, using a custom or default scraper 
@@ -415,7 +429,9 @@ def write_service_info(source, service, i, layertree, group):
 
         # run default scraper
         else:
-            scraper = importlib.import_module('default', package=None)
+            BASE_DIR = Path(__file__).resolve().parent / "scraper"
+            sys.path.insert(0, str(BASE_DIR))
+            scraper = importlib.import_module('default') 
             layer_data = scraper.scrape(source, service, i, layertree, group,
                                         layer_data, config.preview_PREFIX)
 
@@ -501,24 +517,38 @@ def write_dataset_info(csv_filename, output_file):
             # or WMTS if lst_layers is bigger
 
             for j in range(len(lst_layers)):
-                # check if multiple datasets are found, ege there must be WMS,
-                # WFS or WMTS if lst_layers is bigger
+                layer = lst_layers[j]
+
+                # Ensure all string fields are not None
+                service_value = (layer.get('service') or "").casefold()
+                preview_value = layer.get('preview') or ""
+                abstract_value = layer.get('abstract') if layer.get('abstract') not in (None, "n.a.") else dataset['abstract']
+                metadata_value = layer.get('metadata') if layer.get('metadata') not in (None, "n.a.") else dataset['metadata']
+                contact_value = layer.get('contact') if layer.get('contact') not in (None, "n.a.") else dataset['contact']
+                keywords_value = layer.get('keywords') or ""
+
+                # Determine preview
                 if "layers=WMS" in dataset['preview']:
                     dataset['preview'] = dataset['preview']
-                elif "layers=WMS" in lst_layers[j]['preview']:
-                    dataset['preview'] = lst_layers[j]['preview']
-                elif "layers=WMTS" in lst_layers[j]['preview']:
-                    dataset['preview'] = lst_layers[j]['preview']
-                dataset['abstract'] = lst_layers[j]['abstract'] if lst_layers[j]['abstract'] != "n.a." else dataset['abstract']
-                dataset['metadata'] = lst_layers[j]['metadata'] if lst_layers[j]['metadata'] != "n.a." else dataset['metadata']
-                dataset['contact'] = lst_layers[j]['contact'] if lst_layers[j]['contact'] != "n.a." else dataset['contact']
-                dataset['keywords'] = lst_layers[j]['keywords'] if lst_layers[j]['keywords'] != "n.a." else ""
-                dataset['WMSGetCap'] = lst_layers[j]['endpoint'] if "wms".casefold(
-                ) in lst_layers[j]['service'].casefold() else dataset['WMSGetCap']
-                dataset['WMTSGetCap'] = lst_layers[j]['endpoint'] if "wmts".casefold(
-                ) in lst_layers[j]['service'].casefold() else dataset['WMTSGetCap']
-                dataset['WFSGetCap'] = lst_layers[j]['endpoint'] if "wfs".casefold(
-                ) in lst_layers[j]['service'].casefold() else dataset['WFSGetCap']
+                elif "layers=WMS" in preview_value:
+                    dataset['preview'] = preview_value
+                elif "layers=WMTS" in preview_value:
+                    dataset['preview'] = preview_value
+
+                # Update dataset fields
+                dataset['abstract'] = abstract_value
+                dataset['metadata'] = metadata_value
+                dataset['contact'] = contact_value
+                dataset['keywords'] = keywords_value
+
+                # Update service endpoints safely
+                if "wms" in service_value:
+                    dataset['WMSGetCap'] = layer.get('endpoint') or dataset['WMSGetCap']
+                if "wmts" in service_value:
+                    dataset['WMTSGetCap'] = layer.get('endpoint') or dataset['WMTSGetCap']
+                if "wfs" in service_value:
+                    dataset['WFSGetCap'] = layer.get('endpoint') or dataset['WFSGetCap']
+                    
             # remove duplicates from keywords
             keywordlist = dataset['keywords']
             li = list(keywordlist.split(","))
@@ -535,7 +565,8 @@ def write_dataset_info(csv_filename, output_file):
             geo_data_done.append(checklayer)
     return
 
-def check_new_data(actual_db_path, new_data_path, match_columns, output_path):
+def check_new_data(actual_db_path, new_data_path, match_columns,
+                   output_path, keep_old=False):
     """
     It compares the old and new databases to extract and preprocess
     only the new datasets.
@@ -554,14 +585,18 @@ def check_new_data(actual_db_path, new_data_path, match_columns, output_path):
     data_to_keep_path : str
         Path to data already preprocessed from the old database with no
         modifications.
+    keep_old : bool
+        if the data presents only in the old database should be kept
     """
     old_db = pd.read_pickle(actual_db_path)
+    old_db = old_db.fillna("nan")
+    old_db = old_db.replace(to_replace='None', value="nan", regex=True)
+    old_db = old_db.replace(to_replace='n.a.', value='nan', regex=True)
     new_db = pd.read_csv(new_data_path, low_memory=False)
+    new_db = new_db.drop_duplicates(keep='first') # check duplicates
     new_db = new_db.fillna("nan")
-    new_db = new_db.replace(to_replace="'", value="-", regex=True)
-    new_db = new_db.replace(to_replace='\"', value="-", regex=True)
-    new_db = new_db.replace(to_replace="  ", value = " ", regex=True)
-    new_db = new_db.replace(to_replace="    ", value = " ", regex=True)
+    new_db = new_db.replace(to_replace='None', value="nan", regex=True)
+    new_db = new_db.replace(to_replace="n.a.", value="nan", regex=True)
     
     to_preprocessing = new_db.merge(old_db, on=match_columns, how='left',
                                     indicator='_lmerge', suffixes=(None, "_drop"))
@@ -569,10 +604,20 @@ def check_new_data(actual_db_path, new_data_path, match_columns, output_path):
     to_keep = old_db.merge(new_db, on=match_columns, how='inner', indicator='_innermerge',
                            suffixes=(None,"_drop"))
     to_keep = to_keep[old_db.columns.to_list()]
+    to_keep = to_keep.drop_duplicates(keep='first')
+
+    old_db_lmerge = old_db.merge(new_db, on=match_columns, how='left',indicator='_lmerge',
+                                 suffixes=(None,"_drop"))
+    old_db_lmerge = old_db_lmerge.loc[old_db_lmerge['_lmerge']=='left_only']
+
     to_preprocessing = to_preprocessing[new_db.columns.to_list()]
+    to_preprocessing = to_preprocessing.drop_duplicates(keep='first')
 
     to_preprocessing.to_pickle(os.path.join(output_path, 'to_preprocess.pkl'))
-    return to_keep
+    if not keep_old:
+        return to_keep
+    else:
+        return to_keep, old_db_lmerge
 
 def preprocessing_NLP(raw_data_path, output_folder=None, column='abstract'):
     """
@@ -622,9 +667,9 @@ def preprocessing_NLP(raw_data_path, output_folder=None, column='abstract'):
                                             case_sensitive=False)
     
     # Characters cleaning for compatibility with redis -> Already done by checking the new data
-    # print(f"Cleaning up...")
-    # raw_data = raw_data.replace(to_replace="'", value="-", regex=True)
-    # raw_data = raw_data.replace(to_replace='\"', value="-", regex=True)
+    print(f"Cleaning up metadata...")
+    raw_data = raw_data.replace(to_replace="\'", value=" ", regex=True)
+    raw_data = raw_data.replace(to_replace='\"', value="-", regex=True)
     # raw_data = raw_data.replace(to_replace="  ", value = " ", regex=True)
     # raw_data = raw_data.replace(to_replace="    ", value = " ", regex=True)
     
@@ -659,17 +704,7 @@ if __name__ == "__main__":
     6 Logs and prints a message indicating that the scraper has completed.
     """
     process_startT=time()
-    # Initialize and configure the logger
-    logger = logging.getLogger("Scraping log")
-    logger.setLevel(logging.INFO)
-    fh = logging.FileHandler(config.LOG_FILE, "w", "utf-8")
-    fh.setLevel(logging.INFO)
-    formatter = logging.Formatter("%(asctime)s - %(name)s - %(filename)s >"
-                                  "%(funcName)17s(): Line %(lineno)s - "
-                                  "%(levelname)s - %(message)s")
-    fh.setFormatter(formatter)
-    logger.addHandler(fh)
-
+    logger.info(f"Running scraper with a limit of {sourceProcessingLimit_raw}")
     # Get the credentials for the Google Index API. The approach depends on
     # whether this script is running on GitHub (via GitHub Actions) or
     # locally. In the latter case you need a valid config.JSON_KEY_FILE in
@@ -686,12 +721,6 @@ if __name__ == "__main__":
     #    google_credentials = ServiceAccountCredentials.from_json_keyfile_dict(
     #    json.loads(client_secret_str), scopes=config.SCOPES)
 
-    # Clean up main data file and operator-specific error log files
-    try:
-        os.remove(config.GEOSERVICES_CH_CSV)
-    except OSError as e:
-        logger.error("Could not delete %s: %s" %
-                     (config.GEOSERVICES_CH_CSV, e))
     error_log_files = glob.glob(os.path.join(
         config.DEAD_SERVICES_PATH, "*_errors.csv"))
     for error_log_file in error_log_files:
@@ -706,8 +735,8 @@ if __name__ == "__main__":
     n = 1
 
     scraping_startT = time()
-    print(f"Startup time until scraping: {int((process_startT-scraping_startT) / 60)} mins")
-    for source in sources:
+    logger.info(f"Startup time until scraping: {int((process_startT-scraping_startT) / 60)} mins")
+    for source in sources[:sourceProcessingLimit] if sourceProcessingLimit is not None else sources:
         scrape_source_startT = time()
         server_operator = source['Description']
         server_url = source['URL']
@@ -720,7 +749,6 @@ if __name__ == "__main__":
 
         status_msg = "Running %s scraper on %s > %s (source %s/%s)" % (
             scraper_type, server_operator, server_url, n, num_sources)
-        print(status_msg)
         logger.info(status_msg)
 
         # Check if this server is online. If yes, proceed to gather
@@ -733,30 +761,33 @@ if __name__ == "__main__":
                 server_operator, server_url))
         n += 1
         scrape_source_endT = time()
-        logger.info(f"Dataset {source['URL']} processed in {int(scrape_source_endT-scrape_source_startT)} seconds")
+        logger.debug(f"Dataset {source['URL']} processed in {int(scrape_source_endT-scrape_source_startT)} seconds")
 
     scraping_endT = time()
-    print(f"Scraping took: {int((scraping_endT-scraping_startT) / 60)} mins")
+    logger.info(f"Scraping took: {int((scraping_endT-scraping_startT) / 60)} mins")
 
     write_dataset_info(config.GEOSERVICES_CH_CSV,config.GEOSERVICES_CH_CSV)
+    # Copy to artifact folder
+    shutil.copyfile(config.GEOSERVICES_CH_CSV, os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'geoservices_CH.csv'))
 
-    data_to_keep = check_new_data(os.path.join(config.TEMP_PROCESSED_DATA_PKL),
+    data_to_keep = check_new_data(os.path.join(config.PROCESSED_DATA_PKL),
                    config.GEOSERVICES_CH_CSV,
-                   match_columns=['name','title','provider','keywords','abstract','endpoint'],
+                   match_columns=['name','title','provider','keywords','abstract','endpoint', 'contact'],
                    output_path=os.path.split(config.GEOSERVICES_CH_CSV)[0])
     
-    print("\nKeeping "+str(len(data_to_keep))+" datasets from old database")
-    logger.info(f"Keeping {len(data_to_keep)} datasets from old database")
+    logger.info(f"Keeping {len(data_to_keep)} datasets from old database without processing")
 
     preprd_data = preprocessing_NLP(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],
                                                  'to_preprocess.pkl'))
     pathpart = os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl')
+    logger.info(f"Found {len(preprd_data)} datasets for processing")
 
-    preprd_data.to_pickle(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl'))
+
     preprd_data.to_csv(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.csv'))
-    # Save to data for last pipeline stage
+    preprd_data.to_pickle(os.path.join(config.WORKFLOW_ARTIFACT_FOLDER,'preprd_data.pkl'))
+    # TODO REMOVE: Save to data for last pipeline stage
     data_to_keep.to_pickle(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'data_to_keep.pkl'))
     data_to_keep.to_csv(os.path.join(os.path.split(config.GEOSERVICES_CH_CSV)[0],'data_to_keep.csv'))
 
     process_endT = time()
-    print(f"Job took: {int((process_endT-process_startT) / 60)} mins")
+    logger.info(f"Job took: {int((process_endT-process_startT) / 60)} mins")

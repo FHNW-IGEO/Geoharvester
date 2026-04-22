@@ -3,7 +3,7 @@ fastapi-pagination
 geopandas
 pandas
 uvicorn
-redis
+redis == 5.3
 requests
 PyYAML
 numpy

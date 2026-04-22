@@ -4,7 +4,7 @@ import French from "../lang/fr.json";
 import Italian from "../lang/it.json";
 import English from "../lang/en.json";
 import German from "../lang/ger.json";
-import { LANGUAGE } from "src/constants";
+import { LANGUAGE } from "../appConstants";
 
 type LanguageContextType = {
   setLanguage: (language: LANGUAGE) => void;

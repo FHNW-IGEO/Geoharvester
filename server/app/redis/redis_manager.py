@@ -14,7 +14,7 @@ REDIS_HOST_PASSWORD = os.getenv("REDIS_HOST_PASSWORD")
 
 class RedisManager(object):
     def __init__(self, *args):
-        self.redis = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_HOST_PASSWORD)
+        self.redis = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_HOST_PASSWORD, socket_timeout=60)
 
 
 r = RedisManager().redis

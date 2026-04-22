@@ -1,0 +1,13 @@
+2026-01-15 08:45:05,301 - Scraping log - scraper.py >         <module>(): Line 706 - INFO - Running scraper with a limit of 3
+2026-01-15 08:45:05,306 - Scraping log - scraper.py >         <module>(): Line 737 - INFO - Startup time until scraping: 0 mins
+2026-01-15 08:45:05,306 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_AI > https://www.geoportal.ch/services/wms/ktai?SERVICE=WMS&REQUEST=GetCapabilities (source 1/1467)
+2026-01-15 08:45:12,068 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - ch.geoportal.ktai: 500 Server Error: Internal Server Error for url: https://www.geoportal.ch/services/wms/ktai?service=WMS&version=1.3.0&request=GetMap&layers=ch.geoportal.ktai&styles=&width=256&height=256&crs=EPSG%3A4326&bbox=47.225%2C9.297%2C47.453%2C9.632&format=image%2Fpng&transparent=TRUE&exceptions=XML&bgcolor=0xFFFFFF
+2026-01-15 08:45:12,934 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_AR > https://www.geoportal.ch/services/wms/ktar?SERVICE=WMS&REQUEST=GetCapabilities (source 2/1467)
+2026-01-15 08:45:19,229 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - ch.geoportal.ktar: 500 Server Error: Internal Server Error for url: https://www.geoportal.ch/services/wms/ktar?service=WMS&version=1.3.0&request=GetMap&layers=ch.geoportal.ktar&styles=&width=256&height=256&crs=EPSG%3A4326&bbox=47.238%2C9.178%2C47.478%2C9.644&format=image%2Fpng&transparent=TRUE&exceptions=XML&bgcolor=0xFFFFFF
+2026-01-15 08:45:21,751 - Scraping log - scraper.py >         <module>(): Line 751 - INFO - Running default scraper on KT_AG > https://wms.geo.ag.ch/public/ows?SERVICE=WMS (source 3/1467)
+2026-01-15 08:50:09,983 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - ch_ag_geo_aw_wbep: HTTPSConnectionPool(host='wms.geo.ag.ch', port=443): Read timed out. (read timeout=10)
+2026-01-15 08:50:21,199 - Scraping log - scraper.py > get_service_info(): Line 319 - ERROR - ch_ag_geo_aw_wbsp: HTTPSConnectionPool(host='wms.geo.ag.ch', port=443): Read timed out. (read timeout=10)
+2026-01-15 08:51:11,663 - Scraping log - scraper.py >         <module>(): Line 766 - INFO - Scraping took: 6 mins
+2026-01-15 08:58:40,683 - Scraping log - scraper.py >         <module>(): Line 777 - INFO - Keeping 587 datasets from old database without processing
+2026-01-15 09:14:40,066 - Scraping log - scraper.py >         <module>(): Line 782 - INFO - Found 62892 datasets for processing
+2026-01-15 09:14:41,035 - Scraping log - scraper.py >         <module>(): Line 792 - INFO - Job took: 29 mins

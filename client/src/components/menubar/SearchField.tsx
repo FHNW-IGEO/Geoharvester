@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   IconButton,
   OutlinedInput,
@@ -9,9 +8,9 @@ import {
 } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 import SearchIcon from "@mui/icons-material/Search";
-import { BREAKPOINT1000 } from "src/constants";
-import { useViewport } from "src/custom/ViewportHook";
-import { SearchParameters } from "src/types";
+import { BREAKPOINT1000, RESPONSESTATE } from "../../appConstants";
+import { useViewport } from "../../custom/ViewportHook";
+import { SearchParameters } from "../../types";
 import { FormattedMessage, useIntl } from "react-intl";
 
 export type SearchProps = {
@@ -20,6 +19,7 @@ export type SearchProps = {
   setDrawerOpen: (state: boolean) => void;
   triggerSearch: (parameter: SearchParameters) => void;
   searchParameters: SearchParameters;
+  responseState: RESPONSESTATE;
   updateSearchParameters: (parameter: SearchParameters) => void;
 };
 
@@ -34,22 +34,24 @@ export const SearchField = ({
   fromDrawer,
   triggerSearch,
   searchParameters,
+  responseState,
   updateSearchParameters,
 }: SearchFieldProps) => {
   const theme = useTheme();
   const responsiveUI = useViewport().width < BREAKPOINT1000;
   const intl = useIntl();
 
-  // const [localSearchString, setLocalSearchString] = useState("");
   const drawerEnabled = fromDrawer ? fromDrawer : false;
 
   return (
     <FormControl
+      fullWidth
       sx={{
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
         flexGrow: 2,
+        width: "100%",
       }}
       variant="standard"
     >
@@ -60,10 +62,10 @@ export const SearchField = ({
         type="outlined"
         placeholder={intl.formatMessage({
           id: "search.inputPlaceholder",
-          defaultMessage: "Webservice suchen...",
+          defaultMessage: "Webservice ...",
         })}
         value={localSearchString}
-        style={{
+        sx={{
           flexGrow: 2,
           height: responsiveUI ? 56 : 40,
           backgroundColor: theme.palette.secondary.main,
@@ -110,7 +112,17 @@ export const SearchField = ({
           });
         }}
         sx={{
-          fontSize: 14,
+          fontSize: 12,
+          ml: 0.5,
+          minWidth: 120,
+          backgroundColor:
+            responseState === RESPONSESTATE.UNINITIALIZED
+              ? theme.palette.primary.main
+              : theme.palette.secondary.main,
+          color:
+            responseState === RESPONSESTATE.UNINITIALIZED
+              ? theme.palette.secondary.main
+              : theme.palette.primary.main,
         }}
         type="submit"
         variant="contained"

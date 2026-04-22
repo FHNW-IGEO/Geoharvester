@@ -8,14 +8,14 @@ export const Footer = () => {
   return (
     <Box
       sx={{
-        backgroundColor: theme.palette.primary.light,
+        backgroundColor: theme.palette.primary.main,
         color: theme.palette.secondary.main,
         textAlign: "center",
       }}
     >
       <FormattedMessage
         id="footer.impressum"
-        defaultMessage="© 2024 GeoHarvester | Ein Projekt in Zusammenarbeit mit dem Institut Geomatik, FHNW und swisstopo"
+        defaultMessage="© 2023- 2026 GeoHarvester | Ein Projekt in Zusammenarbeit mit dem Institut Geomatik, FHNW und Swisstopo"
       />
     </Box>
   );

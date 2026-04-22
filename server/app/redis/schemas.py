@@ -1,16 +1,18 @@
 
 from typing import List, Optional
 
-from pydantic import BaseModel
-from redis.commands.search.field import (GeoField, NumericField, TagField,
+from pydantic import BaseModel, field_validator
+from redis.commands.search.field import (NumericField, TextField, TagField,
                                          TextField)
+from typing import Optional, List, Union
 
 ### Geoservices
 # Source data:  https://github.com/davidoesch/geoservice_harvester_poc/tree/main/data/geoservices_CH.csv
 
-SVC_PREFIX = "svc:"    
-SVC_KEY = SVC_PREFIX + '{}'
+SVC_PREFIX = "svc:"
 SVC_INDEX_ID = "py_{}_idx".format(SVC_PREFIX)
+SVC_KEY = SVC_PREFIX + '{}'
+
 
 geoservices_schema = (
     TextField('$.provider', as_name='provider', no_stem=True),
@@ -20,21 +22,21 @@ geoservices_schema = (
     TextField('$.tree', as_name='tree', no_stem=True,),
     TextField('$.group', as_name='group', no_stem=True,),
     TextField('$.abstract', as_name='abstract'),
-    TagField('$.keywords', as_name='keywords'),
-    TagField('$.keywords_nlp', as_name='keywords_nlp'),
+    TextField('$.keywords', as_name='keywords'),
+    TagField('$.keywords', as_name='keywords_as_tags'),
+    TextField('$.keywords_nlp', as_name='keywords_nlp'),    
+    TagField('$.keywords_nlp', as_name='keywords_nlp_as_tags'),
     TextField('$.legend', as_name='legend', no_stem=True,),
     TextField('$.contact', as_name='contact', no_stem=True,),
     TextField('$.endpoint', as_name='endpoint', no_stem=True,),
     TextField('$.metadata', as_name='metadata', no_stem=True,),
-    # TextField('$.update', as_name='update', no_stem=True,),# WARNING: field not used
     TextField('$.service', as_name='service'),
     NumericField('$.max_zoom', as_name='max_zoom'),
     NumericField('$.center_lat', as_name='center_lat'),
     NumericField('$.center_lon', as_name='center_lon'),
     TextField('$.bbox', as_name='bbox', no_stem=True,),
     TextField('$.summary', as_name='summary', no_stem=True,),
-    TagField('$.lang_3', as_name='lang_3'),
-    # TagField('$.lang_2', as_name='lang_2'), # WARNING field not used
+    TextField('$.lang_3', as_name='lang_3'),
     NumericField('$.metaquality', as_name='metaquality'),
     TextField('$.title_en', as_name='title_en'),
     TextField('$.title_de', as_name='title_de'),
@@ -44,14 +46,22 @@ geoservices_schema = (
     TextField('$.abstract_de', as_name='abstract_de'),
     TextField('$.abstract_it', as_name='abstract_it'),
     TextField('$.abstract_fr', as_name='abstract_fr'),
-    TagField('$.keywords_en', as_name='keywords_en'),
-    TagField('$.keywords_de', as_name='keywords_de'),
-    TagField('$.keywords_it', as_name='keywords_it'),
-    TagField('$.keywords_fr', as_name='keywords_fr'),
-    TagField('$.keywords_nlp_en', as_name='keywords_nlp_en'),
-    TagField('$.keywords_nlp_de', as_name='keywords_nlp_de'),
-    TagField('$.keywords_nlp_it', as_name='keywords_nlp_it'),
-    TagField('$.keywords_nlp_fr', as_name='keywords_nlp_fr'),
+    TextField('$.keywords_en', as_name='keywords_en'),
+    TextField('$.keywords_de', as_name='keywords_de'),
+    TextField('$.keywords_it', as_name='keywords_it'),
+    TextField('$.keywords_fr', as_name='keywords_fr'),
+    TextField('$.keywords_nlp_en', as_name='keywords_nlp_en'),
+    TextField('$.keywords_nlp_de', as_name='keywords_nlp_de'),
+    TextField('$.keywords_nlp_it', as_name='keywords_nlp_it'),
+    TextField('$.keywords_nlp_fr', as_name='keywords_nlp_fr'),
+    TagField('$.keywords_en', as_name='keywords_en_as_tags'),
+    TagField('$.keywords_de', as_name='keywords_de_as_tags'),
+    TagField('$.keywords_it', as_name='keywords_it_as_tags'),
+    TagField('$.keywords_fr', as_name='keywords_fr_as_tags'),
+    TagField('$.keywords_nlp_en', as_name='keywords_nlp_en_as_tags'),
+    TagField('$.keywords_nlp_de', as_name='keywords_nlp_de_as_tags'),
+    TagField('$.keywords_nlp_it', as_name='keywords_nlp_it_as_tags'),
+    TagField('$.keywords_nlp_fr', as_name='keywords_nlp_fr_as_tags'),
     )
 
 
@@ -62,24 +72,40 @@ class GeoserviceModel(BaseModel):
     provider: str
     title: str
     name: str
-    preview: str
-    tree: str
-    group: str
-    abstract: str
-    keywords: str
-    keywords_nlp:  Optional[str]
-    legend: str
-    contact: str
-    endpoint: str
-    metadata: str
-    service: str
-    max_zoom: int
-    center_lat: Optional[float] #NOTE: Change to float once nan vales are removed
-    center_lon: Optional[float] #NOTE: Change to float once nan vales are removed
-    bbox: str
-    lang_3:  Optional[str]
-    metaquality: Optional[int]
 
+    preview: Optional[str] = ""
+    tree: Optional[str] = ""
+    group: Optional[str] = ""
+    abstract: Optional[str] = ""
+    legend: Optional[str] = ""
+    metadata: Optional[str] = ""
+    contact: Optional[str] = ""
+    endpoint: Optional[str] = ""
+    service: Optional[str] = ""
+    max_zoom: Optional[int] = None
+    bbox: Optional[str] = ""
+    center_lat: Optional[float] = None
+    center_lon: Optional[float] = None
+    metaquality: Optional[int] = 0
+
+    keywords: Optional[Union[str, List[str]]] = None
+    keywords_nlp: Optional[Union[str, List[str]]] = None
+    lang_3: Optional[Union[str, List[str]]] = None
+
+    @field_validator("keywords", "keywords_nlp", "lang_3", mode="before")
+    @classmethod
+    def normalize_to_list(cls, v):
+        if v is None:
+            return []
+        if isinstance(v, str):
+            # split only if needed
+            return [s.strip() for s in v.split(",")] if "," in v else [v]
+        return v
 
     class Config:
         from_attributes = True
+
+
+class KeywordHistogram(BaseModel):
+    text: str
+    value: int

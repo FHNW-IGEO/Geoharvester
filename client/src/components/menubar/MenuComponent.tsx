@@ -19,11 +19,9 @@ import AbcIcon from "@mui/icons-material/Abc";
 import TerminalIcon from "@mui/icons-material/Terminal";
 import InfoIcon from "@mui/icons-material/StickyNote2";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import { LanguageContext } from "src/lang/LanguageContext";
-import { LANGUAGE } from "src/constants";
+import { LanguageContext } from "../../lang/LanguageContext";
+import { LANGUAGE } from "../../appConstants";
 import geoharvesterLogo from "./logo.png";
-
-import "../../styles.css";
 
 export const MenuComponent = () => {
   const { setLanguage, language } = useContext(LanguageContext);
@@ -71,7 +69,12 @@ export const MenuComponent = () => {
           width="242"
           height="29"
           style={{ marginLeft: -10, cursor: "pointer" }}
-          onClick={() => window.location.reload()}
+          onClick={() => {
+            const url = new URL(window.location.href);
+            url.search = "";
+            window.history.pushState({}, "", url.toString());
+            window.location.reload();
+          }}
         />
       </div>
       <Menu
@@ -87,7 +90,7 @@ export const MenuComponent = () => {
         <MenuItem
           onClick={() => {
             setAnchorEl(null);
-            window.open("https://github.com/FHNW-IVGI/Geoharvester");
+            window.open("https://github.com/FHNW-IGEO/Geoharvester");
           }}
         >
           <InfoIcon style={{ marginRight: 14 }} />
@@ -100,7 +103,7 @@ export const MenuComponent = () => {
         <MenuItem
           onClick={() => {
             setAnchorEl(null);
-            window.open("https://github.com/FHNW-IVGI/Geoharvester");
+            window.open("https://github.com/FHNW-IGEO/Geoharvester");
           }}
         >
           <GitHubIcon style={{ marginRight: 14 }} />

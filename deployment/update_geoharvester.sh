@@ -1,5 +1,5 @@
 # This script simplifies updating of the geoharvester project. Copy it to and run it from the home directory of your AWS instance.
-# If you perfer to update manually, follow the documentation at: https://github.com/FHNW-IVGI/Geoharvester/wiki/AWS-EC2
+# If you perfer to update manually, follow the documentation at: https://github.com/FHNW-IGEO/Geoharvester/wiki/AWS-EC2
 # For debugging, make sure that the target folders exist at the indicated paths.
 
 cd /var/www/Geoharvester/server

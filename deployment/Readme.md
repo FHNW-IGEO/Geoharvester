@@ -1,6 +1,6 @@
 # Prod version deployment on AWS EC2.
 
-Please find the latest version on https://github.com/FHNW-IVGI/Geoharvester/wiki/AWS-EC2
+Please find the latest version on https://github.com/FHNW-IGEO/Geoharvester/wiki/AWS-EC2
 
 ---
 

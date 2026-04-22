@@ -2,8 +2,8 @@
 import uuid
 from string import punctuation
 from time import time
-from typing import Union
-
+from typing import Optional, List
+import re
 import pandas as pd
 from app.constants import EnumLangType, EnumProviderType, EnumServiceType
 from app.redis.schemas import SVC_INDEX_ID
@@ -11,7 +11,8 @@ from fastapi.logger import logger as fastapi_logger
 from langdetect import detect
 from nltk.stem import SnowballStemmer
 from redis.commands.search.indexDefinition import IndexDefinition, IndexType
-from redis.commands.search.query import Query, SortbyField
+from redis.commands.search.query import Query
+import json
 
 from server.app.redis.redis_manager import r
 
@@ -103,7 +104,6 @@ def detect_language(phrase, not_found=False):
         lang = excep
     return lang
 
-
 def is_not_num(str) -> bool:
     """
     Tests if a str element contains a number and return True or False.
@@ -158,59 +158,108 @@ def stemming_sentence(list_of_words: list[str], lang: str):
                             if word not in list(punctuation) and is_not_num(word)]
     return words_cleaned_list
 
-
 def transform_wordlist_to_query(wordlist: list[str], lang: str):
-    """Whitespaces in redis queries are parsed as AND, thus this method adds pipes (|) to force OR logic.
-       See: https://redis.io/docs/stack/search/reference/query_syntax/
-    """
-    query_string = ""
     cleaned_wordlist = stemming_sentence(wordlist, lang)
-    print(f"Quering Redis with: {cleaned_wordlist} ...")
-    for index, word in enumerate(cleaned_wordlist):
-        query_string += "{} | ".format(word+'*') if index < (len(cleaned_wordlist)-1) else "{}".format(word+'*') # the * allows the contain opt
-    return query_string
+    query_parts = []
+    for word in cleaned_wordlist:
+        # Only escape special chars except *
+        escaped = re.sub(r'([\\\-|(){}\[\]"\'?:!])', r'\\\1', word)
+        query_parts.append(f"{escaped}*")  # keep * for prefix matching
+    return " | ".join(query_parts)
 
 
-def redis_query_from_parameters(query_string: Union[str, None] = None, 
-                                service: EnumServiceType = EnumServiceType.none,
-                                provider:str = ""):
-    """Build a query string based on the parameters provided.
+def tokenize_query(text: str) -> List[str]:
+    """
+    Split user input into RediSearch-friendly tokens.
+    - Keeps words
+    - Drops punctuation
+    - Preserves token boundaries (CRITICAL)
+    """
+    return re.findall(r"\w+", text.lower())
+
+def escape_token(token: str) -> str:
+    return re.sub(r'([\\\-|(){}\[\]"\'*:?!])', r'\\\1', token)
+
+def redis_query_from_parameters(
+    query_string: Optional[str] = None,
+    service: Optional[str] = None,
+    provider: Optional[str] = None,
+    lang: str = "de"
+):
+    """
+    Build a query string based on the parameters provided.
     """
     queryable_parameters = []
 
-    if (bool(query_string)):
-        queryable_parameters.append(
-            '@title|title_en|title_de|title_it|title_fr|abstract|abstract_en|abstract_de|abstract_it|abstract_fr|keywords|keywords_en|keywords_de|keywords_it|keywords_fr|keywords_nlp|keywords_nlp_en|keywords_nlp_de|keywords_nlp_it|keywords_nlp_fr:({})'.format(query_string)
-        )
+    if query_string:
+        tokens = tokenize_query(query_string)
 
-    if (bool(service)):
-        queryable_parameters.append(
-            '@service:({})'.format(service)
-        )
+        if tokens:
+            token_query = transform_wordlist_to_query(tokens, lang)
 
-    if (bool(provider)):
-        queryable_parameters.append(
-            '@provider:({})'.format(provider)
-        )
+            text_fields = [
+                "title",
+                "title_en", "title_de", "title_it", "title_fr",
+                "abstract",
+                "abstract_en", "abstract_de", "abstract_it", "abstract_fr",
+                "keywords",
+                "keywords_en", "keywords_de", "keywords_it", "keywords_fr",
+                "keywords_nlp",
+                "keywords_nlp_en", "keywords_nlp_de",
+                "keywords_nlp_it", "keywords_nlp_fr",
+            ]
 
-    if (len(queryable_parameters) < 1):
-        # In this case all available datasets should be returned:
-        return '@service:(WMS | WMTS | WFS)'
-    elif (len(queryable_parameters) == 1):
-        return queryable_parameters[0]
-    else:
-        return "&".join(queryable_parameters)
+            field_queries = [f"@{field}:({token_query})" for field in text_fields]
+            text_query = " | ".join(field_queries) 
+            queryable_parameters.append(text_query)
+
+    # --- Service filter ---
+    if service is not None:
+        queryable_parameters.append(f"@service:({service.value})")
+
+    # --- Provider filter ---
+    if provider is not None:
+        queryable_parameters.append(f"@provider:({escape_token(provider.value)})")
+
+    if not queryable_parameters:
+        return "*"
+
+    return " ".join(queryable_parameters)
+
+def redis_query_from_keywords(query_string: str, lang: str = "de"):
+    """
+    Build a query string based on the parameters provided.
     
+    """
+    if query_string:
+        tokens = tokenize_query(query_string)
+        token_query = transform_wordlist_to_query(tokens, lang)
+        text_fields = [
+            "keywords_nlp",
+            f"keywords_{lang}",
+            f"keywords_nlp_{lang}",
+        ]
 
-def search_redis(redis_query, lang: EnumLangType, offset, limit):
-    parsed_language = "french" if lang == EnumLangType.fr else "italian" if lang == EnumLangType.it else "english" if lang == EnumLangType.en else "german"
-    lang_string = "fr" if lang == EnumLangType.fr else "it" if lang == EnumLangType.it else "en" if lang == EnumLangType.en else "de"
+        field_queries = [f"@{field}:({token_query})" for field in text_fields]
+        text_query = " | ".join(field_queries) 
+
+        return text_query
+
+
+def search_redis_with_parameters(redis_query, lang: EnumLangType, offset, limit=50000):
+    LANG_MAP = {
+        EnumLangType.fr: ("french", "fr"),
+        EnumLangType.it: ("italian", "it"),
+        EnumLangType.en: ("english", "en"),
+        EnumLangType.de: ("german", "de"),
+    }
+    parsed_language, lang_string = LANG_MAP.get(lang, ("german", "de"))
+
+    print("q", redis_query)
 
     return r.ft(SVC_INDEX_ID).search(Query(redis_query)
-            # Define all fields that should be searched here, as limit_fields restricts searching to a list of field names:
-            .limit_fields("provider", "service", "name", "keywords", "keywords_nlp", f"title_{lang_string}", f"abstract_{lang_string}", f"keywords_{lang_string}", f"keywords_nlp_{lang_string}")
             .sort_by('metaquality', asc=False)
-            .paging(offset, 50000)
+            .paging(offset, limit)
             .return_field('title')
             .return_field('abstract')
             .return_field('provider')
@@ -232,50 +281,75 @@ def search_redis(redis_query, lang: EnumLangType, offset, limit):
             .return_field('summary')
             .return_field('lang_3')
             .return_field('metaquality')
-            .return_field(f'title_{lang}')
-            .return_field(f'abstract_{lang}')
-            .return_field(f'keywords_{lang}')
-            .return_field(f'keywords_nlp_{lang}')
+            .return_field(f'title_{lang_string}')
+            .return_field(f'abstract_{lang_string}')
+            .return_field(f'keywords_{lang_string}')
+            .return_field(f'keywords_nlp_{lang_string}')
             ), parsed_language
 
-def json_to_pandas(redis_output):
-    """
-    Transforms the json-like output from redis into a pandas df.
 
-    Parameters
-    ----------
-    redis_output : list[str]
-        Output from the redis search
-    Returns
-    -------
-    _ : pandas.DataFrame
-    """
-    query_results = pd.DataFrame()
+def search_redis_with_keywords(redis_query, lang: EnumLangType, offset=0, limit=50000):
+    LANG_MAP = {
+        EnumLangType.fr: ("french", "fr"),
+        EnumLangType.it: ("italian", "it"),
+        EnumLangType.en: ("english", "en"),
+        EnumLangType.de: ("german", "de"),
+    }
+    parsed_language, lang_string = LANG_MAP.get(lang, ("german", "de"))
 
-    skipped = 0
-    for output in redis_output:
-        # Cleaning the string
-        doc = str(output).replace("'", '"')
-        doc = doc.replace('0"0','0')
-        doc = doc.replace("None", '"None"')
-        doc = doc.replace("NaN", "'NaN'")
-        doc = doc.replace("’","")
-        doc = doc.replace('’’', "")
-        doc = doc.replace("\\", "")
-        doc = doc.replace("ß", "ss")
-        doc = doc.replace("xa0","")
-        # Append results to a pandas df
-        try:
-            df = pd.read_json(doc.replace("Document ", ""), orient='index',
-                            encoding='utf-16', encoding_errors='replace').T
-            query_results = pd.concat([query_results, df], axis=0)
-        except ValueError:
-            skipped += 1
-            # print(doc.replace("Document ", ""))
-        # print(len(redis_output)-i)
-    # BUG: check the transformation json-pandas maybe with a binary format instead of json
-    print(f"skipped {skipped} of {skipped + len(query_results)} datasets due to json-binary conversion!")
-    return query_results
+    return r.ft(SVC_INDEX_ID).search(Query(redis_query)
+            .sort_by('metaquality', asc=False)
+            .paging(offset, limit)
+            .return_field('title')
+            .return_field('abstract')
+            .return_field('provider')
+            .return_field('service')
+            .return_field('name')
+            .return_field('preview')
+            .return_field('tree')
+            .return_field('group')
+            .return_field('keywords')
+            .return_field('keywords_nlp')
+            .return_field('legend')
+            .return_field('contact')
+            .return_field('endpoint')
+            .return_field('metadata')
+            .return_field('max_zoom')
+            .return_field('center_lat')
+            .return_field('center_lon')
+            .return_field('bbox')
+            .return_field('summary')
+            .return_field('lang_3')
+            .return_field('metaquality')
+            .return_field(f'title_{lang_string}')
+            .return_field(f'abstract_{lang_string}')
+            .return_field(f'keywords_{lang_string}')
+            .return_field(f'keywords_nlp_{lang_string}')
+            ), parsed_language
+
+def redis_documents_to_pandas(docs):
+    """
+    Convert RediSearch Document objects to a pandas DataFrame.
+    """
+    rows = []
+
+    for doc in docs:
+        row = {}
+
+        for key, value in doc.__dict__.items():
+            # Skip internal attributes
+            if key.startswith("_"):
+                continue
+
+            if isinstance(value, bytes):
+                value = value.decode("utf-8", errors="replace")
+
+            row[key] = value
+
+        rows.append(row)
+
+    return pd.DataFrame(rows)
+
 
 def pandas_to_dict(ranked_results_df):
     """
@@ -380,6 +454,8 @@ def results_ranking(redis_output, query_words_list, known_terms, parsed_lang):
         elapsed time for the redis search
     query_words_list : list[str]
         query words splitted into a list
+    parsed_lang
+        A lang name, e.g. English
 
     Returns
     -------
@@ -387,14 +463,31 @@ def results_ranking(redis_output, query_words_list, known_terms, parsed_lang):
         ranked data frame (descending)
     """
     t0 = time()
-    query_results_df = json_to_pandas(redis_output)
+    query_results_df = redis_documents_to_pandas(redis_output)
+
+    if query_results_df.empty:
+        return None
+    
+    query_results_df['title'] = query_results_df.get('title', '').fillna('').astype(str)
+    query_results_df['metaquality'] = (
+        pd.to_numeric(query_results_df.get('metaquality', 0), errors='coerce')
+        .fillna(0)
+        .astype(int)
+    )
+
     # initialize ranking score and the length counter
     lang = lang_dict[parsed_lang]
+    for col in [
+        'keywords_nlp',
+        f'title_{lang}', f'keywords_{lang}', f'keywords_nlp_{lang}'
+    ]:
+        if col not in query_results_df:
+            query_results_df[col] = ""
+
     if len(query_results_df) > 0:
         query_results_df['score'] = 0
-        query_results_df['inv_title_length'] = query_results_df['title'].apply(lambda x: 200 - len(x))
-        query_results_df['metaquality'] = query_results_df['metaquality'].astype('int')
-    
+        query_results_df['inv_title_length'] = 200 - query_results_df['title'].str.len()
+
         # Calculate the scores
         if query_words_list:
             print(f"Sorting results with: {query_words_list} ...")
@@ -411,11 +504,20 @@ def results_ranking(redis_output, query_words_list, known_terms, parsed_lang):
             query_results_df['score'] = 1
         query_results_df = evaluate_metaquality(query_results_df, 25)
 
+
         query_results_df.sort_values(by=['score', 'inv_title_length', 'title'], axis=0, inplace=True, ascending=False)
         # Replace nans with empty str for a cleaner visualisation
         query_results_df = query_results_df.replace(to_replace='nan', value="", regex=True)
+
+        # For Frontend: Split keyword strings and turn into list
+        nlp_cols = [col for col in query_results_df.columns if col.startswith("keywords_nlp_")]
+        for col in nlp_cols:
+            query_results_df[col + "_list"] = query_results_df[col].fillna("").apply(lambda x: x.split(",") if x else [])
+
         ranked_results = pandas_to_dict(query_results_df)
         # print(f'ET ranking: {round(time()-t0, 2)}')
     else:
         ranked_results = None
+    json.dumps(ranked_results)
+
     return ranked_results

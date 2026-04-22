@@ -7,13 +7,11 @@ import {
   Tooltip,
   styled,
 } from "@mui/material";
-import { Geoservice } from "../../types";
+import { Geoservice, SearchParameters } from "../../types";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-
 import { SubRow } from "./SubRow";
 import { getIcon } from "../../custom/getIcon";
-import "../../styles.css";
 
 export const ServiceRow = ({
   row,
@@ -21,21 +19,22 @@ export const ServiceRow = ({
   page,
   total,
   mobileMode,
+  triggerSearchbyKeyword,
 }: {
   row: Geoservice;
   index: number;
   page: number;
   total: number;
   mobileMode: boolean;
+  triggerSearchbyKeyword: (parameters: SearchParameters) => void;
 }) => {
   const [open, setOpen] = useState(false);
-
   useEffect(() => setOpen(false), [page, total]);
 
   const CenteredTableCell = styled(TableCell)(() => ({
     "&": {
-      width: mobileMode ? 0 : 120,
-      padding: mobileMode ? 0 : 8,
+      width: mobileMode ? 0 : 100,
+      padding: mobileMode ? 0 : 0,
       textAlign: "center",
     },
   }));
@@ -48,9 +47,7 @@ export const ServiceRow = ({
   }));
   const LeftAlignedTableCellMaxWidth = styled(TableCell)(() => ({
     "&": {
-      // padding: 8,
       padding: mobileMode ? 0 : 8,
-
       textAlign: "left",
       minWidth: mobileMode ? 60 : 180,
       wordBreak: "break-word",
@@ -66,7 +63,7 @@ export const ServiceRow = ({
 
   return (
     <>
-      <TableRow key={index} onClick={() => setOpen(!open)}>
+      <TableRow key={index}>
         <CenteredTableCell>
           <IconButton
             aria-label="expand row"
@@ -77,7 +74,9 @@ export const ServiceRow = ({
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </CenteredTableCell>
-        <LeftAlignedTableCellMaxWidth>{row.title}</LeftAlignedTableCellMaxWidth>
+        <LeftAlignedTableCellMaxWidth onClick={() => setOpen(!open)}>
+          {row.title}
+        </LeftAlignedTableCellMaxWidth>
         {!mobileMode && <LeftAlignedTableCell>{abstract}</LeftAlignedTableCell>}
         <CenteredTableCell>
           <Tooltip title={row.provider}>
@@ -98,7 +97,15 @@ export const ServiceRow = ({
           </div>
         </CenteredTableCell>
       </TableRow>
-      <SubRow row={row} open={open} index={index} mobileMode={mobileMode} />
+      {open && (
+        <SubRow
+          row={row}
+          open={open}
+          index={index}
+          mobileMode={mobileMode}
+          triggerSearchbyKeyword={triggerSearchbyKeyword}
+        />
+      )}
     </>
   );
 };

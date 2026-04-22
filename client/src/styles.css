@@ -1,5 +1,4 @@
 @media all and (max-width: 1100px) {
-
   /* Move Pagination UI for table */
   .MuiTablePagination-spacer {
     flex: none !important;
@@ -14,6 +13,14 @@
   .Dropdown {
     min-width: 80px;
   }
+}
+
+.AppBarSpacing {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 .PageWrapper {
@@ -42,162 +49,39 @@ tr th span {
   color: white !important;
 }
 
+.subRowCell {
+  text-align: left;
+  vertical-align: top !important;
+}
 
-/* .appheader {
+.bold {
+  font-weight: 700;
+}
+
+.long-url {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* ---- Vis ---- */
+/* WordCloud */
+
+.wordcloud {
   display: flex;
   flex-direction: column;
-  align-items: left;
-  justify-content: center;
-  font-size: calc(12px + 2vmin);
-  color: white;
+  user-select: none;
+}
+.wordcloud svg {
+  margin: 1rem 0;
+  cursor: pointer;
 }
 
-#menu-text {
-  color: black;
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: bold;
-}
-
-#search {
-  display: flex;
-  flex-direction: row;
+.wordcloud label {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  height: 50px;
+  font-size: 14px;
+  margin-right: 8px;
 }
-
-#search-bar {
-  min-width: 400px;
+.wordcloud textarea {
+  min-height: 100px;
 }
-
-#search-button {
-  margin-left: 10px;
-}
-
-
-#menubar {
-  border-bottom: 1px solid #f9f9f9;
-  padding: 0;
-  background-color: #007CC3;
-}
-
-:root {
-  --size: 30px;
-  --bord: 10px;
-}
-
-.chart {
-  width: var(--size);
-  height: var(--size);
-  margin: 1em auto;
-  border-radius: 50%;
-  background-image: conic-gradient(#007CC3 var(--value), #abe0ff var(--value));
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.chart::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: calc(100% - var(--bord));
-  height: calc(100% - var(--bord));
-  background: white;
-  border-radius: inherit;
-}
-
-
-.percentage {
-  position: relative;
-  z-index: 1;
-  font-size: 0.8em;
-}
-
-.x-0 {
-  --value: 0%;
-}
-
-.x-5 {
-  --value: 5%;
-}
-
-.x-10 {
-  --value: 10%;
-}
-
-.x-15 {
-  --value: 15%;
-}
-
-.x-20 {
-  --value: 20%;
-}
-
-.x-25 {
-  --value: 25%;
-}
-
-.x-30 {
-  --value: 30%;
-}
-
-.x-35 {
-  --value: 35%;
-}
-
-.x-40 {
-  --value: 40%;
-}
-
-.x-45 {
-  --value: 45%;
-}
-
-.x-50 {
-  --value: 50%;
-}
-
-.x-55 {
-  --value: 55%;
-}
-
-.x-60 {
-  --value: 60%;
-}
-
-.x-65 {
-  --value: 65%;
-}
-
-.x-70 {
-  --value: 70%;
-}
-
-.x-75 {
-  --value: 75%;
-}
-
-.x-80 {
-  --value: 80%;
-}
-
-.x-85 {
-  --value: 85%;
-}
-
-.x-90 {
-  --value: 90%;
-}
-
-.x-95 {
-  --value: 95%;
-}
-
-.x-100 {
-  --value: 100%;
-} */
