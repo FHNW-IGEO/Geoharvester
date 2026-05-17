@@ -1,9 +1,11 @@
-[2026-05-10 03:44:28] FinalFetchError (forward) at position 1828: AttributeError: 'NoneType' object has no attribute 'strip'
-[2026-05-10 03:44:28] FinalFetchError (forward) at position 1829: AttributeError: 'NoneType' object has no attribute 'strip'
-[2026-05-10 03:44:31] FinalFetchError (forward) at position 1830: AttributeError: 'NoneType' object has no attribute 'strip'
-[2026-05-10 03:44:33] FinalFetchError (forward) at position 1836: AttributeError: 'NoneType' object has no attribute 'strip'
-[2026-05-10 03:44:33] FinalFetchError (forward) at position 1837: AttributeError: 'NoneType' object has no attribute 'strip'
-[2026-05-10 03:45:47] FinalFetchError (forward) at position 2857: ValueError: ExceptionReport at position 2857
-[2026-05-10 03:54:01] FinalFetchError (forward) at position 11904: ValueError: ExceptionReport at position 11904
-[2026-05-10 03:55:22] FinalFetchError (forward) at position 13066: ValueError: ExceptionReport at position 13066
-[2026-05-10 03:55:54] FinalFetchError (forward) at position 13510: ValueError: ExceptionReport at position 13510
+[2026-05-17 03:54:40] FinalFetchError (forward) at position 1865: AttributeError: 'NoneType' object has no attribute 'strip'
+[2026-05-17 03:54:41] FinalFetchError (forward) at position 1866: AttributeError: 'NoneType' object has no attribute 'strip'
+[2026-05-17 03:54:42] FinalFetchError (forward) at position 1867: AttributeError: 'NoneType' object has no attribute 'strip'
+[2026-05-17 03:54:45] FinalFetchError (forward) at position 1873: AttributeError: 'NoneType' object has no attribute 'strip'
+[2026-05-17 03:54:46] FinalFetchError (forward) at position 1874: AttributeError: 'NoneType' object has no attribute 'strip'
+[2026-05-17 03:55:23] FinalFetchError (forward) at position 2316: ValueError: ExceptionReport at position 2316
+[2026-05-17 03:56:19] FinalFetchError (forward) at position 2925: ValueError: ExceptionReport at position 2925
+[2026-05-17 04:06:04] FinalFetchError (forward) at position 12114: ValueError: ExceptionReport at position 12114
+[2026-05-17 04:07:16] FinalFetchError (forward) at position 12879: ValueError: ExceptionReport at position 12879
+[2026-05-17 04:08:03] FinalFetchError (forward) at position 13311: ValueError: ExceptionReport at position 13311
+[2026-05-17 04:08:42] FinalFetchError (forward) at position 13757: ValueError: ExceptionReport at position 13757
