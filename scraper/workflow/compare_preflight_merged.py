@@ -57,12 +57,15 @@ def main():
             current_hash is None or preflight_hash != current_hash or diag["provider"] == "KT_SG"
         )
 
-        if not needs_processing:
+        # Temp fix to weed out the faulty hashes
+        needs_cleaning = "timestamp" in current_hash
+
+        if not needs_processing and not needs_cleaning:
             continue
 
         # For debugging:
         timestamp = datetime.now().strftime("%d, %m, %Y")
-        reason = "new" if current_hash is None else "changed" if preflight_hash != current_hash else "unknown"
+        reason = "new" if current_hash is None else "changed" if preflight_hash != current_hash else "cleaning" if needs_cleaning else "unknown"
 
         datasets_to_process.append({
             "dataset_id": dataset_id,
