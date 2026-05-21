@@ -54,11 +54,11 @@ def main():
         # Compare latest preflight against what is in merged_data.pkl:
         # TODO: Remove KT_SG condition after reprocessing
         needs_processing = (
-            current_hash is None or preflight_hash != current_hash or diag["provider"] == "KT_SG"
+            current_hash is None or preflight_hash != current_hash
         )
 
         # Temp fix to weed out the faulty hashes
-        needs_cleaning = "timestamp" in current_hash
+        needs_cleaning = "timestamp" in (current_hash or "")
 
         if not needs_processing and not needs_cleaning:
             continue
