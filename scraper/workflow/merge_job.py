@@ -17,6 +17,7 @@ MERGED_DATA_PKL = Path("data/merged_data.pkl") # From Git
 PIPELINE_OUTPUT_CSV = Path("merged_data.csv")
 PIPELINE_OUTPUT_PKL = MERGED_DATA_PKL # Should overwrite previous run
 
+IDENTITY_COLUMNS = ["provider", "endpoint", "name", "service"]
 
 
 def merge_with_unchanged_data(new_data: pd.DataFrame):
@@ -24,8 +25,8 @@ def merge_with_unchanged_data(new_data: pd.DataFrame):
     Merge new preprocessed data into the previous merged database.
 
     Rules:
-    - same hash → replace old row
-    - new hash → append
+        - same (provider, name, service) → replace old row
+        - new dataset identity → append
     """
 
     if "hash" not in new_data.columns:
@@ -43,11 +44,30 @@ def merge_with_unchanged_data(new_data: pd.DataFrame):
         logger.info("No previous merged_data.pkl found – creating new one")
         merged_database = new_data.copy()
 
+    # Case 2: Any subsequent run
     else:
         logger.info("Loading previous merged_data.pkl")
         old_data = pd.read_pickle(MERGED_DATA_PKL)
-        new_hashes = set(new_data["hash"].unique())
-        old_data_filtered = old_data[~old_data["hash"].isin(new_hashes)]
+
+        # This fix can be removed once the old data has been cleaned of duplicates
+        old_data = old_data.drop_duplicates(
+            subset=IDENTITY_COLUMNS,
+            keep="last"
+        )
+
+        new_data = new_data.drop_duplicates(
+            subset=IDENTITY_COLUMNS,
+            keep="last"
+        )
+
+        old_keys = set(
+            tuple(x)
+            for x in new_data[IDENTITY_COLUMNS].to_numpy()
+        )
+
+        mask = old_data[IDENTITY_COLUMNS].apply(tuple, axis=1).isin(old_keys)
+
+        old_data_filtered = old_data[~mask]
 
         # Append new data
         merged_database = pd.concat(
@@ -55,11 +75,11 @@ def merge_with_unchanged_data(new_data: pd.DataFrame):
             ignore_index=True
         )
 
-    # Append new data
-    merged_database = pd.concat(
-        [old_data_filtered, new_data],
-        ignore_index=True
-    )
+        # Final safeguard for handling duplicates
+        merged_database = merged_database.drop_duplicates(
+            subset=IDENTITY_COLUMNS,
+            keep="last"
+       )
 
     merged_database.to_pickle(PIPELINE_OUTPUT_PKL)
     merged_database.to_csv(PIPELINE_OUTPUT_CSV, index=False)
