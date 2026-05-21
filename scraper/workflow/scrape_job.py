@@ -407,12 +407,16 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
                             this_child_layer = service.contents[i]._children[j].id
                             if only_layers is not None and this_child_layer not in only_layers:
                                 continue
-                            
-                            child_layer_hash = (
-                                only_layers.get(this_child_layer)
-                                if only_layers is not None
-                                else None
-                            )
+                            child_layer_info = only_layers.get(this_child_layer) if only_layers is not None else None
+
+                            if child_layer_info:
+                                child_layer_hash = layer_info["hash"]
+                                child_layer_timestamp = layer_info["timestamp"]
+                                child_layer_reason = layer_info["reason"]
+                            else:
+                                child_layer_hash = None
+                                child_layer_timestamp = None
+                                child_layer_reason = None
 
                             if this_child_layer not in layers_done:
                                 if service_title is not None:
@@ -425,7 +429,7 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
                                 logger.debug("Analysing %s > %s > %s >> %s" % (
                                     server_operator, server_url, this_layer,
                                     this_child_layer))
-                                write_service_info(source, service, child_layer_hash, timestamp, reason, 
+                                write_service_info(source, service, child_layer_hash, child_layer_timestamp, child_layer_reason, 
                                                    this_child_layer, layertree,
                                                    group=i)
                                 layers_done.append(this_child_layer)
