@@ -32,7 +32,7 @@ from collections import defaultdict
 import pytz
 import pandas as pd
 from typing import Optional
-from urllib.parse import urlparse, urlunparse
+from urllib.parse import urlparse, urlunparse, parse_qs, urlencode
 
 
 sys.path.append('../')
@@ -57,9 +57,24 @@ OUTPUT_PKL = Path("scrape_job_output.pkl")
 
 def normalize_url(url: str) -> str:
     parsed = urlparse(url)
-    # Keep only scheme + netloc + path, ignore query params
-    normalized = urlunparse((parsed.scheme, parsed.netloc, parsed.path, '', '', ''))
-    return normalized.lower()  
+
+    query = parse_qs(parsed.query)
+
+    # Preserve SERVICE parameter
+    service = query.get("SERVICE", query.get("service", [""]))[0].upper()
+
+    normalized_query = urlencode({"SERVICE": service}) if service else ""
+
+    normalized = urlunparse((
+        parsed.scheme.lower(),
+        parsed.netloc.lower(),
+        parsed.path,
+        "",
+        normalized_query,
+        ""
+    ))
+
+    return normalized 
 
 def load_layers_by_service(path: Path):
     """
