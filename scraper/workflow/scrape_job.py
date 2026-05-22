@@ -410,9 +410,9 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
                             child_layer_info = only_layers.get(this_child_layer) if only_layers is not None else None
 
                             if child_layer_info:
-                                child_layer_hash = layer_info["hash"]
-                                child_layer_timestamp = layer_info["timestamp"]
-                                child_layer_reason = layer_info["reason"]
+                                child_layer_hash = child_layer_info["hash"]
+                                child_layer_timestamp = child_layer_info["timestamp"]
+                                child_layer_reason = child_layer_info["reason"]
                             else:
                                 child_layer_hash = None
                                 child_layer_timestamp = None
