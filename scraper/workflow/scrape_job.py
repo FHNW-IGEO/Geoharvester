@@ -298,28 +298,76 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
             source_version = None
 
         if service_type is None:
-            candidates = [
-                ("WMS", True, lambda: WebMapService(
-                    server_url, version=source_version or None, timeout=config.SCRAPER_REQUEST_TIMEOUT
-                )),  
-                ("WMTS", False, lambda: WebMapTileService(
-                    server_url, timeout=config.SCRAPER_REQUEST_TIMEOUT
-                )),
-                ("WFS", False, lambda: WebFeatureService(
-                    server_url,
-                    version=source_version or "2.0.0",
-                    timeout=config.SCRAPER_REQUEST_TIMEOUT
-                )),
-            ]
+            
+            parsed = urlparse(server_url)
+            query = parse_qs(parsed.query)
 
-            for candidate_type, children_possible, ctor in candidates:
+            service_param = query.get(
+                "SERVICE",
+                query.get("service", [None])
+            )[0]
+
+            if service_param:
+                service_param = service_param.upper()
+
+            # Prefer explicit service type from URL
+            if service_param == "WFS":
+                candidates = [
+                    ("WFS", False, lambda: WebFeatureService(
+                        server_url,
+                        version=source_version or "2.0.0",
+                        timeout=config.SCRAPER_REQUEST_TIMEOUT
+                    ))
+                ]
+
+            elif service_param == "WMS":
+                candidates = [
+                    ("WMS", True, lambda: WebMapService(
+                        server_url,
+                        version=source_version or None,
+                        timeout=config.SCRAPER_REQUEST_TIMEOUT
+                    ))
+                ]
+
+            elif service_param == "WMTS":
+                candidates = [
+                    ("WMTS", False, lambda: WebMapTileService(
+                        server_url,
+                        timeout=config.SCRAPER_REQUEST_TIMEOUT
+                    ))
+                ]
+
+            else:
+                # Fallback probing if SERVICE param missing
+                candidates = [
+                    ("WMS", True, lambda: WebMapService(
+                        server_url,
+                        version=source_version or None,
+                        timeout=config.SCRAPER_REQUEST_TIMEOUT
+                    )),
+                    ("WMTS", False, lambda: WebMapTileService(
+                        server_url,
+                        timeout=config.SCRAPER_REQUEST_TIMEOUT
+                    )),
+                    ("WFS", False, lambda: WebFeatureService(
+                        server_url,
+                        version=source_version or "2.0.0",
+                        timeout=config.SCRAPER_REQUEST_TIMEOUT
+                    )),
+                ]
+
+            for candidate_type, candidate_children_possible, ctor in candidates:
                 try:
                     service = ctor()
                     service_type = candidate_type
-                    children_possible = children_possible
+                    children_possible = candidate_children_possible
                     break
+
                 except Exception as e:
-                        logger.debug(f"Service probe failed: {candidate_type} @ {server_url}: {e}")
+                    logger.debug(
+                        f"Service probe failed: "
+                        f"{candidate_type} @ {server_url}: {e}"
+                    )
 
         if service_type is not None:
             # I.e., we have found a valid service endpoint of type WMS, WTMS or
