@@ -1,14 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-title: Scraper a.k.a Geoharvester
-Author: David Oesch
-Date: 2022-11-05
-Purpose: Retrieve information about a web map service and save it to a file
-Notes:
-- Uses Python 3.9
-- Uses the OWSLib library to access the geo services
-- Processes the service information to extract the layer names and other details
-- Writes the extracted information to  files for future use
+The scraper is based on the prototype of David Oesch (2022-11-05)
 """
 import csv
 import glob
@@ -33,6 +25,8 @@ import pytz
 import pandas as pd
 from typing import Optional
 from urllib.parse import urlparse, urlunparse, parse_qs, urlencode
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 
 sys.path.append('../')
@@ -53,6 +47,32 @@ logger = logging.getLogger("Scraping log")
 DATASETS_TO_PROCESS = Path("../artifacts/datasets_to_process.json")
 OUTPUT_CSV = Path("scrape_job_output.csv")
 OUTPUT_PKL = Path("scrape_job_output.pkl")
+
+# Shared HTTP session for all requests
+HTTP_SESSION = requests.Session()
+
+retry_strategy = Retry(
+    total=3,
+    connect=3,
+    read=3,
+    backoff_factor=1,
+    status_forcelist=[429, 500, 502, 503, 504],
+    allowed_methods=["GET"]
+)
+
+adapter = HTTPAdapter(
+    pool_connections=100,
+    pool_maxsize=100,
+    max_retries=retry_strategy
+)
+
+HTTP_SESSION.mount("http://", adapter)
+HTTP_SESSION.mount("https://", adapter)
+
+# Optional but recommended
+HTTP_SESSION.headers.update({
+    "User-Agent": "Geoharvester/1.0"
+})
 
 
 def normalize_url(url: str) -> str:
@@ -156,9 +176,25 @@ def get_version(input_url):
     Returns:
     str or None: The version attribute value or None if not found.
     """
-    response = requests.get(input_url)
+    response = HTTP_SESSION.get(
+        input_url,
+        timeout=config.SCRAPER_REQUEST_TIMEOUT
+    )
+    if not response.content:
+        return None
+    
+    content_type = response.headers.get("Content-Type", "")
+
+    if "xml" not in content_type.lower():
+        logger.warning(f"{input_url}: non-XML response")
+        return None
+    
     xml_data = response.content
-    root = ET.fromstring(xml_data)
+    try:
+        root = ET.fromstring(xml_data)
+    except ET.ParseError as e:
+        logger.warning(f"{input_url}: invalid XML ({e})")
+        return None
     try:
         version = root.attrib["version"]
     except KeyError:
@@ -226,7 +262,10 @@ def is_online(source):
     server_operator = source['Description']
     server_url = source['URL']
     try:
-        request = requests.get(server_url)
+        request = HTTP_SESSION.get(
+            server_url,
+            timeout=config.SCRAPER_REQUEST_TIMEOUT
+        )
         if request.status_code == 200:
             success = True
         else:
@@ -310,14 +349,15 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
             if service_param:
                 service_param = service_param.upper()
 
-            # Prefer explicit service type from URL
+
             if service_param == "WFS":
                 candidates = [
                     ("WFS", False, lambda: WebFeatureService(
                         server_url,
                         version=source_version or "2.0.0",
-                        timeout=config.SCRAPER_REQUEST_TIMEOUT
-                    ))
+                        timeout=config.SCRAPER_REQUEST_TIMEOUT,
+                        session=HTTP_SESSION
+                    )),
                 ]
 
             elif service_param == "WMS":
@@ -325,40 +365,54 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
                     ("WMS", True, lambda: WebMapService(
                         server_url,
                         version=source_version or None,
-                        timeout=config.SCRAPER_REQUEST_TIMEOUT
-                    ))
+                        timeout=config.SCRAPER_REQUEST_TIMEOUT,
+                        session=HTTP_SESSION
+                    )),
                 ]
 
             elif service_param == "WMTS":
                 candidates = [
                     ("WMTS", False, lambda: WebMapTileService(
                         server_url,
-                        timeout=config.SCRAPER_REQUEST_TIMEOUT
-                    ))
+                        timeout=config.SCRAPER_REQUEST_TIMEOUT,
+                        session=HTTP_SESSION
+                    )),
                 ]
 
             else:
-                # Fallback probing if SERVICE param missing
+                # fallback probing
                 candidates = [
                     ("WMS", True, lambda: WebMapService(
                         server_url,
                         version=source_version or None,
-                        timeout=config.SCRAPER_REQUEST_TIMEOUT
+                        timeout=config.SCRAPER_REQUEST_TIMEOUT,
+                        session=HTTP_SESSION
                     )),
+
                     ("WMTS", False, lambda: WebMapTileService(
                         server_url,
-                        timeout=config.SCRAPER_REQUEST_TIMEOUT
+                        timeout=config.SCRAPER_REQUEST_TIMEOUT,
+                        session=HTTP_SESSION
                     )),
+
                     ("WFS", False, lambda: WebFeatureService(
                         server_url,
                         version=source_version or "2.0.0",
-                        timeout=config.SCRAPER_REQUEST_TIMEOUT
+                        timeout=config.SCRAPER_REQUEST_TIMEOUT,
+                        session=HTTP_SESSION
                     )),
                 ]
 
             for candidate_type, candidate_children_possible, ctor in candidates:
                 try:
                     service = ctor()
+                    if (
+                        service is None
+                        or not hasattr(service, "identification")
+                        or service.identification is None
+                    ):
+                        raise ValueError(f"Invalid OGC service object:  {source}")
+
                     service_type = candidate_type
                     children_possible = candidate_children_possible
                     break
@@ -378,7 +432,7 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
             layers = list(service.contents)
             layers_done = []
             for i in layers:
-                this_layer = service.contents[i].id
+                this_layer = getattr(service.contents[i], "id", i)
 
                 # Only process layers that changed, not all
                 if only_layers is not None and this_layer not in only_layers:
@@ -418,7 +472,7 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
                                                      service.contents[i].boundingBoxWGS84[2],
                                                      service.contents[i].boundingBoxWGS84[3]),
                                                size=(256, 256), format='image/png',
-                                               transparent=True, timeout=10)
+                                               transparent=True, timeout=config.SCRAPER_REQUEST_TIMEOUT)
                                 # Then extract abstract etc
                                 if service_title is not None:
                                     layertree = "%s/%s/%s" % (server_operator,
