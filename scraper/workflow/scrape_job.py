@@ -430,9 +430,11 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
             layers = list(service.contents)
             layers_done = []
             for i in layers:
-                this_layer = getattr(service.contents[i], "id", i)
+                this_layer = getattr(service.contents[i], "id", None) or i
 
                 # Only process layers that changed, not all
+                print(f"OWSLib layer: {this_layer}")
+                print(f"Expected layers: {list(only_layers.keys())[:5]}")
                 if only_layers is not None and this_layer not in only_layers:
                     continue
 
@@ -630,7 +632,8 @@ def write_service_info(source, service, hash,  timestamp, reason, i, layertree, 
     except Exception as e_request:
         error_details = str(e_request)
         log_to_operator_csv(server_operator, i, error_details)
-        logger.error("%s, %s: %s" % (server_operator, i, error_details))
+        logger.exception("%s, %s failed", server_operator, i)
+        print("%s, %s failed", server_operator, i)
         return False
 
 
@@ -683,10 +686,27 @@ if __name__ == "__main__":
     sources = load_source_collection()
 
     logger.info(f"Startup time until scraping: {int((scraping_startT-process_startT) / 60)} mins")
+    logger.info(f"datasets_to_process keys:")
+
+    for k in layers_by_service.keys(): #DEBUGGING
+        print(f"Service Layers: {k}")
+
     for source in sources:
         service_url = normalize_url(source.get("URL"))
+        print(f"Service url: {service_url}") # DEBUGGING
         only_layers = layers_by_service.get(service_url)
         logger.debug(f"Normalized source URL: {service_url}")
+
+        matched = 0
+
+        for source in sources:
+            service_url = normalize_url(source.get("URL"))
+            only_layers = layers_by_service.get(service_url)
+
+            if only_layers:
+                matched += 1
+
+        print(f"Matched services: {matched}")
 
         # Skip services with no changed layers
         if not only_layers:
