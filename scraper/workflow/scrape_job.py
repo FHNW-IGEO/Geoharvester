@@ -80,17 +80,17 @@ def normalize_url(url: str) -> str:
 
     query = parse_qs(parsed.query)
 
-    # Preserve SERVICE parameter
-    service = query.get("SERVICE", query.get("service", [""]))[0].upper()
+    normalized_query = {}
 
-    normalized_query = urlencode({"SERVICE": service}) if service else ""
+    for key, value in query.items():
+        normalized_query[key.upper()] = value[0] if value else ""
 
     normalized = urlunparse((
         parsed.scheme.lower(),
         parsed.netloc.lower(),
         parsed.path,
         "",
-        normalized_query,
+        urlencode(normalized_query),
         ""
     ))
 
@@ -205,8 +205,6 @@ def get_version(input_url):
 
 def write_file(input_dict, output_file):
     """
-    Write a dictionary to a CSV file.
-    Overwrites the file on first write in this job.
 
     Parameters:
     input_dict (dict): Dictionary to be written to file.
@@ -683,15 +681,16 @@ if __name__ == "__main__":
     scraping_startT = time()
     # Load sources
     sources = load_source_collection()
-    num_sources = len(sources)
 
     logger.info(f"Startup time until scraping: {int((scraping_startT-process_startT) / 60)} mins")
     for source in sources:
         service_url = normalize_url(source.get("URL"))
         only_layers = layers_by_service.get(service_url)
+        logger.debug(f"Normalized source URL: {service_url}")
 
         # Skip services with no changed layers
         if not only_layers:
+            logger.warning(f"No changed layers found for service: {service_url}")
             continue
 
         get_service_info(source, only_layers=only_layers)
@@ -699,7 +698,7 @@ if __name__ == "__main__":
     scraping_endT = time()
     logger.info(f"Scraping took: {int((scraping_endT-scraping_startT) / 60)} mins")
 
-    if OUTPUT_CSV.exists():
+    if OUTPUT_CSV.exists() and OUTPUT_CSV.stat().st_size > 0:
         logger.info("Converting scraped CSV to pickle")
 
         df = pd.read_csv(OUTPUT_CSV)
