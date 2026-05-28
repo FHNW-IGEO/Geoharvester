@@ -428,12 +428,20 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
 
             # Extract all layer names
             layers = list(service.contents)
+            print(f"SERVICE TYPE: {service_type}")
+            print(f"SERVICE URL: {server_url}")
+            print(f"LAYER COUNT: {len(layers)}")
+
+            if len(layers) == 0:
+                print("SERVICE CONTENTS EMPTY")
+                print(service.contents)
             layers_done = []
             for i in layers:
                 this_layer = i #getattr(service.contents[i], "id", None) or i
 
                 # Only process layers that changed, not all
                 print(f"OWSLib layer: {repr(this_layer)}")
+
                 if only_layers:
                     print(
                         f"Expected examples: {list(only_layers.keys())[:5]}"
@@ -646,7 +654,7 @@ def write_service_info(source, service, hash,  timestamp, reason, i, layertree, 
     except Exception as e_request:
         error_details = str(e_request)
         log_to_operator_csv(server_operator, i, error_details)
-        logger.exception("%s, %s failed", server_operator, i)
+        print("%s, %s failed", server_operator, i)
         print("%s, %s failed", server_operator, i)
         return False
 
@@ -724,8 +732,15 @@ if __name__ == "__main__":
 
         # Skip services with no changed layers
         if not only_layers:
-            logger.warning(f"No changed layers found for service: {service_url}")
+            print(
+                f"No changed layers found for service: {service_url}"
+            )
             continue
+        else:
+            print(
+                f"Found {len(only_layers)} changed layers "
+                f"for service: {service_url}"
+            )
 
         get_service_info(source, only_layers=only_layers)
            
