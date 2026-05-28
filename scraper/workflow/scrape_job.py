@@ -430,11 +430,15 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
             layers = list(service.contents)
             layers_done = []
             for i in layers:
-                this_layer = getattr(service.contents[i], "id", None) or i
+                this_layer = i #getattr(service.contents[i], "id", None) or i
 
                 # Only process layers that changed, not all
-                print(f"OWSLib layer: {this_layer}")
-                print(f"Expected layers: {list(only_layers.keys())[:5]}")
+                print(f"OWSLib layer: {repr(this_layer)}")
+                if only_layers:
+                    print(
+                        f"Expected examples: {list(only_layers.keys())[:5]}"
+                    )
+
                 if only_layers is not None and this_layer not in only_layers:
                     continue
 
@@ -521,7 +525,12 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
 
                     if children_possible and number_children > 0:
                         for j in range(number_children):
-                            this_child_layer = service.contents[i]._children[j].id
+
+                            child_obj = service.contents[i]._children[j].id
+                            this_child_layer = (
+                                getattr(child_obj, "id", None)
+                                or getattr(child_obj, "name", None)
+                            )
                             if only_layers is not None and this_child_layer not in only_layers:
                                 continue
                             child_layer_info = only_layers.get(this_child_layer) if only_layers is not None else None
@@ -564,6 +573,11 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
 
     except Exception as e_request:
         error_details = str(e_request)
+        print(logger.exception(
+            "%s, %s failed",
+            server_operator,
+            i
+        ))
         log_to_operator_csv(server_operator, server_url, error_details)
         logger.error("%s > %s: %s" %
                      (server_operator, server_url, error_details))
