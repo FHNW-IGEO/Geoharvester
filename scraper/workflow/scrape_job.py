@@ -713,22 +713,20 @@ if __name__ == "__main__":
     for k in layers_by_service.keys(): #DEBUGGING
         print(f"Service Layers: {k}")
 
+    matched = 0
+
+    for s in sources:
+        s_url = normalize_url(s.get("URL"))
+        if layers_by_service.get(s_url):
+            matched += 1
+
+    print(f"Matched services: {matched}")
+
     for source in sources:
         service_url = normalize_url(source.get("URL"))
         print(f"Service url: {service_url}") # DEBUGGING
         only_layers = layers_by_service.get(service_url)
         logger.debug(f"Normalized source URL: {service_url}")
-
-        matched = 0
-
-        for source in sources:
-            service_url = normalize_url(source.get("URL"))
-            only_layers = layers_by_service.get(service_url)
-
-            if only_layers:
-                matched += 1
-
-        print(f"Matched services: {matched}")
 
         # Skip services with no changed layers
         if not only_layers:
