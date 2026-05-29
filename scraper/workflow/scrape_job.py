@@ -583,8 +583,7 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
         error_details = str(e_request)
         print(logger.exception(
             "%s, %s failed",
-            server_operator,
-            i
+            server_operator
         ))
         log_to_operator_csv(server_operator, server_url, error_details)
         logger.error("%s > %s: %s" %
