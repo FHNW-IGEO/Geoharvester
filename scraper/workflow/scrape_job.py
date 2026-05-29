@@ -176,10 +176,14 @@ def get_version(input_url):
     Returns:
     str or None: The version attribute value or None if not found.
     """
-    response = HTTP_SESSION.get(
-        input_url,
-        timeout=config.SCRAPER_REQUEST_TIMEOUT
-    )
+    try:
+        response = HTTP_SESSION.get(
+            input_url,
+            timeout=config.SCRAPER_REQUEST_TIMEOUT
+        )
+    except Exception as e:
+        print(f"{input_url}: request failed ({e})")
+        return None
     if not response.content:
         return None
     
@@ -346,6 +350,16 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
 
             if service_param:
                 service_param = service_param.upper()
+
+            if not service_param:
+                path_lower = parsed.path.lower()
+
+                if "/wms" in path_lower:
+                    service_param = "WMS"
+                elif "/wfs" in path_lower:
+                    service_param = "WFS"
+                elif "wmts" in path_lower:
+                    service_param = "WMTS"
 
 
             if service_param == "WFS":
@@ -583,7 +597,8 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
         error_details = str(e_request)
         print(logger.exception(
             "%s, %s failed",
-            server_operator
+            server_operator,
+            server_url
         ))
         log_to_operator_csv(server_operator, server_url, error_details)
         logger.error("%s > %s: %s" %
@@ -646,6 +661,7 @@ def write_service_info(source, service, hash,  timestamp, reason, i, layertree, 
                                         layer_data, config.preview_PREFIX)
 
         # Writing the Result file
+        print(f"WRITING LAYER: {i}")
         write_file(layer_data, OUTPUT_CSV)
 
         return True
