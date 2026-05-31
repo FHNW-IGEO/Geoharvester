@@ -79,6 +79,8 @@ def normalize_url(url: str) -> str:
     parsed = urlparse(url)
 
     query = parse_qs(parsed.query)
+    print("QUERY KEYS:", query.keys())
+    print("SERVER URL:", url)
 
     normalized_query = {}
 
@@ -341,12 +343,15 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
         if service_type is None:
             
             parsed = urlparse(server_url)
-            query = parse_qs(parsed.query)
+            #query = parse_qs(parsed.query)
+            query = {
+                k.upper(): v
+                for k, v in parse_qs(parsed.query).items()
+            }
+            print("QUERY KEYS:", query.keys())
+            print("SERVER URL:", server_url)
 
-            service_param = query.get(
-                "SERVICE",
-                query.get("service", [None])
-            )[0]
+            service_param = query.get("SERVICE", [None])[0]
 
             if service_param:
                 service_param = service_param.upper()
@@ -354,12 +359,17 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
             if not service_param:
                 path_lower = parsed.path.lower()
 
-                if "/wms" in path_lower:
-                    service_param = "WMS"
+                if "wmtscapabilities" in path_lower:
+                    service_param = "WMTS"
+
+                elif "/wmts/" in path_lower:
+                    service_param = "WMTS"
+
                 elif "/wfs" in path_lower:
                     service_param = "WFS"
-                elif "wmts" in path_lower:
-                    service_param = "WMTS"
+
+                elif "/wms" in path_lower:
+                    service_param = "WMS"
 
 
             if service_param == "WFS":
@@ -430,10 +440,11 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
                     break
 
                 except Exception as e:
-                    logger.debug(
+                    print(
                         f"Service probe failed: "
                         f"{candidate_type} @ {server_url}: {e}"
                     )
+                    print(repr(e))
 
         if service_type is not None:
             # I.e., we have found a valid service endpoint of type WMS, WTMS or
