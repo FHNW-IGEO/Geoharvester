@@ -377,8 +377,7 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
                     ("WFS", False, lambda: WebFeatureService(
                         server_url,
                         version=source_version or "2.0.0",
-                        timeout=config.SCRAPER_REQUEST_TIMEOUT,
-                        session=HTTP_SESSION
+                        timeout=config.SCRAPER_REQUEST_TIMEOUT
                     )),
                 ]
 
@@ -387,8 +386,7 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
                     ("WMS", True, lambda: WebMapService(
                         server_url,
                         version=source_version or None,
-                        timeout=config.SCRAPER_REQUEST_TIMEOUT,
-                        session=HTTP_SESSION
+                        timeout=config.SCRAPER_REQUEST_TIMEOUT
                     )),
                 ]
 
@@ -396,8 +394,7 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
                 candidates = [
                     ("WMTS", False, lambda: WebMapTileService(
                         server_url,
-                        timeout=config.SCRAPER_REQUEST_TIMEOUT,
-                        session=HTTP_SESSION
+                        timeout=config.SCRAPER_REQUEST_TIMEOUT
                     )),
                 ]
 
@@ -407,21 +404,18 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
                     ("WMS", True, lambda: WebMapService(
                         server_url,
                         version=source_version or None,
-                        timeout=config.SCRAPER_REQUEST_TIMEOUT,
-                        session=HTTP_SESSION
+                        timeout=config.SCRAPER_REQUEST_TIMEOUT
                     )),
 
                     ("WMTS", False, lambda: WebMapTileService(
                         server_url,
-                        timeout=config.SCRAPER_REQUEST_TIMEOUT,
-                        session=HTTP_SESSION
+                        timeout=config.SCRAPER_REQUEST_TIMEOUT
                     )),
 
                     ("WFS", False, lambda: WebFeatureService(
                         server_url,
                         version=source_version or "2.0.0",
-                        timeout=config.SCRAPER_REQUEST_TIMEOUT,
-                        session=HTTP_SESSION
+                        timeout=config.SCRAPER_REQUEST_TIMEOUT
                     )),
                 ]
 
