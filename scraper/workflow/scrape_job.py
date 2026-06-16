@@ -51,7 +51,7 @@ OUTPUT_PKL = Path("scrape_job_output.pkl")
 HTTP_SESSION = requests.Session()
 
 retry_strategy = Retry(
-    total=1
+    total=1,
     connect=1,
     read=2,
     backoff_factor=0.5,
