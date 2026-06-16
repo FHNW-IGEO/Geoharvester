@@ -17,34 +17,26 @@ import importlib
 import logging
 import logging.config
 import os
-import re
 import sys
 import warnings
-import xml.etree.ElementTree as ET
-from collections import defaultdict
-from statistics import mean
+
 from pathlib import Path
 
 import configuration as config
 print("CONFIG IMPORTED FROM:", config.__file__)
 import requests
-from requests.exceptions import ReadTimeout, ConnectTimeout
 import utils
 from owslib.wfs import WebFeatureService
 from owslib.wms import WebMapService
 from owslib.wmts import WebMapTileService
-from io import BytesIO
-import random
 
 """ from oauth2client.service_account import ServiceAccountCredentials
 from googleapiclient.discovery import build
 from googleapiclient.http import BatchHttpRequest """
-import json
 import shutil
 from datetime import datetime, timezone
 from time import time
 
-import httplib2
 import pandas as pd
 import pytz
 
@@ -92,27 +84,27 @@ def service_result_empty():
                       "preview": "n.a.", "bbox": "n.a."}
     return SERVICE_RESULT
 
+# Remove if possible, as it increases scrape time
+# def get_version(input_url):
+#     """
+#     Retrieve the version attribute from an XML response from a geoservice at
+#     the input URL.
 
-def get_version(input_url):
-    """
-    Retrieve the version attribute from an XML response from a geoservice at
-    the input URL.
+#     Parameters:
+#     input_url (str): URL to retrieve XML data from.
 
-    Parameters:
-    input_url (str): URL to retrieve XML data from.
-
-    Returns:
-    str or None: The version attribute value or None if not found.
-    """
-    response = requests.get(input_url)
-    xml_data = response.content
-    root = ET.fromstring(xml_data)
-    try:
-        version = root.attrib["version"]
-    except KeyError:
-        logger.warning("%s: Version attribute not found" % (input_url))
-        version = None
-    return version
+#     Returns:
+#     str or None: The version attribute value or None if not found.
+#     """
+#     response = requests.get(input_url)
+#     xml_data = response.content
+#     root = ET.fromstring(xml_data)
+#     try:
+#         version = root.attrib["version"]
+#     except KeyError:
+#         logger.warning("%s: Version attribute not found" % (input_url))
+#         version = None
+#     return version
 
 
 def write_file(input_dict, output_file):
@@ -217,24 +209,25 @@ def get_service_info(source):
     server_url = source['URL']
 
     try:
+        # Remove if possible, as it increases scrape time
         # Check if this service has a valid service version number. If not,
         # set version to None (i.e., use default)
-        source_version = get_version(source['URL'])
-        match = re.match(r"^\d+\.\d+\.\d+$", source_version)
-        if not match:
-            error_details = "Invalid service version number. Scraper will try the default."
-            log_to_operator_csv(server_operator, server_url, error_details)
-            logger.warning("%s, %s: %s" % (server_operator, server_url,
-                                           error_details))
-            source_version = None
-
+        # source_version = get_version(source['URL'])
+        # match = re.match(r"^\d+\.\d+\.\d+$", source_version)
+        # if not match:
+        #     error_details = "Invalid service version number. Scraper will try the default."
+        #     log_to_operator_csv(server_operator, server_url, error_details)
+        #     logger.warning("%s, %s: %s" % (server_operator, server_url,
+        #                                    error_details))
+        #     source_version = None
+        source_version = None
         # Check if this service is a WMS, a WMTS or a WFS
         service_type = None
         try:
             if source_version is not None:
-                service = WebMapService(server_url, version=source_version, timeout=config.SCRAPER_REQUEST_TIMEOUT)
+                service = WebMapService(server_url, version=source_version, timeout=(config.SCRAPER_CONNECT_TIMEOUT, config.SCRAPER_READ_TIMEOUT))
             else:
-                service = WebMapService(server_url, timeout=config.SCRAPER_REQUEST_TIMEOUT)
+                service = WebMapService(server_url, timeout=(config.SCRAPER_CONNECT_TIMEOUT, config.SCRAPER_READ_TIMEOUT))
             service_type = "WMS"
             # We assume WMSs can have child/parent relations
             children_possible = True
@@ -243,7 +236,7 @@ def get_service_info(source):
 
         if service_type is None:
             try:
-                service = WebMapTileService(server_url, timeout=config.SCRAPER_REQUEST_TIMEOUT)
+                service = WebMapTileService(server_url, timeout=(config.SCRAPER_CONNECT_TIMEOUT, config.SCRAPER_READ_TIMEOUT))
                 service_type = "WMTS"
                 # We assume WMTSs can't have child/parent relations
                 children_possible = False
@@ -253,10 +246,10 @@ def get_service_info(source):
         if service_type is None:
             try:
                 if source_version is None:
-                    service = WebFeatureService(server_url, version='2.0.0', timeout=config.SCRAPER_REQUEST_TIMEOUT)
+                    service = WebFeatureService(server_url, version='2.0.0', timeout=(config.SCRAPER_CONNECT_TIMEOUT, config.SCRAPER_READ_TIMEOUT))
                 else:
                     service = WebFeatureService(server_url,
-                                                version=source_version, timeout=config.SCRAPER_REQUEST_TIMEOUT)
+                                                version=source_version, timeout=(config.SCRAPER_CONNECT_TIMEOUT, config.SCRAPER_READ_TIMEOUT))
                 service_type = "WFS"
                 # We assume WFSs can't have child/parent relations
                 children_possible = False
@@ -296,7 +289,7 @@ def get_service_info(source):
                                                      service.contents[i].boundingBoxWGS84[2],
                                                      service.contents[i].boundingBoxWGS84[3]),
                                                size=(256, 256), format='image/png',
-                                               transparent=True, timeout=10)
+                                               transparent=True, timeout=(config.SCRAPER_CONNECT_TIMEOUT, config.SCRAPER_READ_TIMEOUT))
                                 # Then extract abstract etc
                                 if service_title is not None:
                                     layertree = "%s/%s/%s" % (server_operator,

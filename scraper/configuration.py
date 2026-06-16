@@ -2,7 +2,8 @@ import os
 import sys
 from datetime import datetime
 
-SCRAPER_REQUEST_TIMEOUT = 65 # Value in seconds - to be used in owslib requests when scraping
+SCRAPER_CONNECT_TIMEOUT = 15 # Value in seconds - to be used in owslib requests when scraping
+SCRAPER_READ_TIMEOUT = 65 # Value in seconds - to be used in owslib requests when scraping
 SOURCE_COLLECTION_CSV = "sources.csv"
 SOURCE_COLLECTION_VERSION = {"KT_AI": "1.3.0",
                              "KT_AR": "1.3.0", "Geodienste": "1.3.0"}

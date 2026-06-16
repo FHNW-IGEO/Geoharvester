@@ -34,7 +34,6 @@ import scraper.configuration as config
 
 # globals
 warnings.filterwarnings('ignore')
-#sys.path.insert(0, config.SOURCE_SCRAPER_DIR)
 
 service_keys = (("WMSGetCap", "n.a."),
                 ("WMTSGetCap", "n.a."), ("WFSGetCap", "n.a."))
@@ -52,10 +51,10 @@ OUTPUT_PKL = Path("scrape_job_output.pkl")
 HTTP_SESSION = requests.Session()
 
 retry_strategy = Retry(
-    total=3,
-    connect=3,
-    read=3,
-    backoff_factor=1,
+    total=1
+    connect=1,
+    read=2,
+    backoff_factor=0.5,
     status_forcelist=[429, 500, 502, 503, 504],
     allowed_methods=["GET"]
 )
@@ -181,7 +180,7 @@ def get_version(input_url):
     try:
         response = HTTP_SESSION.get(
             input_url,
-            timeout=config.SCRAPER_REQUEST_TIMEOUT
+            timeout=(config.SCRAPER_CONNECT_TIMEOUT, config.SCRAPER_READ_TIMEOUT)
         )
     except Exception as e:
         print(f"{input_url}: request failed ({e})")
@@ -268,7 +267,7 @@ def is_online(source):
     try:
         request = HTTP_SESSION.get(
             server_url,
-            timeout=config.SCRAPER_REQUEST_TIMEOUT
+            timeout=(config.SCRAPER_CONNECT_TIMEOUT, config.SCRAPER_READ_TIMEOUT)
         )
         if request.status_code == 200:
             success = True
@@ -343,7 +342,6 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
         if service_type is None:
             
             parsed = urlparse(server_url)
-            #query = parse_qs(parsed.query)
             query = {
                 k.upper(): v
                 for k, v in parse_qs(parsed.query).items()
@@ -377,7 +375,7 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
                     ("WFS", False, lambda: WebFeatureService(
                         server_url,
                         version=source_version or "2.0.0",
-                        timeout=config.SCRAPER_REQUEST_TIMEOUT
+                        timeout=(config.SCRAPER_CONNECT_TIMEOUT, config.SCRAPER_READ_TIMEOUT)
                     )),
                 ]
 
@@ -386,7 +384,7 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
                     ("WMS", True, lambda: WebMapService(
                         server_url,
                         version=source_version or None,
-                        timeout=config.SCRAPER_REQUEST_TIMEOUT
+                        timeout=(config.SCRAPER_CONNECT_TIMEOUT, config.SCRAPER_READ_TIMEOUT)
                     )),
                 ]
 
@@ -394,7 +392,7 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
                 candidates = [
                     ("WMTS", False, lambda: WebMapTileService(
                         server_url,
-                        timeout=config.SCRAPER_REQUEST_TIMEOUT
+                        timeout=(config.SCRAPER_CONNECT_TIMEOUT, config.SCRAPER_READ_TIMEOUT)
                     )),
                 ]
 
@@ -404,18 +402,18 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
                     ("WMS", True, lambda: WebMapService(
                         server_url,
                         version=source_version or None,
-                        timeout=config.SCRAPER_REQUEST_TIMEOUT
+                        timeout=(config.SCRAPER_CONNECT_TIMEOUT, config.SCRAPER_READ_TIMEOUT)
                     )),
 
                     ("WMTS", False, lambda: WebMapTileService(
                         server_url,
-                        timeout=config.SCRAPER_REQUEST_TIMEOUT
+                        timeout=(config.SCRAPER_CONNECT_TIMEOUT, config.SCRAPER_READ_TIMEOUT)
                     )),
 
                     ("WFS", False, lambda: WebFeatureService(
                         server_url,
                         version=source_version or "2.0.0",
-                        timeout=config.SCRAPER_REQUEST_TIMEOUT
+                        timeout=(config.SCRAPER_CONNECT_TIMEOUT, config.SCRAPER_READ_TIMEOUT)
                     )),
                 ]
 
@@ -503,7 +501,7 @@ def get_service_info(source, only_layers: Optional[dict[str, dict[str, str]]] = 
                                                      service.contents[i].boundingBoxWGS84[2],
                                                      service.contents[i].boundingBoxWGS84[3]),
                                                size=(256, 256), format='image/png',
-                                               transparent=True, timeout=config.SCRAPER_REQUEST_TIMEOUT)
+                                               transparent=True, timeout=(config.SCRAPER_CONNECT_TIMEOUT, config.SCRAPER_READ_TIMEOUT))
                                 # Then extract abstract etc
                                 if service_title is not None:
                                     layertree = "%s/%s/%s" % (server_operator,
