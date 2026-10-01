@@ -19,6 +19,7 @@ import { LanguageContext } from "./lang/LanguageContext";
 import { theme } from "./theme/index";
 import { VisView } from "./components/vis/VisView";
 import { useViewport } from "./custom/ViewportHook";
+import { EolPopup } from "./EolPopup";
 import "./styles.css";
 
 export type SearchResult = {
@@ -31,6 +32,7 @@ export type SearchResult = {
 
 function App() {
   const [searchResult, setSearchResult] = useState({} as SearchResult);
+  const [eolPopupOpen, setEolPopupOpen] = useState(true);
   const [responseState, setResponseState] = useState(
     RESPONSESTATE.UNINITIALIZED,
   );
@@ -194,6 +196,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Stack sx={{ height: "100vh" }}>
+        <EolPopup popupOpen={eolPopupOpen} setPopupOpen={setEolPopupOpen} />
         <Header
           {...{
             localSearchString,
